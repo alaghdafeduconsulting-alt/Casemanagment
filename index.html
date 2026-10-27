@@ -1,0 +1,938 @@
+<title>فضاء آفاق</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: navy app bar with section nav; one working column; child file = header card + tabs; every form opens in a full-height sheet */
+:root{
+  --navy:#1E3A5F; --navy-ink:#FFFFFF; --navy-soft:#E3EAF3; --orange:#E08E45; --orange-ink:#FFFFFF; --orange-soft:#FBEBDC;
+  --bg:#EEF2F7; --card:#FFFFFF; --sunk:#E6ECF3; --line:#D5DDE8; --text:#16283D; --muted:#5A6B80;
+  --ok:#2E7D5B; --ok-soft:#DFF1E8; --warn:#A8661C; --warn-soft:#FBEEDB; --crit:#B3413A; --crit-soft:#F8E3E1;
+  --bar:#1E3A5F; --bar-ink:#FFFFFF; --bar-muted:#C3D1E2;
+  --f-display:"Tajawal","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --f-body:"IBM Plex Sans Arabic","Tajawal",Tahoma,"Segoe UI",sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --navy:#8FB4E0; --navy-ink:#0F1A27; --navy-soft:#1B2B40; --orange:#F0A566; --orange-ink:#1A1208; --orange-soft:#3A2A1C;
+  --bg:#0F1A27; --card:#172536; --sunk:#1D2D41; --line:#2B3D53; --text:#E6EDF5; --muted:#9BACC0;
+  --ok:#6FCB9F; --ok-soft:#173327; --warn:#E9B068; --warn-soft:#35270F; --crit:#F08A82; --crit-soft:#3A1F1E;
+  --bar:#13263D; --bar-ink:#E6EDF5; --bar-muted:#9BACC0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --navy:#8FB4E0; --navy-ink:#0F1A27; --navy-soft:#1B2B40; --orange:#F0A566; --orange-ink:#1A1208; --orange-soft:#3A2A1C;
+  --bg:#0F1A27; --card:#172536; --sunk:#1D2D41; --line:#2B3D53; --text:#E6EDF5; --muted:#9BACC0;
+  --ok:#6FCB9F; --ok-soft:#173327; --warn:#E9B068; --warn-soft:#35270F; --crit:#F08A82; --crit-soft:#3A1F1E;
+  --bar:#13263D; --bar-ink:#E6EDF5; --bar-muted:#9BACC0; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);font-weight:800;margin:0;line-height:1.3;text-wrap:balance}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);color:var(--bar-ink)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;margin-inline-end:auto;background:none;border:0;color:inherit;cursor:pointer;padding:0;text-align:start;text-decoration:none}
+.mark{width:36px;height:36px;border-radius:10px;background:var(--orange);color:var(--orange-ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:20px}
+.brand b{font-family:var(--f-display);font-size:18px;display:block;line-height:1.1}
+.brand small{color:var(--bar-muted);font-size:12.5px}
+nav.sec{display:flex;gap:2px;overflow-x:auto;max-width:100%}
+nav.sec a{color:var(--bar-muted);text-decoration:none;padding:7px 12px;border-radius:9px;font-weight:600;font-size:14.5px;white-space:nowrap}
+nav.sec a[aria-current="page"]{background:rgb(255 255 255/.14);color:var(--bar-ink)}
+nav.sec a:hover{color:var(--bar-ink)}
+main{padding-block:20px 80px}
+.banner{display:flex;gap:10px;padding:10px 14px;border-radius:var(--r);background:var(--orange-soft);font-size:14px;margin-bottom:16px}
+.banner b{color:var(--orange)}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin-bottom:16px}
+.head h1{font-size:clamp(22px,4vw,28px);margin-inline-end:auto}
+.eyebrow{font-size:13px;color:var(--muted);font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--line);background:var(--card);padding:9px 15px;border-radius:10px;cursor:pointer;font-weight:700;font-size:15px;color:var(--text);text-decoration:none}
+.btn:hover{border-color:var(--muted)}
+.btn.pri{background:var(--orange);border-color:var(--orange);color:var(--orange-ink)}
+.btn.navy{background:var(--navy);border-color:var(--navy);color:var(--navy-ink)}
+.btn.ghost{border-color:transparent;background:none;color:var(--muted)}
+.btn.danger{color:var(--crit);border-color:var(--crit-soft)}
+.btn.sm{padding:5px 11px;font-size:13.5px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.stat .n{font-family:var(--f-display);font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat .l{color:var(--muted);font-size:13.5px}
+.stat.crit .n{color:var(--crit)} .stat.warn .n{color:var(--warn)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;min-width:0}
+.panel>h2{font-size:17px;margin-bottom:10px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.list{display:flex;flex-direction:column}
+.li{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);min-width:0}
+.li:first-child{border-top:0}
+.li .grow{flex:1;min-width:0}
+.li .t{font-weight:700}
+.sub{color:var(--muted);font-size:13.5px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:12.5px;font-weight:600;background:var(--sunk);color:var(--text);white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}.chip.warn{background:var(--warn-soft);color:var(--warn)}.chip.crit{background:var(--crit-soft);color:var(--crit)}.chip.acc{background:var(--navy-soft);color:var(--navy)}.chip.or{background:var(--orange-soft);color:var(--orange)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.roster{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.8fr) minmax(140px,1.4fr);gap:12px;align-items:center;padding:12px 16px;border:0;border-top:1px solid var(--line);background:none;width:100%;text-align:start;cursor:pointer;color:inherit}
+.row:first-child{border-top:0}
+.row:hover{background:var(--sunk)}
+.row.th{cursor:default;background:var(--sunk);font-size:12.5px;color:var(--muted);font-weight:700}
+@media (max-width:760px){.row{grid-template-columns:1fr 1fr}.row.th{display:none}.row .c-al{grid-column:1/-1}}
+.code{font-family:var(--f-display);font-weight:800;font-variant-numeric:tabular-nums}
+.meter{height:6px;background:var(--sunk);border-radius:9px;overflow:hidden;margin-top:5px}
+.meter i{display:block;height:100%;background:var(--navy);border-radius:9px}
+.empty{padding:34px 18px;text-align:center;color:var(--muted)}
+.empty h3{color:var(--text);margin-bottom:6px;font-size:18px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tools input,.tools select{width:auto;flex:1;min-width:160px}
+.childhead{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-start}
+.childhead .id{margin-inline-end:auto;min-width:0}
+.childhead h1{font-size:24px}
+.kv{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14px;margin-top:6px}
+.kv span{color:var(--muted)}
+.addbar{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:14px}
+.addbar button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;text-align:start}
+.addbar button:hover{border-color:var(--orange)}
+.addbar b{font-size:14.5px}
+.addbar small{color:var(--muted);font-size:12px;line-height:1.4}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 14px;cursor:pointer;color:var(--muted);font-weight:700;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--orange)}
+.count{font-size:11.5px;background:var(--sunk);border-radius:99px;padding:1px 7px;margin-inline-start:4px}
+.goal{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px}
+.seg button{border:1.5px solid var(--line);background:var(--card);border-radius:9px;padding:6px 12px;font-size:14px;font-weight:700;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--navy);border-color:var(--navy);color:var(--navy-ink)}
+.seg button.on.g-done{background:#2E7D5B;border-color:#2E7D5B;color:#fff}
+.seg button:disabled{cursor:default}
+.trend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:560px){.trend{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.spark{border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.spark .t{font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:4px}
+.spark .t b{color:var(--text);font-variant-numeric:tabular-nums}
+.spark svg{width:100%;height:38px;display:block;margin-top:4px}
+.tl{display:flex;flex-direction:column;gap:8px}
+.tli{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);cursor:pointer;text-align:start;width:100%;color:inherit}
+.tli:hover{border-color:var(--navy)}
+.tag{font-size:12px;font-weight:800;padding:3px 9px;border-radius:7px;white-space:nowrap}
+.ty-obs{background:var(--navy-soft);color:var(--navy)}.ty-acad{background:var(--orange-soft);color:var(--orange)}.ty-ready{background:var(--ok-soft);color:var(--ok)}.ty-fb{background:var(--sunk);color:var(--text)}.ty-screen{background:var(--warn-soft);color:var(--warn)}.ty-note{background:var(--sunk);color:var(--muted)}
+.alert{background:var(--crit-soft);border-inline-start:5px solid var(--crit);padding:10px 14px;border-radius:10px;font-size:14.5px}
+.tip{background:var(--orange-soft);border-radius:10px;padding:10px 14px;font-size:14px}
+ul.plain{margin:6px 0 0;padding-inline-start:20px}
+ul.plain li{margin-bottom:4px}
+.dom{padding:10px 0;border-top:1px solid var(--line)}
+.dom:first-child{border-top:0}
+.domh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800}
+.bigm{height:10px;background:var(--sunk);border-radius:6px;margin:6px 0 2px;overflow:hidden}
+.bigm i{display:block;height:100%;border-radius:6px}
+.up{color:var(--ok);font-weight:800}.down{color:var(--crit);font-weight:800}
+.stackbar{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--sunk);margin:8px 0 6px}
+.stackbar i{display:block;height:100%}
+.lgrow{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted)}
+.lgrow i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:4px;vertical-align:middle}
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.lib a{display:flex;flex-direction:column;gap:4px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--card);text-decoration:none;color:inherit}
+.lib a:hover{border-color:var(--orange)}
+.lib b{font-family:var(--f-display);font-size:16px}
+/* sheet */
+.sheetwrap{position:fixed;inset:0;z-index:20;background:rgb(8 16 28/.55);display:flex;justify-content:center;align-items:stretch}
+.sheet{background:var(--bg);width:100%;max-width:760px;display:flex;flex-direction:column;min-height:0;box-shadow:0 0 40px rgb(0 0 0/.25)}
+.sh-top{background:var(--card);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;gap:10px}
+.sh-top h2{font-size:18px;margin-inline-end:auto}
+.sh-body{flex:1;overflow-y:auto;padding:16px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
+.sh-foot{background:var(--card);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;gap:8px;flex-wrap:wrap}
+.sh-foot .btn{flex:1;min-width:120px}
+.fs{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.fs>h3{font-size:17px}
+.fs .lead{color:var(--muted);font-size:14px;margin:-4px 0 0}
+label.f{display:flex;flex-direction:column;gap:5px;font-weight:700;font-size:14.5px}
+.fl{font-weight:700;font-size:14.5px}
+input[type=text],input[type=date],input[type=number],input[type=month],input[type=search],select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);font-size:16px;color:var(--text)}
+textarea{min-height:68px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.two{grid-template-columns:1fr}}
+.item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.item.done{border-color:var(--navy)}
+.q{font-weight:700}
+.q .num{display:inline-block;min-width:24px;color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:6px}
+@media (max-width:520px){.opts.many{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.opts button{padding:9px 4px;border-radius:9px;border:2px solid var(--line);background:transparent;font-weight:700;font-size:14px;cursor:pointer;line-height:1.25;color:var(--text)}
+.opts button.on{background:var(--c,var(--navy));border-color:var(--c,var(--navy));color:#fff}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:15px}
+.chk input{width:20px;height:20px;flex:none;margin-top:3px;accent-color:var(--navy)}
+.chk:has(input:checked){border-color:var(--navy);background:var(--navy-soft)}
+.chk.red input{accent-color:var(--crit)}
+.chk.red:has(input:checked){border-color:var(--crit);background:var(--crit-soft)}
+.add{width:100%;padding:10px;border:2px dashed var(--line);border-radius:10px;background:none;font-weight:700;cursor:pointer;color:var(--navy)}
+.beh{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.docout{white-space:pre-wrap;font-size:14.5px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.toast{position:fixed;inset-inline:0;bottom:calc(20px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;z-index:40}
+.toast div{background:var(--text);color:var(--bg);padding:9px 18px;border-radius:20px;font-size:14.5px;max-width:90vw}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.btn,.row,.tli,.addbar button{transition:background .15s,border-color .15s}}
+</style>
+
+<div id="root" dir="rtl" lang="ar">
+<header class="bar"><div class="wrap" id="bar"></div></header>
+<main class="wrap" id="app"><div class="loading">جار التحميل…</div></main>
+<div id="sheet"></div>
+<div class="toast" id="toast" hidden><div id="toastText"></div></div>
+</div>
+
+<script>
+/* ================= reference data (from the association's forms) ================= */
+const GROUPS=["قسم التربية الخاصة","برنامج مواكبة (الإدماج المدرسي)","التعليم الأولي","متابعة خارجية"];
+const STATUSES=["نشط","مدمج في مدرسة","في الانتظار","متوقف"];
+const DISABILITY=["شلل دماغي","إعاقة حركية","توحد","متلازمة داون","إعاقة ذهنية","متعددة","فرط الحركة وتشتت الانتباه","صعوبات التعلم","غير مذكورة في الملف"];
+const OBS=[
+ {id:"comm",title:"التواصل والفهم",who:"أخصائي تقويم النطق",items:["ينتبه عندما نناديه باسمه","يفهم تعليمة بسيطة واحدة (مثال: «أعطني الكرة»)","يعبّر عن حاجته بأي طريقة (كلمة، إشارة، نظرة، صورة)","يقول «نعم» أو «لا» بأي طريقة","يشير إلى شيء مألوف أو يسمّيه عندما نسأله عنه","يقلّد صوتاً أو كلمة بعدنا"]},
+ {id:"social",title:"العلاقة مع الآخرين والمشاعر",who:"الأخصائي النفسي",items:["ينظر إلى الشخص الذي يكلّمه","يبتسم أو يفرح عند اللعب مع الآخرين","يلعب بجانب طفل آخر أو معه","ينتظر دوره (بمساعدة إن لزم)","يهدأ خلال بضع دقائق عندما ينزعج","يقبل تغيير النشاط دون نوبة غضب"]},
+ {id:"attention",title:"الانتباه والعمل داخل القسم",who:"الأخصائي النفسي",items:["يبقى في نشاط واحد 5 دقائق","يبقى في مكانه أثناء النشاط (بالوضعية المناسبة له)","ينتقل من نشاط إلى آخر بهدوء","يتبع روتين القسم (الدخول، الأكل، الخروج)","يُكمل النشاط حتى النهاية","يستطيع العمل مع ضجيج خفيف حوله"]},
+ {id:"motor",title:"الحركة",who:"الترويض الطبي والنفس حركي",items:["يجلس بثبات (وحده أو بالسند الخاص به)","يتنقل داخل القسم بطريقته (مشياً، زحفاً، بالكرسي)","يمسك شيئاً بيده ويتركه متى أراد","يستعمل يديه معاً (يمسك الورقة بيد ويخطّ بالأخرى)","يمسك القلم أو الطباشير ويخطّ خطاً","يقلّد حركة بسيطة (رفع اليدين، التصفيق)"]},
+ {id:"autonomy",title:"الاعتماد على النفس",who:"النفس حركي والأسرة",items:["يأكل وحده (كلياً أو جزئياً)","يشرب من الكأس","يُعلِمنا بحاجته إلى المرحاض","يساعد في خلع ملابسه أو لبسها","يغسل يديه بمساعدة بسيطة","يرتّب أدواته عندما نطلب منه"]},
+ {id:"learning",title:"التعلّمات الأولية",who:"الإطار التربوي",items:["يطابق شيئين متشابهين","يتعرّف على الألوان الأساسية","يتعرّف على الأشكال (دائرة، مربع)","يعدّ حتى 5 بأي طريقة","يتعرّف على صورته أو اسمه","يشارك في أغنية أو نشيد القسم","يكمل لعبة تركيب بسيطة (3 أو 4 قطع)"]}];
+const SENSORY=["يغطّي أذنيه أو ينزعج كثيراً من الأصوات","ينزعج من اللمس أو من بعض الملابس","يبحث كثيراً عن الدوران أو القفز أو الهزّ","يضع الأشياء في فمه كثيراً","يرفض أنواعاً كثيرة من الأكل بسبب ملمسها","ينظر إلى الأشياء من زاوية العين أو يقرّبها جداً من وجهه"];
+const FLAGS=["فقد مهارة كان يتقنها (كلام، مشي، أكل)","نوبة تشنّج أو فقدان للوعي","اختناق أو سعال متكرر أثناء الأكل أو الشرب","يؤذي نفسه (يضرب رأسه، يعضّ يده)","يؤذي الأطفال الآخرين بشكل متكرر","يبدو أنه لا يسمع جيداً أو لا يرى جيداً","بكاء أو ألم مستمر لا نعرف سببه","كدمات أو جروح لا نعرف سببها","رفض الأكل أو نقص واضح في الوزن","نعاس غير عادي داخل القسم"];
+const FREQ=["مرة في الأسبوع أو أقل","تقريباً كل يوم","عدة مرات في اليوم"];
+const WANT=["الهروب من النشاط أو الطلب","لفت انتباهنا","الحصول على شيء يريده","يبدو أنه يستمتع بالحركة نفسها","لا أعرف"];
+const GSTAT=["لم يبدأ","يتقدّم","تحقّق"];
+const GDOM=["التواصل","السلوك والمشاعر","الانتباه","الحركة","الاستقلالية","التعلّمات","الإدماج المدرسي"];
+const ACAD=[
+ {id:"pw",title:"مهارات ما قبل الكتابة",obs:true,screens:[
+  {id:"pw1",title:"الحركات الدقيقة والتآزر البصري الحركي",motor:true,items:["مسك الكرات الإسفنجية (بكلتا اليدين)","الضغط على الكرات الإسفنجية بأصابع اليدين","عمل أشكال من الصلصال","التلوين بكلتا اليدين بألوان الأصابع","التلوين بأصابع اليد بألوان الأصابع","استكشاف الورقة وكرمشتها","تمزيق ورق الجرائد","التقاط الخرز بأصابع اليدين","الضغط على الملقط أو القطارة بأصابع اليدين","لصق أشكال من الورق أو الصور المقصوصة","تقليب صفحات الكتاب","يقص بالمقص بشكل عشوائي","يقص خطًا مستقيمًا","يقص خطًا منحنيًا","يقص خطًا متعرجًا","يقص صورة من قصة","يربط رباط الحذاء","يفتح ويغلق أزرار القميص"]},
+  {id:"pw2",title:"النسخ",motor:true,items:["القبض على قلم التلوين العريض باليد المسيطرة","مسك قلم التلوين العريض بالإبهام والسبابة والوسطى","النقر بالقلم على الورقة (التنقيط)","الشخبطة بشكل عشوائي","الشخبطة في اتجاه رأسي","الشخبطة في اتجاه أفقي","الشخبطة في اتجاه دائري","يرسم خطًا رأسيًا مقلِّدًا","يرسم خطًا أفقيًا مقلِّدًا","يرسم علامة + مقلِّدًا","يرسم دائرة مقلِّدًا","يرسم مثلثًا مقلِّدًا","يرسم مربعًا مقلِّدًا","يرسم وردة مقلِّدًا","يرسم رجلًا مقلِّدًا"]}]},
+ {id:"rd",title:"مهارات القراءة",screens:[{id:"rd1",title:"القراءة",items:["يميّز صوت الحرف","يتعرّف على الحروف","يسمّي صوت الحروف","يميّز صوت الحرف المضموم","يميّز صوت الحرف المكسور","يميّز شكل الحرف في أول الكلمة","يميّز شكل الحرف في وسط الكلمة","يميّز شكل الحرف في آخر الكلمة","يقرأ كلمات من 3 حروف مفتوحة","يقرأ المد بالألف","يقرأ المد بالواو","يقرأ المد بالياء","يقرأ جملة من 3 كلمات","يسمّي الكلمة ويعرف معناها","يميّز المفرد والمثنى والجمع","يميّز المذكر والمؤنث","يجيب عن أسئلة (أين، ماذا، متى، كيف، لماذا، هل) حول قطعة قصيرة يقرؤها"]}]},
+ {id:"wr",title:"مهارات الكتابة",screens:[{id:"wr1",title:"الكتابة",motor:true,items:["يصل الحروف المتشابهة","يكتب الحروف منفصلة","يكتب الحرف في أول الكلمة ووسطها وآخرها","يصل الكلمات المتشابهة","يصل الكلمة بالصورة","يكتب كلمة من مقطعين (أكـ / شر / عمـ)","يكتب كلمة من 3 حروف (أكل / شرب / عمل)","ينسخ الكلمات البسيطة","يكتب من الذاكرة (إملاء) الكلمات التي تعلّمها","يكتب اسمه","يكتب الكلمات التي فيها مد بالألف","يكتب الكلمات التي فيها مد بالواو","يكتب الكلمات التي فيها مد بالياء","يكتب جملة من ثلاث كلمات","يعيد ترتيب جملة من ثلاث كلمات","يكتب قطعة قصيرة"]}]},
+ {id:"mt",title:"مهارات الحساب",screens:[
+  {id:"mt1",title:"الأعداد من 1 إلى 10",items:["يعدّ عدًّا آليًا من 1 إلى 10","يعدّ الأشياء من 1 إلى 10","يتعرّف على الأرقام من 1 إلى 10","يصل العدد بالكمية","يسمّي الأرقام من 1 إلى 10","يكتب الأرقام من 1 إلى 10","يعدّ الرموز من 1 إلى 10","يكمل الرقم الناقص من 1 إلى 10","يعطي أو يرسم العدد المطلوب من 1 إلى 10 (بالأشياء وعلى الورق)","يُظهر الأعداد من 1 إلى 10 على أصابع يده","يضع علامة أكبر من وأصغر من","يضع علامة يساوي (=)","يرتّب الأرقام تصاعديًا","يرتّب الأرقام تنازليًا","الجمع البسيط تحت 10","الطرح البسيط تحت 10"]},
+  {id:"mt2",title:"الأعداد الكبيرة والعمليات",start:17,items:["يعدّ حتى 20 على الرموز ويسمّيها ويكتبها","يميّز الآحاد والعشرات","يعدّ حتى 99 ويكتبها","جمع رقمين","طرح رقمين","يميّز المئات","جمع ثلاثة أرقام","طرح ثلاثة أرقام","يميّز الآلاف","جمع أكثر من 3 أرقام","طرح أكثر من 3 أرقام","الجمع بالتحميل (بالاحتفاظ)","الطرح بالاستلاف","جدول الضرب","القسمة","القسمة المطوّلة","المسائل اللفظية","الكسور (جمعها وطرحها)","مفاهيم رياضية (الساعة والمقاييس)","الأعداد العشرية"]}]}];
+const ACAD_OBS=[{id:"hand",q:"اليد المسيطرة",o:["اليمين","اليسار","عسراوية معاكسة"]},{id:"ctrl",q:"التحكم بالقلم",o:["يتحكم","لا يتحكم"]},{id:"grip",q:"طريقة مسك القلم",o:["صحيحة","خاطئة"]},{id:"press",q:"الخطوط: الضغط",o:["خفيفة","ثقيلة"]},{id:"flow",q:"الخطوط: الحركة",o:["مرونة","جمود"]}];
+/* prompt hierarchy: least help -> most help */
+const PL=[{v:"I",l:"وحده",s:5,c:"#2E7D5B"},{v:"G",l:"بالإشارة",s:4,c:"#4F8F55"},{v:"V",l:"بالكلام",s:3,c:"#7F9634"},{v:"M",l:"بالقدوة",s:2,c:"#C98A26"},{v:"PP",l:"مساعدة جسدية جزئية",s:1,c:"#D06A35"},{v:"FP",l:"مساعدة جسدية كاملة",s:0,c:"#B9493A"},{v:"NR",l:"لم ينفّذ",s:-1,c:"#6F7C8C"}];
+const PLM=Object.fromEntries(PL.map(p=>[p.v,p]));PLM.na={v:"na",l:"لا ينطبق",s:null,c:"#8A97A8"};
+const READY=[
+ {id:"auto",title:"الاستقلالية داخل المدرسة",items:[{t:"يستعمل المرحاض أو يُعلِم بحاجته في الوقت المناسب",c:1},{t:"يأكل وجبته وحده وقت الاستراحة"},{t:"يتنقل داخل المدرسة بطريقته (مع وسيلته إن وجدت) دون خطر",c:1},{t:"يحمل أدواته ويرتبها"},{t:"يطلب المساعدة من راشد عند الحاجة"}]},
+ {id:"group",title:"العمل داخل مجموعة",items:[{t:"يبقى في مجموعة من 8 أطفال أو أكثر لمدة 15 دقيقة",c:1},{t:"يتبع تعليمة موجهة لكل المجموعة، لا له وحده"},{t:"ينتظر دوره داخل مجموعة"},{t:"يتحمل الضجيج والازدحام (الساحة، الطابور)"},{t:"يقبل التعامل مع راشد لا يعرفه (معلم جديد)"}]},
+ {id:"beh",title:"السلوك",items:[{t:"لا يؤذي نفسه ولا الآخرين",c:1},{t:"يهدأ بطريقة بسيطة يستطيع المعلم تطبيقها"},{t:"ينتقل بين الأنشطة بإشارة أو تنبيه بسيط"},{t:"يبقى داخل القسم ولا يخرج دون إذن"}]},
+ {id:"com",title:"التواصل",items:[{t:"يعبّر عن حاجاته الأساسية بطريقة يفهمها شخص لا يعرفه",c:1},{t:"يفهم تعليمات القسم اليومية (اجلس، أخرج الدفتر، قف في الصف)"},{t:"يجيب عن سؤال بسيط بأي وسيلة"}]},
+ {id:"learn",title:"التعلّم",items:[{t:"ينجز نشاطاً على الطاولة 10 دقائق بمساعدة قليلة"},{t:"يستعمل أداة كتابة أو بديلاً عنها (بطاقات، إشارة، لوح)"},{t:"يتعرّف على اسمه مكتوباً"},{t:"يقلّد نشاطاً يقوم به المعلم أمام القسم"}]}];
+const RL=["مكتسب","بدعم","غير مكتسب"],RV={"مكتسب":2,"بدعم":1,"غير مكتسب":0};
+const SCHOOL=["مدخل وممرات يمكن الوصول إليها (منحدر، بدون درج)","مرحاض مهيأ أو شخص يساعد عند الحاجة","مرافق/ة داخل القسم (مرافق الحياة المدرسية)","معلم/ة مستعد لاستقبال الطفل ومطّلع على ملفه","مكان جلوس مناسب (كرسي، قرب المعلم، بعيد عن الضجيج)","عدد تلاميذ القسم معقول","إمكانية حضور تدريجي (أيام أو ساعات أقل في البداية)","تنسيق منتظم مع الجمعية عبر برنامج مواكبة"];
+const CL=["متوفر","غير متوفر","لا يحتاجه الطفل"];
+const SPECIALISTS=["تقويم النطق","الترويض الطبي","النفس حركي","الأخصائي النفسي","التربية الخاصة (منسق/ة)"];
+const NEXT=["أتابع الطفل في حصصي","أعيد تقييمه بعد شهر","نخبر الأسرة ونلتقي بها","إحالة إلى طبيب مختص","لا حاجة لتدخل إضافي الآن"];
+const SCREEN=[
+ {id:"lang",title:"اللغة والتواصل",items:["كلامه غير مفهوم لمن لا يعرفه","جمله قصيرة جداً أو مفرداته محدودة مقارنة بأقرانه","لا يفهم التعليمات البسيطة دون إشارة أو تكرار","لا يستطيع أن يحكي حدثاً بسيطاً عاشه","لا يبادر بالكلام مع الآخرين أو لا يلتفت حين يُنادى باسمه"]},
+ {id:"motor",title:"الحركة",items:["يتعثر أو يسقط كثيراً، أو حركته غير متناسقة في الجري والقفز","يمسك القلم بصعوبة أو يتعب بسرعة عند الرسم والكتابة","يجد صعوبة في القص أو التلوين داخل الحدود أو تزرير الملابس","يتجنب الأنشطة الحركية والألعاب الجماعية في الساحة","في الابتدائي: خطه غير مقروء أو بطيء جداً مقارنة بأقرانه"]},
+ {id:"attn",title:"الانتباه وضبط الذات",items:["لا يكمل نشاطاً قصيراً دون مساعدة مستمرة","يتشتت بسهولة لأي صوت أو حركة","يتحرك باستمرار ولا يبقى في مكانه حين يُطلب منه","يجيب أو يتصرف قبل انتهاء التعليمة ولا ينتظر دوره","ينسى أو يضيّع أدواته كثيراً"]},
+ {id:"social",title:"التفاعل الاجتماعي",items:["يلعب وحده معظم الوقت ولا يشارك أقرانه","تواصله البصري قليل، أو لا يستجيب للابتسامة والإشارة","لا يشارك في ألعاب التخيّل والتقليد","يتمسك بروتين أو اهتمام واحد وينزعج بشدة من أي تغيير","حركات متكررة (رفرفة اليدين، الدوران) أو انزعاج شديد من الأصوات أو اللمس"]},
+ {id:"emo",title:"الانفعالات والسلوك",items:["نوبات غضب متكررة وشديدة مقارنة بسنه","بكاء أو قلق شديد عند مفارقة الأهل، مستمر بعد أسابيع من الدخول المدرسي","حزين أو منسحب أو قليل الاهتمام باللعب","يضرب أو يعضّ أو يؤذي أقرانه كثيراً","صامت تماماً في القسم مع أنه يتكلم في البيت"]},
+ {id:"learn",title:"التعلمات الأولى",items:["في التعليم الأولي: لا يتعرف على الألوان والأشكال الأساسية","لا يعدّ الأشياء أو لا يربط العدد بالكمية","يجد صعوبة في تذكر الأناشيد أو أيام الأسبوع أو تسلسل بسيط","في الابتدائي: صعوبة مستمرة في ربط الحرف بصوته رغم التكرار","في الابتدائي: قراءة متعثرة جداً، أو خلط مستمر بين الحروف والأرقام المتشابهة"]}];
+const SCREEN_URGENT=["فقدان الطفل لمهارات كان يتقنها (الكلام، اللعب، النظافة)","شك في السمع أو البصر"];
+const NOTE_KINDS=["جلسة فردية","جلسة جماعية","تواصل مع الأسرة","زيارة المدرسة","اجتماع الفريق","أخرى"];
+const ACT_TYPES=["لقاء الآباء","ورشة للأطفال","تكوين للأطر","اجتماع شهري للفريق","زيارة مدرسة","تحسيس وتوعية","شراكة ومراسلة","أخرى"];
+const LIBRARY=[
+ ["متابعة الطفل","النسخة الأولى من بطاقة ملاحظة المربي (تعمل على الهاتف فقط)","https://claude.ai/artifact/6PrLwu7KXbZ2BtYvs9L3U8"],
+ ["التقييم الأكاديمي","النسخة الأولى من تقييم المهارات الأكاديمية بمستويات التلقين","https://claude.ai/artifact/8uw522TpgiwaFmXUSQqG5Z"],
+ ["استمارة التقييم الرقمية","الاستمارة الشاملة للأخصائي النفسي (توحد / نسخة مرنة)","https://claude.ai/artifact/YLN12wWDcZYwi8RiD6tnvx"],
+ ["شبكة رصد التعثرات النمائية","النسخة الورقية للمدرّسين (التعليم الأولي والسنتان الأولى والثانية)","https://claude.ai/artifact/JRTMbNcoyz6DbAnPz9aUyv"],
+ ["سلوك طفلي يتعبني","عرض لقاء الآباء: نوبات الغضب والعناد","https://claude.ai/artifact/MHHEjcjqRg63WKxUtfptB8"],
+ ["مطبوعات لقاء الآباء","المطبوعات التي تُسلَّم للأسر في اللقاء","https://claude.ai/artifact/565w8KZEa8GX854qW9EGNa"],
+ ["سند للإدماج","متابعة الإدماج المدرسي مع المدرسة والأسرة والمرافق","https://claude.ai/artifact/LmmjEnY6mTpPbuH19KZMzq"],
+ ["Clinical Workflow Toolkit","أدوات سير العمل الإكلينيكي","https://claude.ai/artifact/4qjZUT61bWk5YF1V77W5Hi"]];
+
+/* ================= helpers ================= */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const daysBetween=(a,b)=>Math.round((new Date(b+"T12:00:00")-new Date(a+"T12:00:00"))/864e5);
+const daysSince=ds=>ds?daysBetween(ds,today()):null;
+const fd=s=>{const m=String(s||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+"/"+m[2]+"/"+m[1]:String(s||"")};
+const fdh=s=>"<bdi>"+esc(fd(s))+"</bdi>";
+const MONTHS=["يناير","فبراير","مارس","أبريل","ماي","يونيو","يوليوز","غشت","شتنبر","أكتوبر","نونبر","دجنبر"];
+const monthName=ym=>{const [y,m]=ym.split("-");return MONTHS[+m-1]+" "+y};
+const getP=(o,p)=>p.split(".").reduce((a,k)=>a==null?a:a[k],o);
+const setP=(o,p,v)=>{const ks=p.split(".");let a=o;ks.slice(0,-1).forEach(k=>{if(a[k]==null||typeof a[k]!=="object")a[k]={};a=a[k]});a[ks[ks.length-1]]=v};
+const clone=o=>JSON.parse(JSON.stringify(o));
+function toast(m){$("toastText").textContent=m;$("toast").hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>$("toast").hidden=true,2600)}
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+
+/* ================= state & data layer ================= */
+const COLS=["children","records","goals","activities"];
+let S={children:[],records:[],goals:[],activities:[]};
+let mode="loading",db=null,userCap=null,myId=null,names={},downloads=null;
+let view={tab:"overview",q:"",grp:"",month:today().slice(0,7),armed:null};
+let F=null; // open sheet
+
+async function boot(){
+  window.addEventListener("hashchange",()=>{view.armed=null;render();window.scrollTo(0,0)});
+  render();
+  const cl=window.claude;
+  if(cl&&cl.use){
+    cl.use("downloads").then(d=>{downloads=d}).catch(()=>{});
+    let d=null;try{d=await cl.use("db")}catch(e){}
+    if(d){
+      db=d;mode="live";
+      try{userCap=await cl.use("user");if(userCap)myId=await userCap.id()}catch(e){}
+      const seen=new Set();
+      COLS.forEach(c=>db.collection(c).onSnapshot(snap=>{
+        S[c]=snap.docs.map(x=>({...x.data(),id:x.id}));seen.add(c);
+        if(seen.size===COLS.length||mode==="live")schedule();
+      },e=>toast(e&&e.code==="quota_exceeded"?"مساحة التخزين ممتلئة.":"تعذّر الاتصال بقاعدة البيانات. أعد فتح الصفحة.")));
+      return;
+    }
+  }
+  mode="demo";S=demoData();render();
+}
+let _raf=0;function schedule(){cancelAnimationFrame(_raf);_raf=requestAnimationFrame(render)}
+async function put(col,obj){
+  const {id,...rest}=obj;const body=clone(rest);
+  if(mode==="live"){try{await db.collection(col).doc(id).set(body)}catch(e){toast(e&&e.code==="quota_exceeded"?"مساحة التخزين ممتلئة: احذف عناصر قديمة.":"لم يتم الحفظ. تحقق من الاتصال وأعد المحاولة.");throw e}}
+  else{const i=S[col].findIndex(x=>x.id===id);const row={...body,id};if(i<0)S[col].push(row);else S[col][i]=row;render()}
+}
+async function remove(col,id){
+  if(mode==="live"){try{await db.collection(col).doc(id).delete()}catch(e){toast("لم يتم الحذف. أعد المحاولة.");throw e}}
+  else{S[col]=S[col].filter(x=>x.id!==id);render()}
+}
+function who(id){if(!id)return "عضو الفريق";const p=names[id];return (p&&p.name)||"عضو الفريق"}
+let _nameReq=new Set();
+function resolveNames(){
+  if(!userCap||!userCap.profiles)return;
+  const ids=[...new Set([...S.records,...S.activities].map(r=>r.by).filter(Boolean))].filter(i=>!names[i]&&!_nameReq.has(i));
+  if(!ids.length)return;ids.forEach(i=>_nameReq.add(i));
+  userCap.profiles(ids).then(ps=>{Object.assign(names,ps||{});schedule()}).catch(()=>{});
+}
+
+/* ================= derived ================= */
+const childById=id=>S.children.find(c=>c.id===id);
+const childLabel=c=>c?(c.code?c.code+" · ":"")+(c.name||""):"طفل محذوف";
+const recsOf=(cid,type)=>S.records.filter(r=>r.childId===cid&&(!type||r.type===type)).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.createdAt||0)-(a.createdAt||0));
+const goalsOf=cid=>S.goals.filter(g=>g.childId===cid).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+function prevOf(r){return recsOf(r.childId,r.type).filter(x=>x.id!==r.id&&(x.date||"")<=(r.date||""))[0]||null}
+const active=c=>(c.status||"نشط")==="نشط"||c.status==="مدمج في مدرسة";
+
+function alertsOf(c){
+  const out=[];const obs=recsOf(c.id,"obs");
+  if(!obs.length)out.push({lv:"warn",t:"لا توجد ملاحظة أولى"});
+  else{
+    const n=daysSince(obs[0].date);
+    if(n>35&&(c.status||"نشط")==="نشط")out.push({lv:"warn",t:"المتابعة الشهرية متأخرة ("+n+" يوم)"});
+    if((obs[0].flags||[]).length&&n<=60)out.push({lv:"crit",t:"علامات مهمة في آخر ملاحظة"});
+  }
+  const sc=recsOf(c.id,"screen")[0];
+  if(sc){const a=screenAnalysis(sc);if(a.cls==="crit")out.push({lv:"crit",t:"رصد: "+a.short});else if(a.cls==="warn")out.push({lv:"warn",t:"رصد: "+a.short})}
+  const fb=recsOf(c.id,"fb").find(r=>r.review);
+  if(fb){const n=daysBetween(today(),fb.review);if(n<0&&n>-30)out.push({lv:"warn",t:"فات موعد المراجعة "+fd(fb.review)});else if(n>=0&&n<=7)out.push({lv:"acc",t:"مراجعة مع المربي "+fd(fb.review)})}
+  return out;
+}
+function goalPct(cid){const g=goalsOf(cid);if(!g.length)return null;return Math.round(g.reduce((s,x)=>s+(x.status==="تحقّق"?2:x.status==="يتقدّم"?1:0),0)/(g.length*2)*100)}
+
+/* ================= analyses (ported from the association's tools) ================= */
+const ANS={yes:2,some:1,no:0},ANS_L={yes:"نعم",some:"أحيانًا",no:"ليس بعد",na:"لا ينطبق"};
+function domainScore(r,d){
+  const a=(r.ans&&r.ans[d.id])||[];let sum=0,n=0,answered=0;
+  a.forEach(v=>{if(v==null)return;answered++;if(v==="na")return;sum+=ANS[v];n++});
+  const pct=n?Math.round(sum/(2*n)*100):null;const enough=answered>=Math.ceil(d.items.length/2)&&n>0;
+  let level="none",label="بيانات غير كافية";
+  if(enough){if(pct>=75){level="good";label="جيد"}else if(pct>=50){level="mid";label="في تقدّم"}else{level="low";label="يحتاج دعمًا"}}
+  return {pct,level,label,answered,total:d.items.length};
+}
+function obsAnalysis(r){
+  const doms=OBS.map(d=>({d,s:domainScore(r,d)}));const refer=new Map();
+  const add=(w,why)=>{if(!refer.has(w))refer.set(w,[]);refer.get(w).push(why)};
+  doms.forEach(({d,s})=>{if(s.level==="low")add(d.who,d.title)});
+  const sens=(r.sensory||[]).length;if(sens>=2)add("الأخصائي النفسي والنفس حركي","ملاحظات حسية ("+sens+")");
+  if((r.behaviors||[]).some(b=>b.what&&b.freq&&b.freq!==FREQ[0]))add("الأخصائي النفسي","سلوك متكرر");
+  const unanswered=OBS.reduce((n,d)=>n+d.items.filter((_,i)=>((r.ans||{})[d.id]||[])[i]==null).length,0);
+  return {doms,refer,flags:r.flags||[],unanswered};
+}
+const levelColor=l=>l==="good"?"var(--ok)":l==="mid"?"var(--orange)":l==="low"?"var(--crit)":"var(--line)";
+function subjStats(r,s){
+  let k=0,total=0;const next=[],dist={};PL.forEach(p=>dist[p.v]=0);
+  s.screens.forEach(sc=>sc.items.forEach((it,i)=>{total++;const v=((r.ans||{})[sc.id]||[])[i];if(!v||v==="na")return;
+    dist[v]++;if(v==="I")k++;else if(next.length<3)next.push({num:(sc.start||1)+i,t:it,v})}));
+  return {k,total,next,dist};
+}
+function nextLevel(v){if(v==="NR")return "يقبل المحاولة بمساعدة جسدية";const i=PL.findIndex(p=>p.v===v);return i<=0?null:PL[i-1].l}
+function lessHelp(r,p,s){
+  if(!p||!(p.subjects||[]).includes(s.id))return null;let better=0,worse=0;
+  s.screens.forEach(sc=>sc.items.forEach((_,i)=>{const a=((r.ans||{})[sc.id]||[])[i],b=((p.ans||{})[sc.id]||[])[i];
+    if(!a||!b||a==="na"||b==="na")return;const x=PLM[a].s,y=PLM[b].s;if(x>y)better++;else if(x<y)worse++}));
+  return {better,worse};
+}
+function readyAnalysis(r){
+  let sum=0,n=0;const critMiss=[],goals=[],dom=[];
+  READY.forEach(d=>{let s=0,m=0;d.items.forEach((it,i)=>{const v=((r.ans||{})[d.id]||[])[i];if(!v)return;s+=RV[v];m++;sum+=RV[v];n++;
+    if(v!==RL[0])goals.push({t:it.t,c:!!it.c,v});if(it.c&&v===RL[2])critMiss.push(it.t)});
+    dom.push({d,pct:m?Math.round(s/(2*m)*100):null})});
+  const total=READY.reduce((k,d)=>k+d.items.length,0);const pct=n?Math.round(sum/(2*n)*100):null;
+  let dec,cls;
+  if(n<total*.8){dec="أكمل الأسئلة أولًا";cls="none"}
+  else if(critMiss.length||pct<50){dec="يحتاج مزيدًا من التحضير قبل الإدماج";cls="low"}
+  else if(pct>=75){dec="مستعد للإدماج مع متابعة عادية عبر برنامج مواكبة";cls="good"}
+  else{dec="مستعد للإدماج مع مرافقة ودعم داخل المدرسة";cls="mid"}
+  goals.sort((a,b)=>(b.c-a.c)||(a.v===RL[2]?-1:1));
+  const gaps=SCHOOL.filter((_,i)=>((r.ans||{}).cond||[])[i]===CL[1]);
+  return {pct,dec,cls,critMiss,goals,gaps,dom};
+}
+function screenAnalysis(r){
+  const per=SCREEN.map(d=>{const a=((r.ans||{})[d.id]||[]);const twos=d.items.filter((_,i)=>a[i]==="2");return {d,twos,ones:a.filter(v=>v==="1").length,signal:twos.length>=2}});
+  const sig=per.filter(p=>p.signal).length,anyTwo=per.reduce((n,p)=>n+p.twos.length,0);const urgent=r.urgent||[];
+  let dec,cls,short;
+  if(urgent.length){dec="توجيه دون انتظار، مهما كانت الدرجات";cls="crit";short="توجيه عاجل"}
+  else if(sig>=2){dec="إشارة قوية: أقترح على الأسرة استشارة في أقرب وقت";cls="crit";short="إشارة قوية"}
+  else if(sig===1){dec="إشارة: أتحدث مع الأسرة وأقترح استشارة مختص";cls="warn";short="إشارة"}
+  else if(anyTwo){dec="أكيّف داخل القسم وأعيد الملاحظة بعد شهر";cls="mid";short="تكييف وإعادة ملاحظة"}
+  else{dec="أواصل الملاحظة العادية";cls="good";short="لا إشارة"}
+  return {per,dec,cls,short,urgent};
+}
+
+/* ================= record types: forms + summaries ================= */
+const yesOpts=[{v:"yes",l:"نعم",c:"#2D5A8A"},{v:"some",l:"أحيانًا",c:"#C97A2E"},{v:"no",l:"ليس بعد",c:"#6F7C8C"}];
+const TYPES={
+ obs:{t:"ملاحظة المربي",d:"ملاحظة أولى أو متابعة شهرية",blank:()=>({kind:"followup",ans:{},notes:{},sensory:[],flags:[],behaviors:[],goalStatus:{}}),
+  sections:r=>[
+   {t:"معلومات الملاحظة",fields:[{k:"kind",type:"seg",l:"نوع الملاحظة",o:[{v:"first",l:"ملاحظة أولى"},{v:"followup",l:"متابعة شهرية"}]},{row:[{k:"date",type:"date",l:"تاريخ الملاحظة"},{k:"educator",type:"text",l:"المربي / المربية"}]},
+    {type:"tip",html:"لاحظ الطفل <strong>3 أيام على الأقل</strong> قبل ملء البطاقة. اكتب ما تراه بعينك، واختر «لا ينطبق» إذا كانت إعاقة الطفل تمنعه من البند. هذه البطاقة ليست تشخيصًا."}]},
+   ...OBS.map(d=>({t:d.title,lead:"هل يفعل الطفل هذا عادة؟",fields:[{type:"scale",k:"ans."+d.id,items:d.items,opts:yesOpts,na:true},{k:"notes."+d.id,type:"textarea",l:"ملاحظة (اختياري): مثال لما رأيته"}]})),
+   {t:"ملاحظات حسّية",lead:"علّم فقط ما تلاحظه كثيرًا.",fields:[{k:"sensory",type:"checks",o:SENSORY},{k:"sensoryNote",type:"textarea",l:"ملاحظة (اختياري)"}]},
+   {t:"علامات مهمة",fields:[{type:"alert",html:"إذا رأيت أيًّا من هذه العلامات، <strong>أخبر الإدارة أو الأخصائي في نفس اليوم</strong>، ولا تنتظر الاجتماع الشهري."},{k:"flags",type:"checks",o:FLAGS,red:true},{k:"flagNote",type:"textarea",l:"ماذا رأيت بالضبط ومتى؟"}]},
+   {t:"سلوك يقلقني",lead:"اختياري. اكتب مثل كاميرا: ماذا حدث قبل، ماذا فعل الطفل، ماذا فعلنا بعده.",fields:[{type:"behaviors"}]},
+   {t:"ما يحبه الطفل وما يتقنه",lead:"ما يحبه الطفل هو ما سنستعمله لتشجيعه.",fields:[{k:"likes",type:"textarea",l:"ماذا يحب؟ (ألعاب، أغاني، أكل، أنشطة، أشخاص)"},{k:"good",type:"textarea",l:"في ماذا ينجح جيدًا؟"},{k:"calm",type:"textarea",l:"ما الذي يساعده على الهدوء؟"}]},
+   {t:"أهداف المشروع الفردي",lead:"حدّد أين وصل الطفل في كل هدف. تُحدَّث الأهداف في ملف الطفل عند الحفظ.",fields:[{type:"goalstatus"},{k:"goalNote",type:"textarea",l:"ملاحظة حول الأهداف (اختياري)"}]}],
+  html:viewObs,text:textObs},
+ acad:{t:"التقييم الأكاديمي",d:"ما قبل الكتابة، القراءة، الكتابة، الحساب",blank:()=>({subjects:[],ans:{},notes:{},obs:{}}),
+  sections:r=>[
+   {t:"معلومات التقييم",fields:[{row:[{k:"date",type:"date",l:"تاريخ التقييم"},{k:"period",type:"text",l:"فترة التقييم",ph:"مثال: بداية السنة"}]},{k:"evaluator",type:"text",l:"القائم بالتقييم"},
+    {k:"subjects",type:"checks",l:"ماذا ستقيّم اليوم؟",o:ACAD.map(s=>({v:s.id,l:s.title+" ("+s.screens.reduce((a,x)=>a+x.items.length,0)+" مهارة)"})),rerender:true},
+    {type:"tip",html:"اطلب المهارة أولًا <strong>دون مساعدة</strong>، ثم زِد المساعدة خطوة خطوة، وسجّل <strong>أقل مساعدة احتاجها لينجح</strong>. «وحده» = يعرف. إذا لم يعرف 3 مهارات متتالية يمكنك التوقف."}]},
+   ...ACAD.filter(s=>(r.subjects||[]).includes(s.id)).flatMap(s=>[
+     ...s.screens.map(sc=>({t:s.title+": "+sc.title,fields:[{type:"scale",k:"ans."+sc.id,items:sc.items,opts:PL,na:!!sc.motor,start:sc.start||1,many:true},{k:"notes."+sc.id,type:"textarea",l:"ملاحظات"}]})),
+     ...(s.obs?[{t:"ما قبل الكتابة: عن طريق الملاحظة",lead:"لاحظ الطفل وهو يرسم أو يكتب.",fields:[...ACAD_OBS.map(o=>({k:"obs."+o.id,type:"seg",l:o.q,o:o.o})),{k:"notes.pwo",type:"textarea",l:"ملاحظات"}]}]:[])]),
+   {t:"نقاط القوة ونقاط الضعف",fields:[{k:"strengths",type:"textarea",l:"نقاط القوة"},{k:"weak",type:"textarea",l:"نقاط الضعف"},{k:"remarks",type:"textarea",l:"ملاحظات"}]}],
+  html:viewAcad,text:textAcad},
+ ready:{t:"الجاهزية للمدرسة",d:"قبل اقتراح الإدماج في مدرسة عمومية",blank:()=>({ans:{},notes:{}}),
+  sections:r=>[
+   {t:"معلومات التقييم",fields:[{type:"tip",html:"تُملأ من طرف المربي المرجعي مع الأخصائيين. الهدف معرفة ما يحتاجه الطفل وما تحتاجه المدرسة. البند المعلَّم بـ ★ أساسي."},{k:"date",type:"date",l:"التاريخ"},{k:"school",type:"text",l:"المدرسة المقترحة (إن وُجدت)"},{k:"team",type:"text",l:"من شارك في التقييم؟",ph:"مثال: المربية، أخصائي النطق، النفس حركي"}]},
+   ...READY.map(d=>({t:d.title,lead:"«بدعم» = يفعلها إذا ساعده راشد أو استعمل وسيلة مساعدة.",fields:[{type:"scale",k:"ans."+d.id,items:d.items.map(i=>(i.c?"★ ":"")+i.t),opts:[{v:RL[0],l:RL[0],c:"#2E7D5B"},{v:RL[1],l:RL[1],c:"#C97A2E"},{v:RL[2],l:RL[2],c:"#B3413A"}]},{k:"notes."+d.id,type:"textarea",l:"الدعم الذي يحتاجه في هذا المجال (اختياري)"}]})),
+   {t:"ظروف المدرسة المستقبِلة",lead:"الإدماج مسؤولية المدرسة أيضًا. اترك هذا فارغًا إذا لم تُحدَّد مدرسة بعد.",fields:[{type:"scale",k:"ans.cond",items:SCHOOL,opts:[{v:CL[0],l:CL[0],c:"#2E7D5B"},{v:CL[1],l:CL[1],c:"#B3413A"},{v:CL[2],l:CL[2],c:"#6F7C8C"}]},{k:"condNote",type:"textarea",l:"ملاحظات حول المدرسة"}]}],
+  html:viewReady,text:textReady},
+ fb:{t:"رد الأخصائي",d:"توصيات للمربي بعد رؤية الطفل",blank:()=>({dos:["","",""],donts:["",""],next:[]}),
+  sections:r=>[
+   {t:"الإحالة",lead:"اكتب بجمل قصيرة وكلمات يفهمها المربي، بدون مصطلحات.",fields:[{row:[{k:"specialist",type:"select",l:"التخصص",o:SPECIALISTS},{k:"date",type:"date",l:"التاريخ"}]},{row:[{k:"specName",type:"text",l:"اسم الأخصائي"},{k:"educator",type:"text",l:"إلى المربي/ة"}]},{k:"reason",type:"text",l:"سبب الإحالة",ph:"مثال: التواصل والفهم يحتاج دعمًا"}]},
+   {t:"ما لاحظتُه",fields:[{k:"seen",type:"textarea",l:"ماذا لاحظتُ؟ (جملتان أو ثلاث)",ph:"مثال: يفهم التعليمة عندما نريه الشيء، ولا يفهمها بالكلام فقط"},{k:"meaning",type:"textarea",l:"ماذا يعني هذا داخل القسم؟",ph:"مثال: عندما لا يتبع التعليمة فليس عنادًا، بل لم يفهمها"}]},
+   {t:"التوصيات",fields:[{k:"dos",type:"list",l:"افعل في القسم (3 أشياء كحد أقصى، يمكن فعلها غدًا)",ph:["مثال: أظهر له الصورة أو الشيء مع كل تعليمة","مثال: أعطه تعليمة واحدة في كل مرة","مثال: امدحه فورًا عندما يطلب بالإشارة"]},{k:"donts",type:"list",l:"تجنّب",ph:["مثال: لا تعطه اللعبة وهو يصرخ","مثال: لا تكرر التعليمة بصوت أعلى"]},{k:"watch",type:"textarea",l:"لاحظ وسجّل لي قبل اللقاء القادم",ph:"مثال: كم مرة في اليوم يطلب شيئًا بالإشارة"}]},
+   {t:"الخطوة التالية",fields:[{k:"next",type:"checks",o:NEXT},{k:"review",type:"date",l:"موعد المراجعة مع المربي"}]}],
+  html:viewFb,text:textFb},
+ screen:{t:"شبكة رصد التعثرات",d:"يملؤها المدرّس(ة) عن تلميذ يثير تساؤله",blank:()=>({ans:{},urgent:[]}),
+  sections:r=>[
+   {t:"معلومات الرصد",fields:[{row:[{k:"date",type:"date",l:"التاريخ"},{k:"teacher",type:"text",l:"المدرّس(ة)"}]},{row:[{k:"klass",type:"text",l:"القسم"},{k:"period",type:"text",l:"فترة الملاحظة",ph:"أسبوعان على الأقل"}]},
+    {type:"tip",html:"لا تُحتسب الدرجة <strong>2</strong> إلا إذا كان السلوك متكررًا، ومستمرًا منذ عدة أسابيع، ويظهر في أكثر من وضعية. قارن دائمًا التلميذ بأقرانه من نفس السن."}]},
+   ...SCREEN.map(d=>({t:d.title,fields:[{type:"scale",k:"ans."+d.id,items:d.items,opts:[{v:"0",l:"0 · لا ألاحظه",c:"#2E7D5B"},{v:"1",l:"1 · أحيانًا",c:"#C97A2E"},{v:"2",l:"2 · كثيرًا",c:"#B3413A"}]}]})),
+   {t:"حالات تستدعي التوجيه دون انتظار",fields:[{k:"urgent",type:"checks",o:SCREEN_URGENT,red:true},{k:"notes",type:"textarea",l:"ملاحظات المدرّس(ة)"}]}],
+  html:viewScreen,text:textScreen},
+ note:{t:"ملاحظة جلسة",d:"جلسة، تواصل مع الأسرة، زيارة",blank:()=>({kind:NOTE_KINDS[0]}),
+  sections:r=>[{t:"الملاحظة",fields:[{k:"kind",type:"seg",l:"النوع",o:NOTE_KINDS},{k:"date",type:"date",l:"التاريخ"},{k:"text",type:"textarea",l:"ماذا حدث؟"},{k:"nextStep",type:"textarea",l:"الخطوة التالية"}]}],
+  html:r=>`<div class="fs"><div class="chips"><span class="chip acc">${esc(r.kind||"")}</span></div><div style="white-space:pre-wrap">${esc(r.text||"—")}</div>${r.nextStep?`<div><div class="fl">الخطوة التالية</div><div style="white-space:pre-wrap">${esc(r.nextStep)}</div></div>`:""}</div>`,
+  text:r=>[(r.kind||"ملاحظة")+" — "+childLabel(childById(r.childId))+" — "+fd(r.date),r.text||"",r.nextStep?"الخطوة التالية: "+r.nextStep:""].filter(Boolean).join("\n")}
+};
+const CHILD_FORM={t:"بطاقة الطفل",sections:()=>[{t:"المعلومات الأساسية",fields:[
+  {type:"tip",html:"السرية: استعمل رمزًا والاسم الأول أو الأحرف الأولى فقط. لا تكتب هنا تفاصيل التشخيص أو أرقام الهاتف."},
+  {row:[{k:"code",type:"text",l:"الرمز *",ph:"مثال: خ-014"},{k:"name",type:"text",l:"الاسم الأول أو الأحرف الأولى *"}]},
+  {row:[{k:"dob",type:"date",l:"تاريخ الميلاد"},{k:"sex",type:"seg",l:"الجنس",o:["ذكر","أنثى"]}]},
+  {row:[{k:"group",type:"select",l:"القسم / البرنامج",o:GROUPS},{k:"status",type:"select",l:"الوضعية",o:STATUSES}]},
+  {k:"disability",type:"select",l:"الإعاقة كما هي مكتوبة في الملف",o:DISABILITY},
+  {row:[{k:"educator",type:"text",l:"المربي المرجعي"},{k:"school",type:"text",l:"المدرسة (إن وُجدت)"}]},
+  {k:"notes",type:"textarea",l:"ملاحظات عامة"}]}]};
+const ACT_FORM={t:"نشاط الجمعية",sections:()=>[{t:"النشاط",fields:[
+  {k:"type",type:"select",l:"نوع النشاط",o:ACT_TYPES},{k:"title",type:"text",l:"العنوان *",ph:"مثال: سلوك طفلي يتعبني: نوبات الغضب والعناد"},
+  {row:[{k:"date",type:"date",l:"التاريخ"},{k:"place",type:"text",l:"المكان"}]},
+  {row:[{k:"families",type:"number",l:"عدد الأسر / المشاركين"},{k:"kids",type:"number",l:"عدد الأطفال المعنيين"}]},
+  {k:"lead",type:"text",l:"المؤطِّر / المسؤول"},{k:"notes",type:"textarea",l:"ما الذي تم؟ النتائج والملاحظات"},{k:"followup",type:"textarea",l:"المتابعة المطلوبة"}]}]};
+
+/* ---------- summaries ---------- */
+function viewObs(r){
+  const A=obsAnalysis(r),p=prevOf(r);const pd=p?Object.fromEntries(OBS.map(d=>[d.id,domainScore(p,d)])):null;
+  return `<p class="sub" style="margin:0">${r.kind==="first"?"ملاحظة أولى":"متابعة شهرية"} بتاريخ ${fdh(r.date)}${p?" — مقارنة مع "+fdh(p.date):""}${r.educator?" — "+esc(r.educator):""}. تلخيص للملاحظات وليس تشخيصًا.</p>
+  ${A.flags.length?`<div class="alert"><strong>أخبر الإدارة أو الأخصائي اليوم:</strong><ul class="plain">${A.flags.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>${r.flagNote?esc(r.flagNote):""}</div>`:""}
+  <div class="fs">${A.doms.map(({d,s})=>{const ps=pd&&pd[d.id];let delta="";
+    if(ps&&ps.level!=="none"&&s.level!=="none"){const dd=s.pct-ps.pct;delta=dd>0?`<span class="up">▲ ${dd}</span>`:dd<0?`<span class="down">▼ ${-dd}</span>`:`<span class="sub">= ثابت</span>`}
+    return `<div class="dom"><div class="domh"><span>${esc(d.title)}</span><span class="chip ${s.level==="good"?"ok":s.level==="mid"?"or":s.level==="low"?"crit":""}">${s.label}${s.level!=="none"?" · "+s.pct+"%":""}</span></div>
+    <div class="bigm"><i style="width:${s.level==="none"?0:s.pct}%;background:${levelColor(s.level)}"></i></div><div class="sub">أجاب على ${s.answered} من ${s.total} ${delta}</div>${(r.notes||{})[d.id]?`<div class="sub">${esc(r.notes[d.id])}</div>`:""}</div>`}).join("")}</div>
+  <div class="fs"><h3>من نُخبر في الاجتماع الشهري؟</h3>${A.refer.size?`<ul class="plain">${[...A.refer].map(([w,why])=>`<li><strong>${esc(w)}</strong>: ${esc(why.join("، "))}</li>`).join("")}</ul>`:`<p class="sub" style="margin:0">لا يوجد مجال يحتاج إحالة خاصة حسب هذه الملاحظة.</p>`}</div>
+  ${(r.sensory||[]).length?`<div class="fs"><h3>ملاحظات حسية</h3><ul class="plain">${r.sensory.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
+  ${(r.behaviors||[]).filter(b=>b.what).map((b,i)=>`<div class="fs"><h3>سلوك مقلق ${i+1}: ${esc(b.what)}</h3><div class="sub">${b.when?"قبل: "+esc(b.when)+"<br>":""}${b.after?"بعد: "+esc(b.after)+"<br>":""}${b.freq?"التكرار: "+esc(b.freq)+"<br>":""}${b.want?"ما يظنه المربي: "+esc(b.want):""}</div></div>`).join("")}
+  ${r.likes||r.good||r.calm?`<div class="fs"><h3>نقاط القوة والاهتمامات</h3><div>${r.likes?"<b>يحب:</b> "+esc(r.likes)+"<br>":""}${r.good?"<b>ينجح في:</b> "+esc(r.good)+"<br>":""}${r.calm?"<b>يهدّئه:</b> "+esc(r.calm):""}</div></div>`:""}
+  ${A.unanswered?`<p class="sub">بقي ${A.unanswered} بندًا بدون جواب.</p>`:""}`;
+}
+function textObs(r){
+  const A=obsAnalysis(r),p=prevOf(r),c=childById(r.childId),L=[];
+  L.push("بطاقة ملاحظة المربي — جمعية آفاق، مركز خطوات (قسم التربية الخاصة)");
+  L.push("ملاحظة: هذه ملاحظات سلوكية يومية من الإطار التربوي، وليست اختبارًا معياريًا ولا تشخيصًا.");
+  L.push("========================================");
+  L.push("▪ الطفل: "+childLabel(c)+(c&&c.disability?" | الإعاقة حسب الملف: "+c.disability:""));
+  L.push("▪ "+(r.kind==="first"?"ملاحظة أولى":"متابعة شهرية")+" | التاريخ: "+fd(r.date)+(r.educator?" | المربي/ة: "+r.educator:""));
+  if(A.flags.length){L.push("\n▪ علامات تستدعي تدخلًا عاجلًا");A.flags.forEach(f=>L.push("  - "+f));if(r.flagNote)L.push("  - التفاصيل: "+r.flagNote)}
+  L.push("\n▪ الملاحظة حسب المجالات (نعم / أحيانًا / ليس بعد)");
+  A.doms.forEach(({d,s})=>{let line="  ["+d.title+"] "+s.label+(s.level!=="none"?" ("+s.pct+"%)":"");
+    if(p){const ps=domainScore(p,d);if(ps.level!=="none"&&s.level!=="none")line+=" — السابق "+ps.pct+"%"}L.push(line);
+    d.items.forEach((q,i)=>{const v=((r.ans||{})[d.id]||[])[i];if(v)L.push("     • "+q+": "+ANS_L[v])});
+    if((r.notes||{})[d.id])L.push("     ملاحظة: "+r.notes[d.id])});
+  if((r.sensory||[]).length||r.sensoryNote){L.push("\n▪ ملاحظات حسية");(r.sensory||[]).forEach(s=>L.push("  - "+s));if(r.sensoryNote)L.push("  - "+r.sensoryNote)}
+  const bs=(r.behaviors||[]).filter(b=>b.what);
+  if(bs.length){L.push("\n▪ سلوك مقلق (قبل / السلوك / بعد)");bs.forEach((b,i)=>{L.push("  "+(i+1)+") "+b.what);if(b.when)L.push("     قبل: "+b.when);if(b.after)L.push("     بعد: "+b.after);if(b.freq)L.push("     التكرار: "+b.freq);if(b.want)L.push("     ما يظنه المربي: "+b.want)})}
+  if(r.likes||r.good||r.calm){L.push("\n▪ نقاط القوة والاهتمامات");if(r.likes)L.push("  - يحب: "+r.likes);if(r.good)L.push("  - ينجح في: "+r.good);if(r.calm)L.push("  - يساعده على الهدوء: "+r.calm)}
+  const gs=Object.entries(r.goalStatus||{}).filter(([,v])=>v);
+  if(gs.length){L.push("\n▪ أهداف المشروع الفردي");gs.forEach(([id,v])=>{const g=S.goals.find(x=>x.id===id);if(g)L.push("  - "+g.text+": "+v)});if(r.goalNote)L.push("  - ملاحظة: "+r.goalNote)}
+  if(A.refer.size){L.push("\n▪ اقتراح عرض الحالة في الاجتماع الشهري على");[...A.refer].forEach(([w,why])=>L.push("  - "+w+": "+why.join("، ")))}
+  return L.join("\n");
+}
+function viewAcad(r){
+  const p=prevOf(r);const subs=ACAD.filter(s=>(r.subjects||[]).includes(s.id));
+  if(!subs.length)return `<p class="sub">لم تُختر أي مادة.</p>`;
+  return `<p class="sub" style="margin:0">تقييم بتاريخ ${fdh(r.date)}${p?" — مقارنة مع "+fdh(p.date):""}. تقييم ملاحظاتي بالمهارات، وليس اختبارًا معياريًا.</p>`+subs.map(s=>{
+    const st=subjStats(r,s),lh=lessHelp(r,p,s);let delta="";
+    if(p&&(p.subjects||[]).includes(s.id)){const d=st.k-subjStats(p,s).k;delta=d>0?`<span class="up">▲ ${d} مهارة جديدة</span>`:d<0?`<span class="down">▼ ${-d}</span>`:`<span class="sub">= بدون تغيير</span>`}
+    return `<div class="fs"><div class="domh"><span>${esc(s.title)}</span>${delta}</div>
+    <div><span class="code" style="font-size:26px;color:var(--navy)">${st.k}</span> <span class="sub">مهارة ينفّذها وحده من ${st.total}</span></div>
+    <div class="stackbar">${PL.filter(x=>st.dist[x.v]).map(x=>`<i style="width:${st.dist[x.v]/st.total*100}%;background:${x.c}"></i>`).join("")}</div>
+    <div class="lgrow">${PL.filter(x=>st.dist[x.v]).map(x=>`<span><i style="background:${x.c}"></i>${x.l}: ${st.dist[x.v]}</span>`).join("")}</div>
+    ${lh&&(lh.better||lh.worse)?`<p class="sub" style="margin:0">${lh.better?`<span class="up">مساعدة أقل في ${lh.better} مهارة</span>`:""}${lh.better&&lh.worse?" — ":""}${lh.worse?`<span class="down">مساعدة أكثر في ${lh.worse}</span>`:""}</p>`:""}
+    ${st.next.length?`<div><div class="fl">الأهداف التالية المقترحة</div><ul class="plain">${st.next.map(x=>`<li>${x.num}. ${esc(x.t)}<br><span class="sub">الآن: ${PLM[x.v].l} ← الهدف: ${nextLevel(x.v)}</span></li>`).join("")}</ul></div>`:""}</div>`}).join("")
+  +((r.subjects||[]).includes("pw")&&Object.values(r.obs||{}).some(Boolean)?`<div class="fs"><h3>عن طريق الملاحظة</h3><ul class="plain">${ACAD_OBS.filter(o=>(r.obs||{})[o.id]).map(o=>`<li>${o.q}: <strong>${esc(r.obs[o.id])}</strong></li>`).join("")}</ul></div>`:"")
+  +(r.strengths||r.weak?`<div class="fs">${r.strengths?"<div><b>نقاط القوة:</b> "+esc(r.strengths)+"</div>":""}${r.weak?"<div><b>نقاط الضعف:</b> "+esc(r.weak)+"</div>":""}${r.remarks?"<div><b>ملاحظات:</b> "+esc(r.remarks)+"</div>":""}</div>`:"");
+}
+function textAcad(r){
+  const L=[],p=prevOf(r);
+  L.push("التقييم الأكاديمي — جمعية آفاق، مركز خطوات");
+  L.push("ملاحظة: تقييم ملاحظاتي بالمهارات مع تسجيل أقل مستوى تلقين لازم، وليس اختبارًا معياريًا.");
+  L.push("مستويات التلقين: وحده ← بالإشارة ← بالكلام ← بالقدوة ← مساعدة جسدية جزئية ← مساعدة جسدية كاملة ← لم ينفّذ");
+  L.push("========================================");
+  L.push("▪ الطالب: "+childLabel(childById(r.childId))+" | التاريخ: "+fd(r.date)+(r.period?" | الفترة: "+r.period:"")+(r.evaluator?" | القائم بالتقييم: "+r.evaluator:""));
+  ACAD.filter(s=>(r.subjects||[]).includes(s.id)).forEach(s=>{const st=subjStats(r,s);
+    L.push("\n▪ "+s.title+": ينفّذ وحده "+st.k+" من "+st.total+(p&&(p.subjects||[]).includes(s.id)?" (السابق: "+subjStats(p,s).k+")":""));
+    s.screens.forEach(sc=>{const a=(r.ans||{})[sc.id]||[];if(!a.some(Boolean)){L.push("  ["+sc.title+"]: لم يُقيَّم");return}
+      L.push("  ["+sc.title+"]");sc.items.forEach((it,i)=>{if(a[i])L.push("     "+((sc.start||1)+i)+". "+it+": "+PLM[a[i]].l)});
+      if((r.notes||{})[sc.id])L.push("     ملاحظات: "+r.notes[sc.id])});
+    if(s.obs){const o=ACAD_OBS.filter(x=>(r.obs||{})[x.id]);if(o.length){L.push("  [عن طريق الملاحظة]");o.forEach(x=>L.push("     "+x.q+": "+r.obs[x.id]))}}
+    if(st.next.length){L.push("  الأهداف التالية المقترحة:");st.next.forEach(x=>L.push("     - "+x.t+" (الآن: "+PLM[x.v].l+" ← الهدف: "+nextLevel(x.v)+")"))}});
+  if(r.strengths)L.push("\n▪ نقاط القوة\n  "+r.strengths);if(r.weak)L.push("\n▪ نقاط الضعف\n  "+r.weak);if(r.remarks)L.push("\n▪ ملاحظات\n  "+r.remarks);
+  return L.join("\n");
+}
+function viewReady(r){
+  const A=readyAnalysis(r),p=prevOf(r),pA=p?readyAnalysis(p):null;
+  return `<p class="sub" style="margin:0">بتاريخ ${fdh(r.date)}${r.school?" — "+esc(r.school):""}. القرار النهائي للفريق متعدد التخصصات مع الأسرة.</p>
+  <div class="fs"><div class="domh"><span>الاقتراح</span>${A.pct!=null?`<span class="chip">${A.pct}%</span>`:""}</div><p style="font-size:19px;font-weight:800;margin:0;color:${levelColor(A.cls)}">${esc(A.dec)}</p>${pA&&pA.pct!=null?`<p class="sub" style="margin:0">في التقييم السابق: ${pA.pct}%</p>`:""}</div>
+  <div class="fs">${A.dom.map(({d,pct})=>`<div class="dom"><div class="domh"><span>${esc(d.title)}</span><span class="sub">${pct==null?"—":pct+"%"}</span></div><div class="bigm"><i style="width:${pct||0}%;background:${pct==null?"var(--line)":pct>=75?"var(--ok)":pct>=50?"var(--orange)":"var(--crit)"}"></i></div></div>`).join("")}</div>
+  ${A.critMiss.length?`<div class="alert"><strong>بنود أساسية غير مكتسبة:</strong><ul class="plain">${A.critMiss.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
+  ${A.goals.length?`<div class="fs"><h3>أهداف مقترحة للتحضير</h3><p class="sub" style="margin:0">يختار الفريق منها 2 أو 3 لإدخالها في المشروع الفردي.</p><ul class="plain">${A.goals.slice(0,6).map(g=>`<li>${g.c?"★ ":""}${esc(g.t)} <span class="sub">(${g.v})</span></li>`).join("")}</ul></div>`:""}
+  ${A.gaps.length?`<div class="fs"><h3>ما يجب تنسيقه مع المدرسة</h3><ul class="plain">${A.gaps.map(g=>`<li>${esc(g)}</li>`).join("")}</ul></div>`:""}`;
+}
+function textReady(r){
+  const A=readyAnalysis(r),L=[];
+  L.push("تقييم الجاهزية للمدرسة — جمعية آفاق، برنامج مواكبة");L.push("ملاحظة: تقييم ملاحظاتي من طرف الفريق، وليس اختبارًا معياريًا.");L.push("========================================");
+  L.push("▪ الطفل: "+childLabel(childById(r.childId))+" | التاريخ: "+fd(r.date));if(r.school)L.push("▪ المدرسة المقترحة: "+r.school);if(r.team)L.push("▪ شارك في التقييم: "+r.team);
+  L.push("\n▪ الاقتراح: "+A.dec+(A.pct!=null?" ("+A.pct+"%)":""));
+  L.push("\n▪ النتائج حسب المجالات (مكتسب / بدعم / غير مكتسب)");
+  READY.forEach(d=>{const x=A.dom.find(q=>q.d===d);L.push("  ["+d.title+"] "+(x.pct==null?"—":x.pct+"%"));
+    d.items.forEach((it,i)=>{const v=((r.ans||{})[d.id]||[])[i];if(v)L.push("     • "+(it.c?"★ ":"")+it.t+": "+v)});if((r.notes||{})[d.id])L.push("     الدعم المطلوب: "+r.notes[d.id])});
+  if(A.critMiss.length){L.push("\n▪ بنود أساسية غير مكتسبة");A.critMiss.forEach(x=>L.push("  - "+x))}
+  const cs=SCHOOL.map((c,i)=>((r.ans||{}).cond||[])[i]?"  - "+c+": "+r.ans.cond[i]:null).filter(Boolean);
+  if(cs.length){L.push("\n▪ ظروف المدرسة المستقبِلة");cs.forEach(x=>L.push(x));if(r.condNote)L.push("  - ملاحظات: "+r.condNote)}
+  if(A.goals.length){L.push("\n▪ أهداف مقترحة للتحضير");A.goals.slice(0,6).forEach(g=>L.push("  - "+g.t+" ("+g.v+")"))}
+  return L.join("\n");
+}
+function textFb(r){
+  const L=[];L.push("رد "+(r.specialist||"الأخصائي")+" — جمعية آفاق، مركز خطوات");
+  L.push("الطفل: "+childLabel(childById(r.childId))+" | التاريخ: "+fd(r.date)+(r.educator?" | إلى: "+r.educator:""));if(r.reason)L.push("سبب الإحالة: "+r.reason);
+  if(r.seen)L.push("\n▪ ماذا لاحظتُ\n"+r.seen);if(r.meaning)L.push("\n▪ ماذا يعني هذا في القسم\n"+r.meaning);
+  const d=(r.dos||[]).filter(x=>x&&x.trim());if(d.length){L.push("\n▪ افعل");d.forEach((x,i)=>L.push((i+1)+". "+x))}
+  const n=(r.donts||[]).filter(x=>x&&x.trim());if(n.length){L.push("\n▪ تجنّب");n.forEach(x=>L.push("- "+x))}
+  if(r.watch)L.push("\n▪ لاحظ وسجّل\n"+r.watch);if((r.next||[]).length)L.push("\n▪ الخطوة التالية: "+r.next.join("، "));if(r.review)L.push("▪ موعد المراجعة: "+fd(r.review));if(r.specName)L.push("\n"+r.specName);
+  return L.join("\n");
+}
+function viewFb(r){return `${!(r.dos||[]).some(x=>x&&x.trim())?`<div class="alert">لم يُكتب أي شيء في «افعل». المربي يحتاج على الأقل توصية واحدة يطبقها في القسم.</div>`:""}<div class="docout">${esc(textFb(r))}</div>`}
+function viewScreen(r){
+  const A=screenAnalysis(r);
+  return `<p class="sub" style="margin:0">رصد بتاريخ ${fdh(r.date)}${r.teacher?" — "+esc(r.teacher):""}${r.klass?" — القسم: "+esc(r.klass):""}. قاعدة عملية لتوجيه القرار، وليست عتبة علمية مقننة.</p>
+  <div class="fs"><div class="fl">ماذا أفعل؟</div><p style="font-size:19px;font-weight:800;margin:0;color:${A.cls==="crit"?"var(--crit)":A.cls==="warn"?"var(--warn)":A.cls==="mid"?"var(--orange)":"var(--ok)"}">${esc(A.dec)}</p>${A.urgent.length?`<ul class="plain">${A.urgent.map(u=>`<li>${esc(u)}</li>`).join("")}</ul>`:""}</div>
+  <div class="fs">${A.per.map(p=>`<div class="dom"><div class="domh"><span>${esc(p.d.title)}</span><span class="chip ${p.signal?"crit":p.twos.length?"or":"ok"}">${p.signal?"إشارة":p.twos.length?"درجة 2 في سلوك واحد":"لا إشارة"}</span></div>${p.twos.length?`<ul class="plain">${p.twos.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:`<div class="sub">${p.ones} سلوك «أحيانًا»</div>`}</div>`).join("")}</div>
+  <div class="fs"><h3>ماذا بعد الرصد؟</h3><ol class="plain" style="margin:0"><li><b>أكيّف داخل القسم:</b> مكان الجلوس، تعليمات قصيرة، وقت إضافي.</li><li><b>أتحدث مع الأسرة:</b> أصف ما ألاحظه بأمثلة، دون أي تسمية أو تشخيص.</li><li><b>أوجّه:</b> أقترح على الأسرة استشارة مختص، وأسلّمها نسخة من هذه الشبكة.</li></ol></div>
+  ${r.notes?`<div class="fs"><div class="fl">ملاحظات المدرّس(ة)</div><div style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:""}`;
+}
+function textScreen(r){
+  const A=screenAnalysis(r),L=[];
+  L.push("شبكة رصد التعثرات النمائية — جمعية آفاق");L.push("وثيقة سرية: لا تُشارك إلا مع الأسرة ومع المختص، بموافقة الأسرة.");L.push("========================================");
+  L.push("▪ التلميذ(ة): "+childLabel(childById(r.childId))+" | التاريخ: "+fd(r.date)+(r.klass?" | القسم: "+r.klass:"")+(r.teacher?" | المدرّس(ة): "+r.teacher:""));
+  L.push("\n▪ ماذا أفعل؟ "+A.dec);if(A.urgent.length)A.urgent.forEach(u=>L.push("  - "+u));
+  SCREEN.forEach(d=>{L.push("\n▪ "+d.title);d.items.forEach((it,i)=>{const v=((r.ans||{})[d.id]||[])[i];if(v!=null)L.push("  - "+it+": "+v)})});
+  if(r.notes)L.push("\n▪ ملاحظات المدرّس(ة)\n"+r.notes);return L.join("\n");
+}
+
+/* ================= demo data (preview only, clearly marked) ================= */
+function demoData(){
+  const d=n=>{const x=new Date();x.setDate(x.getDate()-n);return x.toISOString().slice(0,10)};
+  const c1="ex1",c2="ex2",c3="ex3";const fill=(arr,n)=>Array.from({length:n},(_,i)=>arr[i%arr.length]);
+  return {children:[
+    {id:c1,code:"مثال-001",name:"أ. ب.",dob:"2018-03-11",sex:"ذكر",group:GROUPS[0],status:"نشط",disability:"توحد",educator:"مربية (مثال)",createdAt:1},
+    {id:c2,code:"مثال-002",name:"س. م.",dob:"2017-09-02",sex:"أنثى",group:GROUPS[1],status:"مدمج في مدرسة",disability:"شلل دماغي",educator:"مربي (مثال)",school:"مدرسة (مثال)",createdAt:2},
+    {id:c3,code:"مثال-003",name:"ي. ع.",dob:"2019-01-20",sex:"ذكر",group:GROUPS[0],status:"نشط",disability:"متلازمة داون",educator:"مربية (مثال)",createdAt:3}],
+   records:[
+    {id:"r1",childId:c1,type:"obs",kind:"first",date:d(70),educator:"مربية (مثال)",ans:{comm:fill(["some","no","some","no","no","no"],6),social:fill(["no","some","no","no","some","no"],6),attention:fill(["no","no","some","some","no","no"],6),motor:fill(["yes","yes","yes","some","some","yes"],6),autonomy:fill(["some","yes","no","some","some","no"],6),learning:fill(["yes","some","some","no","some","yes","some"],7)},notes:{},sensory:[SENSORY[0],SENSORY[2]],flags:[],behaviors:[],goalStatus:{},createdAt:1},
+    {id:"r2",childId:c1,type:"obs",kind:"followup",date:d(40),educator:"مربية (مثال)",ans:{comm:fill(["some","some","some","no","some","no"],6),social:fill(["some","some","no","some","some","no"],6),attention:fill(["some","no","some","yes","some","no"],6),motor:fill(["yes"],6),autonomy:fill(["yes","yes","some","some","some","some"],6),learning:fill(["yes","yes","some","some","yes","yes","some"],7)},notes:{comm:"بدأ يطلب الماء بالإشارة."},sensory:[SENSORY[0]],flags:[],behaviors:[{what:"يرمي الأدوات على الأرض",when:"عندما نطلب منه ترك اللعبة",after:"نترك النشاط ليهدأ",freq:FREQ[1],want:WANT[0]}],goalStatus:{g1:"يتقدّم"},likes:"الأناشيد والمكعبات",calm:"الركن الهادئ مع وسادة",createdAt:2},
+    {id:"r3",childId:c1,type:"fb",date:d(30),specialist:"تقويم النطق",reason:"التواصل والفهم يحتاج دعمًا",seen:"يفهم التعليمة عندما نريه الشيء، ولا يفهمها بالكلام فقط.",meaning:"عندما لا يتبع التعليمة فليس عنادًا، بل لم يفهمها.",dos:["أظهر له الصورة مع كل تعليمة","تعليمة واحدة في كل مرة",""],donts:["لا تكرر التعليمة بصوت أعلى",""],next:[NEXT[1]],review:d(-3),createdAt:3},
+    {id:"r4",childId:c2,type:"ready",date:d(20),school:"مدرسة (مثال)",ans:{auto:[RL[0],RL[0],RL[1],RL[0],RL[0]],group:[RL[0],RL[1],RL[0],RL[1],RL[0]],beh:[RL[0],RL[0],RL[1],RL[0]],com:[RL[0],RL[0],RL[0]],learn:[RL[1],RL[1],RL[0],RL[0]],cond:[CL[1],CL[0],CL[0],CL[0],CL[0],CL[1],CL[0],CL[0]]},notes:{},createdAt:4},
+    {id:"r5",childId:c2,type:"obs",kind:"followup",date:d(12),ans:{comm:fill(["yes"],6),social:fill(["yes","yes","some","yes","yes","some"],6),attention:fill(["yes","some","yes","yes","some","yes"],6),motor:fill(["some","na","yes","some","some","yes"],6),autonomy:fill(["yes","yes","yes","some","yes","yes"],6),learning:fill(["yes"],7)},notes:{},sensory:[],flags:[],behaviors:[],goalStatus:{},createdAt:5},
+    {id:"r6",childId:c3,type:"acad",date:d(15),subjects:["pw"],ans:{pw1:fill(["I","I","G","V","I","I","I","G","M","V","I","PP","FP","NR"],18),pw2:fill(["I","G","V","M","PP"],15)},notes:{},obs:{hand:"اليمين",grip:"خاطئة"},createdAt:6},
+    {id:"r7",childId:c3,type:"obs",kind:"followup",date:d(8),ans:{comm:fill(["yes","some"],6),social:fill(["yes"],6),attention:fill(["some","no"],6),motor:fill(["yes","some"],6),autonomy:fill(["some"],6),learning:fill(["some","yes"],7)},notes:{},sensory:[],flags:[FLAGS[5]],flagNote:"لا يلتفت للأصوات من خلفه.",behaviors:[],goalStatus:{},createdAt:7}],
+   goals:[
+    {id:"g1",childId:c1,text:"يطلب الماء بالإشارة دون مساعدة",domain:"التواصل",status:"يتقدّم",createdAt:1},
+    {id:"g2",childId:c1,text:"يقبل تغيير النشاط عند الإعلان عنه بصورة",domain:"السلوك والمشاعر",status:"لم يبدأ",createdAt:2},
+    {id:"g3",childId:c2,text:"يبقى في مجموعة القسم 15 دقيقة",domain:"الإدماج المدرسي",status:"تحقّق",createdAt:3},
+    {id:"g4",childId:c3,text:"يمسك القلم بالإبهام والسبابة والوسطى",domain:"الحركة",status:"يتقدّم",createdAt:4}],
+   activities:[
+    {id:"a1",type:"لقاء الآباء",title:"سلوك طفلي يتعبني: نوبات الغضب والعناد",date:d(21),place:"مقر الجمعية",families:14,kids:0,lead:"الأخصائي النفسي",notes:"عرض وتمارين تطبيقية، وتسليم المطبوعات.",createdAt:1},
+    {id:"a2",type:"اجتماع شهري للفريق",title:"الاجتماع الشهري",date:d(5),place:"مركز خطوات",families:8,kids:6,lead:"منسقة التربية الخاصة",notes:"مناقشة 6 حالات.",createdAt:2}]};
+}
+
+/* ================= rendering: shell ================= */
+const ROUTES=[["home","اليوم"],["children","الأطفال"],["meeting","الاجتماع الشهري"],["activities","الأنشطة"],["library","المراجع"]];
+function route(){const h=(location.hash||"").slice(1);if(h.startsWith("child-"))return {r:"child",id:h.slice(6)};return {r:ROUTES.some(x=>x[0]===h)?h:"home"}}
+function renderBar(cur){
+  $("bar").innerHTML=`<a class="brand" href="#home"><span class="mark">آ</span><span><b>فضاء آفاق</b><small>جمعية آفاق — مركز خطوات</small></span></a>
+  <nav class="sec" aria-label="الأقسام">${ROUTES.map(([k,l])=>`<a href="#${k}" ${cur===k||(cur==="child"&&k==="children")?'aria-current="page"':""}>${l}</a>`).join("")}</nav>`;
+}
+function banner(){return mode==="demo"?`<div class="banner"><b>●</b><span>معاينة بأمثلة: الأطفال والبيانات هنا أمثلة فقط ولا يُحفظ شيء. افتح الصفحة المنشورة ليعمل الحفظ والمشاركة مع الفريق.</span></div>`:""}
+function render(){
+  const R=route();renderBar(R.r);document.title="فضاء آفاق";
+  if(mode==="loading"){$("app").innerHTML=`<div class="loading">جار التحميل…</div>`;return}
+  const html=R.r==="child"?pageChild(R.id):R.r==="children"?pageChildren():R.r==="meeting"?pageMeeting():R.r==="activities"?pageActivities():R.r==="library"?pageLibrary():pageHome();
+  $("app").innerHTML=banner()+html;resolveNames();
+}
+
+/* ---------- home ---------- */
+function pageHome(){
+  const act=S.children.filter(active);const al=act.map(c=>({c,a:alertsOf(c)}));
+  const crit=al.filter(x=>x.a.some(a=>a.lv==="crit"));const late=al.filter(x=>x.a.some(a=>a.t.startsWith("المتابعة الشهرية")||a.t.startsWith("لا توجد")));
+  const ym=today().slice(0,7);const actsM=S.activities.filter(a=>(a.date||"").startsWith(ym)).length;
+  const recent=[...S.records].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,8);
+  const agenda=[];
+  S.records.filter(r=>r.type==="fb"&&r.review).forEach(r=>{const n=daysBetween(today(),r.review);if(n>=-7&&n<=14)agenda.push({d:r.review,t:"مراجعة توصيات "+(r.specialist||"الأخصائي")+" مع المربي",c:r.childId})});
+  agenda.sort((a,b)=>a.d.localeCompare(b.d));
+  if(!S.children.length)return `<div class="head"><div><div class="eyebrow">${fdh(today())}</div><h1>مرحبًا في فضاء آفاق</h1></div></div>
+    <div class="roster"><div class="empty"><h3>ملفات الأطفال تظهر هنا</h3><p>ابدأ بإضافة أول طفل برمز واسمه الأول. بعد ذلك يمكن للفريق تسجيل الملاحظات الشهرية، والتقييمات، وردود الأخصائيين في ملفه، وتظهر التنبيهات في هذه الصفحة.</p><button class="btn pri" data-act="newChild">+ إضافة طفل</button></div></div>`;
+  return `<div class="head"><div><div class="eyebrow">${fdh(today())}</div><h1>ما يحتاج انتباهك اليوم</h1></div><button class="btn pri" data-act="quick">+ تسجيل سريع</button></div>
+  <div class="stats">
+   <div class="stat"><div class="n">${act.length}</div><div class="l">طفل في المتابعة</div></div>
+   <div class="stat ${crit.length?"crit":""}"><div class="n">${crit.length}</div><div class="l">حالة عاجلة</div></div>
+   <div class="stat ${late.length?"warn":""}"><div class="n">${late.length}</div><div class="l">متابعة شهرية متأخرة</div></div>
+   <div class="stat"><div class="n">${actsM}</div><div class="l">نشاط هذا الشهر</div></div></div>
+  <div class="grid2"><div class="stack">
+   <div class="panel"><h2>التنبيهات</h2>${al.filter(x=>x.a.length).length?`<div class="list">${al.filter(x=>x.a.length).sort((a,b)=>b.a.filter(z=>z.lv==="crit").length-a.a.filter(z=>z.lv==="crit").length).slice(0,12).map(({c,a})=>`<a class="li" href="#child-${esc(c.id)}" style="color:inherit;text-decoration:none"><div class="grow"><div class="t">${esc(childLabel(c))}</div><div class="chips">${a.map(x=>`<span class="chip ${x.lv}">${esc(x.t)}</span>`).join("")}</div></div><span class="sub">←</span></a>`).join("")}</div>`:`<p class="sub" style="margin:0">لا توجد تنبيهات. كل الأطفال لهم متابعة حديثة.</p>`}</div>
+   <div class="panel"><h2>آخر ما سُجِّل</h2>${recent.length?`<div class="list">${recent.map(r=>`<button class="li" data-act="openRec" data-id="${esc(r.id)}" style="border-inline:0;border-bottom:0;background:none;width:100%;text-align:start;cursor:pointer;color:inherit"><span class="tag ty-${r.type}">${esc(TYPES[r.type].t)}</span><div class="grow"><div class="t">${esc(childLabel(childById(r.childId)))}</div><div class="sub">${fdh(r.date)} · ${esc(who(r.by))}</div></div></button>`).join("")}</div>`:`<p class="sub" style="margin:0">لم يُسجَّل شيء بعد.</p>`}</div>
+  </div><div class="stack">
+   <div class="panel"><h2>المواعيد القريبة</h2>${agenda.length?`<div class="list">${agenda.map(a=>`<a class="li" href="#child-${esc(a.c)}" style="color:inherit;text-decoration:none"><span class="chip ${a.d<today()?"warn":"acc"}">${fdh(a.d)}</span><div class="grow"><div class="t">${esc(childLabel(childById(a.c)))}</div><div class="sub">${esc(a.t)}</div></div></a>`).join("")}</div>`:`<p class="sub" style="margin:0">لا مواعيد مراجعة خلال الأسبوعين القادمين. تُضاف المواعيد من «رد الأخصائي».</p>`}</div>
+   <div class="panel"><h2>الاجتماع الشهري</h2><p class="sub" style="margin:0 0 10px">جدول أعمال ${monthName(ym)} جاهز من الملاحظات المسجلة: الإحالات حسب الأخصائي، والعلامات المهمة، والأطفال بدون متابعة.</p><a class="btn navy" href="#meeting">فتح جدول الأعمال</a></div>
+  </div></div>`;
+}
+
+/* ---------- children list ---------- */
+function pageChildren(){
+  const q=view.q.trim().toLowerCase();
+  const cs=[...S.children].filter(c=>(!view.grp||c.group===view.grp)&&(!q||(c.code+" "+c.name+" "+(c.educator||"")).toLowerCase().includes(q))).sort((a,b)=>(a.code||"").localeCompare(b.code||""));
+  let h=`<div class="head"><div><div class="eyebrow">${S.children.length} ملف</div><h1>ملفات الأطفال</h1></div><button class="btn pri" data-act="newChild">+ إضافة طفل</button></div>
+  <div class="tools"><input type="search" id="q" placeholder="ابحث بالرمز أو الاسم أو المربي" value="${esc(view.q)}" aria-label="بحث"><select id="grp" aria-label="القسم"><option value="">كل الأقسام</option>${GROUPS.map(g=>`<option ${view.grp===g?"selected":""}>${esc(g)}</option>`).join("")}</select></div>`;
+  if(!S.children.length)return h+`<div class="roster"><div class="empty"><h3>لا يوجد أي طفل بعد</h3><p>أضف أول طفل برمز (مثال خ-001) واسمه الأول.</p><button class="btn pri" data-act="newChild">+ إضافة طفل</button></div></div>`;
+  h+=`<div class="roster"><div class="row th"><span>الطفل</span><span>القسم</span><span>آخر تسجيل</span><span>الأهداف</span><span>للمتابعة</span></div>`;
+  if(!cs.length)h+=`<div class="empty">لا نتائج لهذا البحث.</div>`;
+  cs.forEach(c=>{const last=recsOf(c.id)[0],pct=goalPct(c.id),a=alertsOf(c);
+    h+=`<button class="row" data-act="go" data-href="#child-${esc(c.id)}"><span><span class="code">${esc(c.code||"")}</span> · ${esc(c.name||"")}<span class="sub" style="display:block">${esc(c.disability||"")}</span></span>
+    <span class="sub">${esc(c.group||"—")}<br>${esc(c.status||"نشط")}</span>
+    <span>${last?`${esc(TYPES[last.type].t)}<span class="sub" style="display:block">${fdh(last.date)}</span>`:`<span class="sub">لا شيء بعد</span>`}</span>
+    <span>${pct==null?`<span class="sub">—</span>`:`<span style="font-variant-numeric:tabular-nums">${pct}%</span><span class="meter" style="display:block"><i style="width:${pct}%"></i></span>`}</span>
+    <span class="chips c-al">${a.length?a.map(x=>`<span class="chip ${x.lv}">${esc(x.t)}</span>`).join(""):`<span class="chip ok">لا شيء يذكر</span>`}</span></button>`});
+  return h+`</div><p class="sub" style="margin-top:12px">السرية: رمز واسم أول فقط. لا أسماء كاملة ولا تفاصيل تشخيص.</p>`;
+}
+
+/* ---------- child file ---------- */
+function age(dob){if(!dob)return "";const a=(new Date()-new Date(dob+"T12:00:00"))/(365.25*864e5);return a>0?Math.floor(a)+" سنوات":""}
+function spark(vals){
+  if(vals.length<2)return `<svg viewBox="0 0 100 38" aria-hidden="true"></svg>`;
+  const w=100,h=38,pad=4,x=i=>w-pad-i*(w-2*pad)/(vals.length-1),y=v=>h-pad-v*(h-2*pad)/100;
+  const pts=vals.map((v,i)=>x(i).toFixed(1)+","+y(v).toFixed(1)).join(" ");
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${[0,50,100].map(v=>`<line x1="0" x2="${w}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1" vector-effect="non-scaling-stroke"/>`).join("")}
+  <polygon points="${x(0)},${h-pad} ${pts} ${x(vals.length-1)},${h-pad}" fill="var(--navy-soft)"/><polyline points="${pts}" fill="none" stroke="var(--navy)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+  <circle cx="${x(vals.length-1)}" cy="${y(vals[vals.length-1])}" r="2.6" fill="var(--orange)"/></svg>`;
+}
+function pageChild(id){
+  const c=childById(id);
+  if(!c)return `<a class="btn ghost sm" href="#children">→ كل الأطفال</a><div class="roster" style="margin-top:10px"><div class="empty"><h3>هذا الملف غير موجود</h3><p>ربما حُذف. ارجع إلى قائمة الأطفال.</p></div></div>`;
+  const recs=recsOf(id),goals=goalsOf(id),al=alertsOf(c),armed=view.armed==="child:"+id;
+  let h=`<a class="btn ghost sm" href="#children" style="margin-bottom:8px">→ كل الأطفال</a>
+  <div class="childhead"><div class="id"><div class="eyebrow">${esc(c.group||"")} · ${esc(c.status||"نشط")}</div><h1><span class="code">${esc(c.code||"")}</span> · ${esc(c.name||"")}</h1>
+   <div class="kv">${c.dob?`<div><span>العمر:</span> ${age(c.dob)}</div>`:""}${c.sex?`<div><span>الجنس:</span> ${esc(c.sex)}</div>`:""}<div><span>الإعاقة:</span> ${esc(c.disability||"—")}</div><div><span>المربي المرجعي:</span> ${esc(c.educator||"—")}</div>${c.school?`<div><span>المدرسة:</span> ${esc(c.school)}</div>`:""}</div>
+   ${al.length?`<div class="chips" style="margin-top:8px">${al.map(x=>`<span class="chip ${x.lv}">${esc(x.t)}</span>`).join("")}</div>`:""}</div>
+   <div class="chips">${armed?`<button class="btn sm" data-act="disarm">إلغاء</button><button class="btn sm danger" data-act="delChild" data-id="${esc(id)}">تأكيد حذف الملف وكل سجلاته</button>`:`<button class="btn sm" data-act="editChild" data-id="${esc(id)}">تعديل البطاقة</button><button class="btn sm ghost" data-act="arm" data-v="child:${esc(id)}">حذف</button>`}</div></div>
+  <div class="addbar">${Object.entries(TYPES).map(([k,t])=>`<button data-act="newRec" data-type="${k}" data-child="${esc(id)}"><b>+ ${esc(t.t)}</b><small>${esc(t.d)}</small></button>`).join("")}</div>
+  <div class="tabs" role="tablist">${[["overview","نظرة عامة",null],["timeline","السجل",recs.length],["goals","المشروع الفردي",goals.length]].map(([k,l,n])=>`<button role="tab" data-act="tab" data-v="${k}" aria-selected="${view.tab===k}">${l}${n!=null?`<span class="count">${n}</span>`:""}</button>`).join("")}</div>`;
+  if(view.tab==="timeline")h+=tabTimeline(recs);
+  else if(view.tab==="goals")h+=tabGoals(c,goals);
+  else h+=tabOverview(c,recs,goals);
+  return h;
+}
+function tabOverview(c,recs,goals){
+  const obs=recs.filter(r=>r.type==="obs").slice(0,8).reverse();const lastObs=obs[obs.length-1];
+  const trend=obs.length?`<div class="trend">${OBS.map(d=>{const v=obs.map(r=>domainScore(r,d)).filter(s=>s.level!=="none").map(s=>s.pct);return `<div class="spark"><div class="t"><span>${esc(d.title)}</span><b>${v.length?v[v.length-1]+"%":"—"}</b></div>${spark(v)}</div>`}).join("")}</div>`:`<p class="sub" style="margin:0">يظهر هنا تطور الطفل في كل مجال بعد تسجيل ملاحظتين على الأقل.</p>`;
+  const latestBy=Object.keys(TYPES).map(k=>[k,recs.find(r=>r.type===k)]).filter(x=>x[1]);
+  const st=lastObs||{};const ready=recs.find(r=>r.type==="ready");
+  return `<div class="grid2"><div class="stack">
+   <div class="panel"><h2>التطور حسب المجالات (ملاحظات المربي)</h2>${trend}</div>
+   <div class="panel"><h2>أهداف المشروع الفردي</h2>${goals.length?`<div class="list">${goals.map(g=>`<div class="li"><div class="grow"><div class="t">${esc(g.text)}</div><div class="sub">${esc(g.domain||"")}</div></div><span class="chip ${g.status==="تحقّق"?"ok":g.status==="يتقدّم"?"or":""}">${esc(g.status||"لم يبدأ")}</span></div>`).join("")}</div>`:`<p class="sub" style="margin:0">لا أهداف بعد. أضفها من تبويب «المشروع الفردي».</p>`}</div>
+  </div><div class="stack">
+   <div class="panel"><h2>ما يحبه وما يهدّئه</h2>${st.likes||st.calm||st.good?`${st.likes?`<p style="margin:0 0 6px"><b>يحب:</b> ${esc(st.likes)}</p>`:""}${st.good?`<p style="margin:0 0 6px"><b>ينجح في:</b> ${esc(st.good)}</p>`:""}${st.calm?`<p style="margin:0"><b>يهدّئه:</b> ${esc(st.calm)}</p>`:""}<p class="sub" style="margin:6px 0 0">من آخر ملاحظة (${fdh(lastObs.date)})</p>`:`<p class="sub" style="margin:0">يُملأ من قسم «ما يحبه الطفل» في ملاحظة المربي.</p>`}</div>
+   ${ready?`<div class="panel"><h2>الجاهزية للمدرسة</h2><p style="margin:0;font-weight:700">${esc(readyAnalysis(ready).dec)}</p><p class="sub" style="margin:4px 0 0">${fdh(ready.date)}</p></div>`:""}
+   <div class="panel"><h2>آخر تسجيل من كل نوع</h2>${latestBy.length?`<div class="tl">${latestBy.map(([k,r])=>tli(r)).join("")}</div>`:`<p class="sub" style="margin:0">لا تسجيلات بعد. ابدأ بـ«ملاحظة المربي» من الأزرار أعلاه.</p>`}</div>
+   ${c.notes?`<div class="panel"><h2>ملاحظات عامة</h2><p style="margin:0;white-space:pre-wrap">${esc(c.notes)}</p></div>`:""}
+  </div></div>`;
+}
+function recHint(r){
+  if(r.type==="obs"){const A=obsAnalysis(r);return (r.kind==="first"?"ملاحظة أولى":"متابعة شهرية")+(A.flags.length?" · علامات مهمة":"")+(A.refer.size?" · إحالة: "+[...A.refer.keys()].join("، "):"")}
+  if(r.type==="acad")return ACAD.filter(s=>(r.subjects||[]).includes(s.id)).map(s=>s.title+": "+subjStats(r,s).k+"/"+subjStats(r,s).total).join(" · ");
+  if(r.type==="ready")return readyAnalysis(r).dec;
+  if(r.type==="fb")return (r.specialist||"")+(r.review?" · مراجعة "+fd(r.review):"");
+  if(r.type==="screen")return screenAnalysis(r).dec;
+  return (r.kind||"")+(r.text?" · "+r.text.slice(0,60):"");
+}
+function tli(r){return `<button class="tli" data-act="openRec" data-id="${esc(r.id)}"><span class="tag ty-${r.type}">${esc(TYPES[r.type].t)}</span><span style="min-width:0"><b>${fdh(r.date)}</b> <span class="sub">· ${esc(who(r.by))}</span><span class="sub" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(recHint(r))}</span></span><span class="sub">←</span></button>`}
+function tabTimeline(recs){return recs.length?`<div class="tl">${recs.map(tli).join("")}</div>`:`<div class="roster"><div class="empty"><h3>السجل فارغ</h3><p>كل ملاحظة أو تقييم أو رد أخصائي يُسجَّل هنا بالتاريخ واسم من سجّله.</p></div></div>`}
+function tabGoals(c,goals){
+  return `<div class="grid2"><div class="panel"><h2>الأهداف (${goals.length})</h2>${goals.length?`<div class="stack">${goals.map(g=>{const armed=view.armed==="goal:"+g.id;return `<div class="goal"><div><b>${esc(g.text)}</b><div class="sub">${esc(g.domain||"")}${g.who?" · المسؤول: "+esc(g.who):""}${g.review?" · المراجعة: "+fd(g.review):""}</div></div>
+    <div class="seg">${GSTAT.map(s=>`<button class="${(g.status||"لم يبدأ")===s?"on":""} ${s==="تحقّق"?"g-done":""}" data-act="gstat" data-id="${esc(g.id)}" data-v="${s}" aria-pressed="${(g.status||"لم يبدأ")===s}">${s}</button>`).join("")}</div>
+    <div class="chips">${armed?`<button class="btn sm" data-act="disarm">إلغاء</button><button class="btn sm danger" data-act="delGoal" data-id="${esc(g.id)}">تأكيد الحذف</button>`:`<button class="btn sm ghost" data-act="arm" data-v="goal:${esc(g.id)}">حذف</button>`}</div></div>`}).join("")}</div>`:`<p class="sub" style="margin:0">لا أهداف بعد. ابدأ بـ 3 إلى 5 أهداف قابلة للملاحظة، قررها الفريق في الاجتماع الشهري.</p>`}</div>
+  <form class="panel stack" id="goalForm"><h2 style="margin:0">إضافة هدف</h2>
+   ${suggestGoals(c).length?`<div><div class="sub" style="margin-bottom:5px">اقتراحات من آخر التقييمات</div><div class="chips">${suggestGoals(c).map((s,i)=>`<button type="button" class="chip" style="cursor:pointer;border:1px dashed var(--line)" data-act="sugg" data-t="${esc(s.t)}" data-d="${esc(s.d)}">${esc(s.t)}</button>`).join("")}</div></div>`:""}
+   <label class="f">الهدف (قابل للملاحظة)<textarea id="g-text" required placeholder="مثال: يطلب الماء بالإشارة دون مساعدة"></textarea></label>
+   <div class="two"><label class="f">المجال<select id="g-dom">${GDOM.map(d=>`<option>${d}</option>`).join("")}</select></label><label class="f">المراجعة<input type="date" id="g-rev"></label></div>
+   <label class="f">المسؤول عن التنفيذ<input type="text" id="g-who" placeholder="مثال: المربية + أخصائي النطق"></label>
+   <button class="btn pri" type="submit">إضافة الهدف</button></form></div>`;
+}
+function suggestGoals(c){
+  const out=[],have=new Set(goalsOf(c.id).map(g=>g.text));
+  const ac=recsOf(c.id,"acad")[0];if(ac)ACAD.filter(s=>(ac.subjects||[]).includes(s.id)).forEach(s=>subjStats(ac,s).next.slice(0,2).forEach(x=>out.push({t:x.t,d:"التعلّمات"})));
+  const rd=recsOf(c.id,"ready")[0];if(rd)readyAnalysis(rd).goals.slice(0,2).forEach(g=>out.push({t:g.t,d:"الإدماج المدرسي"}));
+  const ob=recsOf(c.id,"obs")[0];if(ob)OBS.forEach(d=>{const a=(ob.ans||{})[d.id]||[];const i=a.findIndex(v=>v==="no");if(i>=0&&out.length<8)out.push({t:d.items[i],d:{comm:"التواصل",social:"السلوك والمشاعر",attention:"الانتباه",motor:"الحركة",autonomy:"الاستقلالية",learning:"التعلّمات"}[d.id]})});
+  return out.filter(x=>!have.has(x.t)).slice(0,6);
+}
+
+/* ---------- monthly meeting ---------- */
+function meetingData(ym){
+  const obs=S.records.filter(r=>r.type==="obs"&&(r.date||"").startsWith(ym));
+  const refer=new Map(),flags=[];
+  obs.forEach(r=>{const A=obsAnalysis(r);A.refer.forEach((why,w)=>{if(!refer.has(w))refer.set(w,[]);refer.get(w).push({r,why})});if(A.flags.length)flags.push({r,f:A.flags})});
+  const seen=new Set(obs.map(r=>r.childId));const missing=S.children.filter(c=>(c.status||"نشط")==="نشط"&&!seen.has(c.id));
+  const fbs=S.records.filter(r=>r.type==="fb"&&(r.date||"").startsWith(ym));
+  const screens=S.records.filter(r=>r.type==="screen"&&(r.date||"").startsWith(ym)).filter(r=>["crit","warn"].includes(screenAnalysis(r).cls));
+  const goalsDone=S.goals.filter(g=>g.status==="تحقّق").length;
+  return {obs,refer,flags,missing,fbs,screens,goalsDone};
+}
+function pageMeeting(){
+  const ym=view.month,M=meetingData(ym);
+  return `<div class="head"><div><div class="eyebrow">جدول الأعمال يُبنى من الملاحظات المسجلة</div><h1>الاجتماع الشهري — ${monthName(ym)}</h1></div>
+   <input type="month" id="month" value="${esc(ym)}" style="width:auto" aria-label="الشهر"><button class="btn navy" data-act="copyMeeting">نسخ جدول الأعمال</button></div>
+  <div class="stats"><div class="stat"><div class="n">${M.obs.length}</div><div class="l">ملاحظة هذا الشهر</div></div><div class="stat ${M.flags.length?"crit":""}"><div class="n">${M.flags.length}</div><div class="l">بطاقة فيها علامات مهمة</div></div><div class="stat"><div class="n">${M.refer.size}</div><div class="l">أخصائي معني بإحالات</div></div><div class="stat ${M.missing.length?"warn":""}"><div class="n">${M.missing.length}</div><div class="l">طفل بدون متابعة هذا الشهر</div></div></div>
+  <div class="grid2"><div class="stack">
+   ${M.flags.length?`<div class="panel"><h2>1. العلامات المهمة (أولوية)</h2><div class="list">${M.flags.map(({r,f})=>`<div class="li"><div class="grow"><a class="t" href="#child-${esc(r.childId)}" style="color:inherit">${esc(childLabel(childById(r.childId)))}</a><ul class="plain">${f.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><button class="btn sm" data-act="openRec" data-id="${esc(r.id)}">البطاقة</button></div>`).join("")}</div></div>`:""}
+   <div class="panel"><h2>${M.flags.length?"2":"1"}. الإحالات حسب الأخصائي</h2>${M.refer.size?[...M.refer].map(([w,list])=>`<div style="margin-bottom:12px"><div class="fl">${esc(w)} <span class="count">${list.length}</span></div><div class="list">${list.map(({r,why})=>`<div class="li"><div class="grow"><a class="t" href="#child-${esc(r.childId)}" style="color:inherit">${esc(childLabel(childById(r.childId)))}</a><div class="sub">${esc(why.join("، "))} · ${fdh(r.date)}</div></div><button class="btn sm" data-act="newRec" data-type="fb" data-child="${esc(r.childId)}" data-spec="${esc(w)}" data-reason="${esc(why.join("، "))}">كتابة الرد</button></div>`).join("")}</div></div>`).join(""):`<p class="sub" style="margin:0">لا إحالات من ملاحظات هذا الشهر.</p>`}</div>
+   ${M.screens.length?`<div class="panel"><h2>رصد المدارس: إشارات</h2><div class="list">${M.screens.map(r=>`<div class="li"><div class="grow"><a class="t" href="#child-${esc(r.childId)}" style="color:inherit">${esc(childLabel(childById(r.childId)))}</a><div class="sub">${esc(screenAnalysis(r).dec)}</div></div></div>`).join("")}</div></div>`:""}
+  </div><div class="stack">
+   <div class="panel"><h2>بدون ملاحظة هذا الشهر</h2>${M.missing.length?`<div class="list">${M.missing.map(c=>`<div class="li"><div class="grow"><a class="t" href="#child-${esc(c.id)}" style="color:inherit">${esc(childLabel(c))}</a><div class="sub">${esc(c.educator||"")}</div></div><button class="btn sm" data-act="newRec" data-type="obs" data-child="${esc(c.id)}">ملاحظة</button></div>`).join("")}</div>`:`<p class="sub" style="margin:0">كل الأطفال النشطين لهم ملاحظة هذا الشهر.</p>`}</div>
+   <div class="panel"><h2>ردود الأخصائيين هذا الشهر</h2>${M.fbs.length?`<div class="tl">${M.fbs.map(tli).join("")}</div>`:`<p class="sub" style="margin:0">لا ردود بعد.</p>`}</div>
+  </div></div>`;
+}
+function meetingText(){
+  const ym=view.month,M=meetingData(ym),L=[];
+  L.push("جدول أعمال الاجتماع الشهري — جمعية آفاق، مركز خطوات — "+monthName(ym));L.push("========================================");
+  L.push("عدد الملاحظات المسجلة: "+M.obs.length);
+  if(M.flags.length){L.push("\n▪ العلامات المهمة");M.flags.forEach(({r,f})=>L.push("  - "+childLabel(childById(r.childId))+": "+f.join("؛ ")))}
+  L.push("\n▪ الإحالات حسب الأخصائي");if(!M.refer.size)L.push("  لا إحالات.");
+  M.refer.forEach((list,w)=>{L.push("  "+w+":");list.forEach(({r,why})=>L.push("     - "+childLabel(childById(r.childId))+" ("+why.join("، ")+")"))});
+  if(M.screens.length){L.push("\n▪ رصد المدارس");M.screens.forEach(r=>L.push("  - "+childLabel(childById(r.childId))+": "+screenAnalysis(r).dec))}
+  if(M.missing.length){L.push("\n▪ أطفال بدون ملاحظة هذا الشهر");M.missing.forEach(c=>L.push("  - "+childLabel(c)+(c.educator?" ("+c.educator+")":"")))}
+  L.push("\n▪ أهداف المشروع الفردي المحققة إلى الآن: "+M.goalsDone);
+  return L.join("\n");
+}
+
+/* ---------- activities ---------- */
+function pageActivities(){
+  const y=view.month.slice(0,4);const acts=[...S.activities].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const yr=acts.filter(a=>(a.date||"").startsWith(y));const byType=ACT_TYPES.map(t=>[t,yr.filter(a=>a.type===t)]).filter(x=>x[1].length);
+  const fam=yr.reduce((s,a)=>s+(+a.families||0),0);
+  let h=`<div class="head"><div><div class="eyebrow">لقاءات الآباء، الورشات، التكوين، الشراكات</div><h1>أنشطة الجمعية</h1></div><button class="btn" data-act="copyActs">نسخ حصيلة ${esc(y)}</button><button class="btn pri" data-act="newAct">+ تسجيل نشاط</button></div>`;
+  if(!acts.length)return h+`<div class="roster"><div class="empty"><h3>سجل الأنشطة فارغ</h3><p>سجّل هنا كل لقاء آباء أو ورشة أو تكوين، بعدد المشاركين. تُجمع الحصيلة السنوية تلقائيًا لتقارير الشركاء والممولين.</p><button class="btn pri" data-act="newAct">+ تسجيل نشاط</button></div></div>`;
+  h+=`<div class="stats"><div class="stat"><div class="n">${yr.length}</div><div class="l">نشاط في ${esc(y)}</div></div><div class="stat"><div class="n">${fam}</div><div class="l">مشارك / أسرة</div></div><div class="stat"><div class="n">${yr.filter(a=>a.type==="لقاء الآباء").length}</div><div class="l">لقاء آباء</div></div><div class="stat"><div class="n">${byType.length}</div><div class="l">نوع نشاط</div></div></div>`;
+  let cur="";h+=`<div class="stack">`;
+  acts.forEach(a=>{const ym=(a.date||"").slice(0,7);if(ym!==cur){if(cur)h+=`</div></div>`;cur=ym;h+=`<div class="panel"><h2>${ym?monthName(ym):"بدون تاريخ"}</h2><div class="list">`}
+    const armed=view.armed==="act:"+a.id;
+    h+=`<div class="li"><div class="grow"><div class="t">${esc(a.title||"")}</div><div class="chips" style="margin:3px 0"><span class="chip acc">${esc(a.type||"")}</span><span class="chip">${fdh(a.date)}</span>${a.families?`<span class="chip">${esc(a.families)} مشارك</span>`:""}${a.place?`<span class="chip">${esc(a.place)}</span>`:""}</div>${a.notes?`<div class="sub">${esc(a.notes)}</div>`:""}</div>
+    <div class="chips">${armed?`<button class="btn sm" data-act="disarm">إلغاء</button><button class="btn sm danger" data-act="delAct" data-id="${esc(a.id)}">تأكيد</button>`:`<button class="btn sm" data-act="editAct" data-id="${esc(a.id)}">تعديل</button><button class="btn sm ghost" data-act="arm" data-v="act:${esc(a.id)}">حذف</button>`}</div></div>`});
+  return h+`</div></div></div>`;
+}
+function actsText(){
+  const y=view.month.slice(0,4);const yr=S.activities.filter(a=>(a.date||"").startsWith(y)).sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+  const L=["حصيلة أنشطة جمعية آفاق — سنة "+y,"========================================","عدد الأنشطة: "+yr.length+" | مجموع المشاركين: "+yr.reduce((s,a)=>s+(+a.families||0),0)];
+  ACT_TYPES.forEach(t=>{const l=yr.filter(a=>a.type===t);if(!l.length)return;L.push("\n▪ "+t+" ("+l.length+")");l.forEach(a=>L.push("  - "+fd(a.date)+": "+(a.title||"")+(a.families?" — "+a.families+" مشارك":"")+(a.place?" — "+a.place:"")))});
+  return L.join("\n");
+}
+function pageLibrary(){
+  return `<div class="head"><div><div class="eyebrow">الوثائق والأدوات السابقة</div><h1>المراجع</h1></div></div>
+  <p class="sub" style="margin:-6px 0 14px">النماذج الورقية والعروض التي أُعدّت سابقًا للجمعية. البطاقات الرقمية القديمة كانت تحفظ على الهاتف فقط؛ كل ذلك صار في ملفات الأطفال هنا.</p>
+  <div class="lib">${LIBRARY.map(([t,d,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener"><b>${esc(t)}</b><span class="sub">${esc(d)}</span></a>`).join("")}</div>`;
+}
+
+/* ================= sheet (forms + record view) ================= */
+function openForm(kind,opts){
+  // kind: record type key | "child" | "act"
+  const o=opts||{};let spec,col,r;
+  if(kind==="child"){spec=CHILD_FORM;col="children";r=o.r?clone(o.r):{id:uid(),status:"نشط",group:GROUPS[0],createdAt:Date.now()}}
+  else if(kind==="act"){spec=ACT_FORM;col="activities";r=o.r?clone(o.r):{id:uid(),type:ACT_TYPES[0],date:today(),createdAt:Date.now()}}
+  else{spec=TYPES[kind];col="records";r=o.r?clone(o.r):{id:uid(),type:kind,childId:o.child||"",date:today(),...spec.blank(),createdAt:Date.now()};
+    if(!o.r&&kind==="obs"){const c=childById(o.child);if(c&&c.educator)r.educator=c.educator;if(!recsOf(o.child,"obs").length)r.kind="first"}
+    if(o.spec)r.specialist=SPECIALISTS.find(s=>o.spec.includes(s.replace("الأخصائي ","")))||"";if(o.reason)r.reason=o.reason}
+  F={kind,spec,col,r,mode:"edit",isNew:!o.r,armed:false};renderSheet(true);
+}
+function openRecord(id){const r=S.records.find(x=>x.id===id);if(!r)return;F={kind:r.type,spec:TYPES[r.type],col:"records",r:clone(r),mode:"view",isNew:false,armed:false};renderSheet(true)}
+function closeSheet(){F=null;$("sheet").innerHTML="";document.body.style.overflow=""}
+function fieldHtml(f){
+  if(f.row)return `<div class="two">${f.row.map(fieldHtml).join("")}</div>`;
+  const r=F.r,v=f.k?getP(r,f.k):null,id="f-"+(f.k||"").replace(/\./g,"_");
+  switch(f.type){
+   case "tip":return `<div class="tip">${f.html}</div>`;
+   case "alert":return `<div class="alert">${f.html}</div>`;
+   case "text":case "date":case "number":return `<label class="f">${esc(f.l)}<input type="${f.type}" id="${id}" data-bind="${f.k}" value="${esc(v??"")}" ${f.ph?`placeholder="${esc(f.ph)}"`:""}></label>`;
+   case "textarea":return `<label class="f">${esc(f.l)}<textarea id="${id}" data-bind="${f.k}" ${f.ph?`placeholder="${esc(f.ph)}"`:""}>${esc(v??"")}</textarea></label>`;
+   case "select":return `<label class="f">${esc(f.l)}<select id="${id}" data-bind="${f.k}"><option value="">اختر</option>${f.o.map(x=>`<option ${v===x?"selected":""}>${esc(x)}</option>`).join("")}</select></label>`;
+   case "seg":return `<div class="stack" style="gap:6px"><span class="fl">${esc(f.l)}</span><div class="seg">${f.o.map(x=>{const val=typeof x==="object"?x.v:x,l=typeof x==="object"?x.l:x;return `<button type="button" class="${v===val?"on":""}" data-act="seg" data-k="${f.k}" data-v="${esc(val)}" aria-pressed="${v===val}">${esc(l)}</button>`}).join("")}</div></div>`;
+   case "checks":{const sel=Array.isArray(v)?v:[];return `<div class="stack" style="gap:6px">${f.l?`<span class="fl">${esc(f.l)}</span>`:""}${f.o.map((x,i)=>{const val=typeof x==="object"?x.v:x,l=typeof x==="object"?x.l:x;return `<label class="chk ${f.red?"red":""}"><input type="checkbox" id="${id}-${i}" data-act="chk" data-k="${f.k}" data-v="${esc(val)}" ${f.rerender?'data-rr="1"':""} ${sel.includes(val)?"checked":""}><span>${esc(l)}</span></label>`}).join("")}</div>`}
+   case "list":{const arr=Array.isArray(v)?v:[];return `<div class="stack" style="gap:6px"><span class="fl">${esc(f.l)}</span>${f.ph.map((p,i)=>`<input type="text" id="${id}-${i}" data-bindlist="${f.k}" data-i="${i}" value="${esc(arr[i]||"")}" placeholder="${esc(p)}">`).join("")}</div>`}
+   case "scale":{const arr=Array.isArray(v)?v:[];const opts=f.opts.concat(f.na?[{v:"na",l:"لا ينطبق",c:"#8A97A8"}]:[]);const done=arr.filter(x=>x!=null).length;
+     return `<div class="sub">أجبت على ${done} من ${f.items.length}</div>`+f.items.map((q,i)=>`<div class="item ${arr[i]!=null?"done":""}"><div class="q"><span class="num">${(f.start||1)+i}</span> ${esc(q)}</div><div class="opts ${f.many?"many":""}" style="--n:${f.many?Math.min(opts.length,4):opts.length}">${opts.map(o=>`<button type="button" class="${arr[i]===o.v?"on":""}" style="--c:${o.c}" data-act="sc" data-k="${f.k}" data-i="${i}" data-v="${esc(o.v)}" data-n="${f.items.length}" aria-pressed="${arr[i]===o.v}">${esc(o.l)}</button>`).join("")}</div></div>`).join("")}
+   case "behaviors":{const bs=r.behaviors||[];return bs.map((b,i)=>`<div class="beh"><div class="domh"><span>سلوك ${i+1}</span><button type="button" class="btn sm ghost" data-act="behDel" data-i="${i}">حذف</button></div>
+     <label class="f">ماذا يفعل الطفل؟<input type="text" id="b-${i}-what" data-bind="behaviors.${i}.what" value="${esc(b.what||"")}" placeholder="مثال: يرمي الأدوات على الأرض"></label>
+     <label class="f">متى يحدث؟ ماذا كان يجري قبله؟<textarea id="b-${i}-when" data-bind="behaviors.${i}.when">${esc(b.when||"")}</textarea></label>
+     <label class="f">ماذا نفعل نحن بعده؟<textarea id="b-${i}-after" data-bind="behaviors.${i}.after">${esc(b.after||"")}</textarea></label>
+     <div class="stack" style="gap:6px"><span class="fl">كم مرة؟</span><div class="seg">${FREQ.map(x=>`<button type="button" class="${b.freq===x?"on":""}" data-act="seg" data-k="behaviors.${i}.freq" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>
+     <label class="f">في رأيك، ماذا يريد الطفل من هذا السلوك؟<select id="b-${i}-want" data-bind="behaviors.${i}.want"><option value="">اختر</option>${WANT.map(w=>`<option ${b.want===w?"selected":""}>${esc(w)}</option>`).join("")}</select></label></div>`).join("")
+     +(bs.length<2?`<button type="button" class="add" data-act="behAdd">+ إضافة سلوك</button>`:"")}
+   case "goalstatus":{const gs=goalsOf(r.childId);if(!gs.length)return `<p class="sub" style="margin:0">لا أهداف مسجلة لهذا الطفل بعد. تُضاف من تبويب «المشروع الفردي» في ملفه.</p>`;
+     return gs.map(g=>{const cur=(r.goalStatus||{})[g.id]||"";return `<div class="item"><div class="q">${esc(g.text)}</div><div class="seg">${GSTAT.map(s=>`<button type="button" class="${cur===s?"on":""} ${s==="تحقّق"?"g-done":""}" data-act="seg" data-k="goalStatus.${g.id}" data-v="${s}">${s}</button>`).join("")}</div><span class="sub">الحالة الحالية في الملف: ${esc(g.status||"لم يبدأ")}</span></div>`}).join("")}
+  }
+  return "";
+}
+function renderSheet(first){
+  if(!F){closeSheet();return}
+  const body=$("sheet").querySelector(".sh-body");const top=body&&!first?body.scrollTop:0;
+  const r=F.r,isRec=F.col==="records";const c=isRec?childById(r.childId):null;
+  let title=(F.kind==="child"?(F.isNew?"طفل جديد":"تعديل بطاقة الطفل"):F.kind==="act"?(F.isNew?"تسجيل نشاط":"تعديل النشاط"):F.spec.t)+(c?" — "+childLabel(c):"");
+  let main,foot;
+  if(F.mode==="view"){
+    main=F.spec.html(r)+`<p class="sub">سجّله ${esc(who(r.by))}${r.updatedAt?" · آخر تعديل "+new Date(r.updatedAt).toLocaleDateString("ar-MA"):""}</p>`;
+    foot=F.armed?`<button class="btn" data-act="sDisarm">إلغاء</button><button class="btn danger" data-act="sDel">تأكيد الحذف النهائي</button>`
+      :`<button class="btn pri" data-act="copy">نسخ النص لإرساله</button>${downloads?`<button class="btn" data-act="dl">تنزيل كملف</button>`:""}<button class="btn" data-act="sEdit">تعديل</button><button class="btn ghost" data-act="sArm">حذف</button>`;
+  }else{
+    const secs=F.spec.sections(r);
+    main=(isRec&&!r.childId?`<div class="fs"><label class="f">الطفل *<select id="f-child" data-bind="childId"><option value="">اختر الطفل</option>${[...S.children].sort((a,b)=>(a.code||"").localeCompare(b.code||"")).map(x=>`<option value="${esc(x.id)}">${esc(childLabel(x))}</option>`).join("")}</select></label></div>`:"")
+      +secs.map(s=>`<section class="fs"><h3>${esc(s.t)}</h3>${s.lead?`<p class="lead">${esc(s.lead)}</p>`:""}${s.fields.map(fieldHtml).join("")}</section>`).join("");
+    foot=`<button class="btn" data-act="close">إلغاء</button><button class="btn pri" data-act="save">${isRec?"حفظ وعرض النتيجة":"حفظ"}</button>`;
+  }
+  $("sheet").innerHTML=`<div class="sheetwrap" data-act="backdrop"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="sh-top"><h2>${esc(title)}</h2><button class="btn sm ghost" data-act="close" aria-label="إغلاق">✕ إغلاق</button></div><div class="sh-body">${main}</div><div class="sh-foot">${foot}</div></div></div>`;
+  document.body.style.overflow="hidden";
+  $("sheet").querySelector(".sh-body").scrollTop=top;
+}
+async function saveSheet(){
+  const r=F.r;
+  if(F.col==="children"&&(!(r.code||"").trim()||!(r.name||"").trim())){toast("الرمز والاسم الأول إلزاميان.");return}
+  if(F.col==="activities"&&!(r.title||"").trim()){toast("اكتب عنوان النشاط.");return}
+  if(F.col==="records"&&!r.childId){toast("اختر الطفل أولًا.");return}
+  if(F.col==="records"&&r.type==="acad"&&!(r.subjects||[]).length){toast("اختر مادة واحدة على الأقل.");return}
+  if(F.col==="records"){if(!r.by)r.by=myId||null;r.updatedAt=Date.now()}
+  try{await put(F.col,r)}catch(e){return}
+  if(r.type==="obs"&&r.goalStatus)for(const [gid,st] of Object.entries(r.goalStatus)){const g=S.goals.find(x=>x.id===gid);if(g&&st&&g.status!==st){try{await put("goals",{...g,status:st})}catch(e){}}}
+  toast("تم الحفظ");
+  if(F.col==="records"){F.mode="view";F.isNew=false;renderSheet(true)}
+  else{const k=F.kind,id=r.id;closeSheet();if(k==="child")location.hash="child-"+id}
+}
+async function copyText(t){
+  try{await navigator.clipboard.writeText(t);toast("تم النسخ. الصقه في واتساب أو في رسالة.")}
+  catch(e){F={kind:"text",spec:{t:"النص",html:()=>""},col:null,r:{},mode:"text"};
+    $("sheet").innerHTML=`<div class="sheetwrap"><div class="sheet"><div class="sh-top"><h2>انسخ النص يدويًا</h2><button class="btn sm ghost" data-act="close">✕ إغلاق</button></div><div class="sh-body"><textarea id="manualCopy" style="min-height:60vh">${esc(t)}</textarea></div></div></div>`;
+    const ta=$("manualCopy");ta.focus();ta.select()}
+}
+
+/* ================= events ================= */
+document.addEventListener("click",async e=>{
+  const el=e.target.closest("[data-act]");if(!el)return;const a=el.dataset.act;
+  if(a==="backdrop"&&e.target!==el)return;
+  switch(a){
+   case "go":location.hash=el.dataset.href.slice(1);break;
+   case "tab":view.tab=el.dataset.v;render();break;
+   case "arm":view.armed=el.dataset.v;render();break;
+   case "disarm":view.armed=null;render();break;
+   case "newChild":openForm("child");break;
+   case "editChild":openForm("child",{r:childById(el.dataset.id)});break;
+   case "delChild":{const id=el.dataset.id;view.armed=null;
+     for(const r of S.records.filter(x=>x.childId===id))await remove("records",r.id).catch(()=>{});
+     for(const g of S.goals.filter(x=>x.childId===id))await remove("goals",g.id).catch(()=>{});
+     await remove("children",id).catch(()=>{});toast("تم حذف الملف");location.hash="children";break}
+   case "newRec":openForm(el.dataset.type,{child:el.dataset.child,spec:el.dataset.spec,reason:el.dataset.reason});break;
+   case "quick":openForm("obs",{child:""});break;
+   case "openRec":openRecord(el.dataset.id);break;
+   case "newAct":openForm("act");break;
+   case "editAct":openForm("act",{r:S.activities.find(x=>x.id===el.dataset.id)});break;
+   case "delAct":view.armed=null;await remove("activities",el.dataset.id).catch(()=>{});break;
+   case "gstat":{const g=S.goals.find(x=>x.id===el.dataset.id);if(g)await put("goals",{...g,status:el.dataset.v}).catch(()=>{});break}
+   case "delGoal":view.armed=null;await remove("goals",el.dataset.id).catch(()=>{});break;
+   case "sugg":$("g-text").value=el.dataset.t;$("g-dom").value=el.dataset.d;break;
+   case "copyMeeting":copyText(meetingText());break;
+   case "copyActs":copyText(actsText());break;
+   /* sheet */
+   case "backdrop":case "close":closeSheet();break;
+   case "seg":{const cur=getP(F.r,el.dataset.k);setP(F.r,el.dataset.k,cur===el.dataset.v?"":el.dataset.v);renderSheet();break}
+   case "sc":{let arr=getP(F.r,el.dataset.k);if(!Array.isArray(arr)){arr=Array(+el.dataset.n).fill(null);setP(F.r,el.dataset.k,arr)}
+     while(arr.length<+el.dataset.n)arr.push(null);const i=+el.dataset.i;arr[i]=arr[i]===el.dataset.v?null:el.dataset.v;renderSheet();break}
+   case "chk":{let arr=getP(F.r,el.dataset.k);if(!Array.isArray(arr)){arr=[];setP(F.r,el.dataset.k,arr)}const v=el.dataset.v;
+     if(el.checked){if(!arr.includes(v))arr.push(v)}else setP(F.r,el.dataset.k,arr.filter(x=>x!==v));if(el.dataset.rr)renderSheet();break}
+   case "behAdd":F.r.behaviors=F.r.behaviors||[];F.r.behaviors.push({what:"",when:"",after:"",freq:"",want:""});renderSheet();break;
+   case "behDel":F.r.behaviors.splice(+el.dataset.i,1);renderSheet();break;
+   case "save":saveSheet();break;
+   case "sEdit":F.mode="edit";renderSheet(true);break;
+   case "sArm":F.armed=true;renderSheet();break;
+   case "sDisarm":F.armed=false;renderSheet();break;
+   case "sDel":{const id=F.r.id;closeSheet();await remove("records",id).catch(()=>{});toast("تم الحذف");break}
+   case "copy":copyText(F.spec.text(F.r));break;
+   case "dl":{const r=F.r,c=childById(r.childId);try{await downloads.save({filename:(F.spec.t+"_"+(c?c.code:"")+"_"+r.date).replace(/[\\/:*?"<>|\s]+/g,"_")+".txt",data:F.spec.text(r)});toast("تم التنزيل")}catch(err){if(!err||err.code!=="declined")toast("تعذّر التنزيل. استعمل «نسخ النص».")}break}
+  }
+});
+document.addEventListener("input",e=>{
+  const el=e.target;
+  if(F&&el.dataset.bind){setP(F.r,el.dataset.bind,el.type==="number"?(el.value===""?"":+el.value):el.value);if(el.dataset.bind==="childId"&&F.kind==="obs"){renderSheet()}return}
+  if(F&&el.dataset.bindlist){let arr=getP(F.r,el.dataset.bindlist);if(!Array.isArray(arr)){arr=[];setP(F.r,el.dataset.bindlist,arr)}arr[+el.dataset.i]=el.value;return}
+  if(el.id==="q"){view.q=el.value;const pos=el.selectionStart;render();const q=$("q");q.focus();try{q.setSelectionRange(pos,pos)}catch(_){}}
+});
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(F&&el.tagName==="SELECT"&&el.dataset.bind){setP(F.r,el.dataset.bind,el.value);if(el.dataset.bind==="childId")renderSheet()}
+  if(el.id==="grp"){view.grp=el.value;render()}
+  if(el.id==="month"&&el.value){view.month=el.value;render()}
+});
+document.addEventListener("submit",async e=>{
+  if(e.target.id!=="goalForm")return;e.preventDefault();
+  const id=route().id,text=$("g-text").value.trim();if(!text){toast("اكتب نص الهدف.");return}
+  try{await put("goals",{id:uid(),childId:id,text,domain:$("g-dom").value,review:$("g-rev").value,who:$("g-who").value.trim(),status:"لم يبدأ",createdAt:Date.now()});toast("تمت إضافة الهدف")}catch(_){}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&F)closeSheet()});
+boot();
+</script>
