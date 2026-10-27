@@ -3,8 +3,8 @@
  * The app (file "index") is served as a web app; every record is one row in this spreadsheet.
  * The team code is read from sheet «الإعدادات», cell B1.
  */
-const COLS = ['children', 'records', 'goals', 'activities'];
-const SHEET_NAMES = { children: 'الأطفال', records: 'السجلات', goals: 'الأهداف', activities: 'الأنشطة' };
+const COLS = ['children', 'records', 'goals', 'activities', 'plan'];
+const SHEET_NAMES = { children: 'الأطفال', records: 'السجلات', goals: 'الأهداف', activities: 'الأنشطة', plan: 'الخطة السنوية' };
 const HEADERS = ['id', 'التاريخ', 'الطفل', 'الوصف', 'سجّله', 'آخر تعديل', 'json'];
 
 function doGet() {

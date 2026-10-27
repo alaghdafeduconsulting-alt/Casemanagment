@@ -169,6 +169,40 @@ textarea{min-height:68px;resize:vertical}
 .add{width:100%;padding:10px;border:2px dashed var(--line);border-radius:10px;background:none;font-weight:700;cursor:pointer;color:var(--navy)}
 .beh{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
 .docout{white-space:pre-wrap;font-size:14.5px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.ty-psy{background:var(--navy-soft);color:var(--text)}.ty-comp{background:var(--ok-soft);color:var(--ok)}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.kcard{background:var(--sunk);border-radius:12px;padding:14px 16px;line-height:1.65}
+.kcard.dark{background:#1E3A5F;color:#FFFFFF}
+.klead{font-size:clamp(18px,3vw,24px);font-weight:700;margin:0}
+.talkwrap{display:flex;flex-direction:column;gap:12px;max-width:900px}
+.slide{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:clamp(18px,4vw,40px);display:flex;flex-direction:column;gap:14px;min-height:340px}
+.slide h2{font-size:clamp(24px,5vw,40px)}
+.slide .kick{color:var(--orange);font-weight:700;font-size:14px}
+.slide .kbody{display:flex;flex-direction:column;gap:12px;font-size:clamp(16px,2.4vw,20px)}
+.slide .kfoot{margin-top:auto;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.slide.dark{background:#1E3A5F;color:#FFFFFF;border-color:#1E3A5F}
+.slide.dark .sub,.slide.dark .kfoot,.slide.dark .kick{color:inherit;opacity:.85}
+.slide.dark .kcard{background:rgb(255 255 255/.12);color:inherit}
+.slide.accent{background:var(--orange);color:var(--orange-ink);border-color:var(--orange)}
+.slide.accent .kick,.slide.accent .kfoot{color:inherit;opacity:.85}
+.gantt{overflow-x:auto}
+.gantt table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+.gantt th,.gantt td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:center}
+.gantt th{color:var(--muted);font-weight:700;font-size:12.5px}
+.gantt .gt{text-align:start;min-width:200px}
+.gantt .gax{text-align:start;background:var(--sunk);font-weight:800}
+.gantt .now{background:var(--orange-soft)}
+.gc{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;font-weight:800;font-size:13px}
+.gplan{background:var(--navy-soft);border:1px solid var(--navy)}.gdone{background:#2E7D5B;color:#fff}.glate{background:var(--crit-soft);border:1px solid var(--crit);color:var(--crit)}
+.glink{background:none;border:0;padding:0;font-weight:700;cursor:pointer;color:var(--text);text-align:start;display:block}
+.gnum{font-variant-numeric:tabular-nums;white-space:nowrap}
+table.abc{min-width:640px}.abc td,.abc th{border:1px solid var(--line)}.abc td{height:44px;text-align:start}.abc tr.ex td{color:var(--muted);font-style:italic}
+.rrow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.4fr);gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
+.rrow:first-child{border-top:0}
+.rrow select,.rrow input{padding:7px 8px;font-size:14px}
+@media (max-width:560px){.rrow{grid-template-columns:1fr 1fr}.rrow span{grid-column:1/-1;font-weight:700}}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.cgrid .chk{padding:7px 9px;font-size:14px}
 .toast{position:fixed;inset-inline:0;bottom:calc(20px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;z-index:40}
 .toast div{background:var(--text);color:var(--bg);padding:9px 18px;border-radius:20px;font-size:14.5px;max-width:90vw}
 .loading{padding:60px 0;text-align:center;color:var(--muted)}
@@ -234,15 +268,115 @@ const SCREEN=[
 const SCREEN_URGENT=["فقدان الطفل لمهارات كان يتقنها (الكلام، اللعب، النظافة)","شك في السمع أو البصر"];
 const NOTE_KINDS=["جلسة فردية","جلسة جماعية","تواصل مع الأسرة","زيارة المدرسة","اجتماع الفريق","أخرى"];
 const ACT_TYPES=["لقاء الآباء","ورشة للأطفال","تكوين للأطر","اجتماع شهري للفريق","زيارة مدرسة","تحسيس وتوعية","شراكة ومراسلة","أخرى"];
-const LIBRARY=[
- ["متابعة الطفل","النسخة الأولى من بطاقة ملاحظة المربي (تعمل على الهاتف فقط)","https://claude.ai/artifact/6PrLwu7KXbZ2BtYvs9L3U8"],
- ["التقييم الأكاديمي","النسخة الأولى من تقييم المهارات الأكاديمية بمستويات التلقين","https://claude.ai/artifact/8uw522TpgiwaFmXUSQqG5Z"],
- ["استمارة التقييم الرقمية","الاستمارة الشاملة للأخصائي النفسي (توحد / نسخة مرنة)","https://claude.ai/artifact/YLN12wWDcZYwi8RiD6tnvx"],
- ["شبكة رصد التعثرات النمائية","النسخة الورقية للمدرّسين (التعليم الأولي والسنتان الأولى والثانية)","https://claude.ai/artifact/JRTMbNcoyz6DbAnPz9aUyv"],
- ["سلوك طفلي يتعبني","عرض لقاء الآباء: نوبات الغضب والعناد","https://claude.ai/artifact/MHHEjcjqRg63WKxUtfptB8"],
- ["مطبوعات لقاء الآباء","المطبوعات التي تُسلَّم للأسر في اللقاء","https://claude.ai/artifact/565w8KZEa8GX854qW9EGNa"],
- ["سند للإدماج","متابعة الإدماج المدرسي مع المدرسة والأسرة والمرافق","https://claude.ai/artifact/LmmjEnY6mTpPbuH19KZMzq"],
- ["Clinical Workflow Toolkit","أدوات سير العمل الإكلينيكي","https://claude.ai/artifact/4qjZUT61bWk5YF1V77W5Hi"]];
+/* ---------- psychologist's comprehensive evaluation (from «استمارة التقييم الرقمية») ---------- */
+const PSY_LEVELS=["طبيعي / جيد جداً","بسيط","متوسط","شديد"];
+const PSY_TABLES={
+ dev:{t:"التاريخ النمائي والطبي",rows:["الحمل والولادة","التطور الحركي","التطور اللغوي","التطور الاجتماعي","التاريخ الطبي","الأدوية الحالية","المشاكل العصبية","المشاكل الحسية","النوم","الأكل","استخدام الشاشات","الاستقلالية اليومية"]},
+ aba:{t:"تقييم ABA",asd:1,rows:["التقليد","المطابقة","اتباع التعليمات","الانتظار / التعميم","اكتساب مهارات جديدة","تقليل السلوكيات المستهدفة"]},
+ vb:{t:"VB-MAPP",asd:1,levels:["ضعيف","متوسط","جيد جداً"],rows:["Mand (الطلب)","Tact (التسمية)","Listener Responding (الاستجابة السمعية)","Echoic (الترديد)","Intraverbal (الحوار اللفظي)","Social Skills (المهارات الاجتماعية)","Independent Play (اللعب المستقل)","Group Skills (مهارات المجموعة)","Visual Perception & Motor Imitation","Classroom Skills (مهارات الصف)"]},
+ psych:{t:"التقييم النفسي",rows:["التنظيم الانفعالي","تحمل الإحباط","المرونة المعرفية","القلق","تقدير الذات","السلوكيات التكرارية","فهم الانفعالات","التعبير الانفعالي","الاستجابة للتغيير","مهارات حل المشكلات"]},
+ pass:{t:"المعالجة المعرفية (نموذج PASS)",rows:["التخطيط — وضع الاستراتيجيات","التخطيط — المراقبة الذاتية وتصحيح المسار","الانتباه — الانتباه الانتقائي والمستمر","الانتباه — مقاومة المشتتات وسرعة المعالجة","المعالجة التزامنية — إدراك العلاقات المكانية والأنماط","المعالجة التزامنية — الفهم الكلي للمعلومات المترابطة","المعالجة التتابعية — الترتيب التسلسلي وتذكر التسلسلات","المعالجة التتابعية — تنفيذ تعليمات متعددة الخطوات"]},
+ exec:{t:"الوظائف التنفيذية",rows:["الانتباه المستمر","الذاكرة العاملة","التخطيط","المرونة المعرفية","التحكم في الاندفاع","تنظيم المهام","إدارة الوقت","إنهاء المهام"]},
+ acad:{t:"التقييم الأكاديمي",rows:["القراءة — الدقة","القراءة — الفهم","الكتابة — التعبير","الكتابة — الإملاء والخط","الرياضيات — فهم المفاهيم","الرياضيات — العمليات الحسابية","حل المشكلات"]},
+ comm:{t:"التواصل واللغة",rows:["اللغة الاستقبالية","اللغة التعبيرية","التواصل غير اللفظي","التواصل الوظيفي","فهم التعليمات","استيعاب المفردات"]},
+ sens:{t:"المهارات الحسية والحركية",rows:["الحساسية السمعية","الحساسية البصرية","الحساسية اللمسية","التوازن","المهارات الحركية الدقيقة","المهارات الحركية الكبرى","التخطيط الحركي"]}};
+const PSY_TEXT=[
+ ["referral","سبب الإحالة والمشكلة الرئيسية",[["referral_reason","سبب الإحالة الرئيسي"],["family_complaints","شكاوى الأسرة"],["school_complaints","شكاوى المدرسة"],["concerning_behaviors","أهم السلوكيات المقلقة"],["academic_info","معلومات أكاديمية أولية"],["strengths_initial","نقاط القوة الحالية (ملاحظة أولية)"]]],
+ ["family","الأسرة والبيئة",[["family_env","بيئة الطفل ومدى تنظيم الروتين اليومي"],["family_reinforcement","استخدام الأسرة للتعزيز الإيجابي"],["family_challenges","تحديات الأسرة الحالية"],["family_support","مصادر الدعم المتوفرة"],["family_expectations","توقعات الأسرة من التدخل"]]],
+ ["strengths","نقاط القوة والاهتمامات",[["interests","الاهتمامات الخاصة"],["reinforcers","المعززات الطبيعية (أشياء/أنشطة محببة)"],["strengths_academic","نقاط القوة الأكاديمية"],["strengths_social","نقاط القوة الاجتماعية"],["talents","المواهب والأنشطة المفضلة"]]]];
+const PSY_DYN={
+ behaviors:{t:"سجل السلوكيات الملاحظة (ABA)",asd:1,fields:[["behavior","السلوك","text"],["freq","التكرار (يومي/أسبوعي)","text"],["severity","الشدة","select",["خفيف","متوسط","شديد"]],["duration","المدة التقريبية","text"],["notes","ملاحظات","textarea"]]},
+ fba:{t:"التحليل الوظيفي للسلوك (FBA)",asd:1,fields:[["target","السلوك المستهدف","text"],["antecedent","المثير القبلي (Antecedent)","textarea"],["consequence","النتيجة (Consequence)","textarea"],["function","الوظيفة المحتملة","select",["هروب / تجنب","انتباه","حصول على شيء","حسي / تلقائي"]],["notes","فرضيات وتوصيات أولية","textarea"]]},
+ smart:{t:"أهداف SMART",fields:[["goal","الهدف","text"],["criteria","معايير النجاح","text"],["timeline","الجدول الزمني","text"],["responsible","المسؤول عن التنفيذ","text"]]},
+ recs:{t:"التوصيات",fields:[["type","الجهة","select",["توصية مدرسية","توصية أسرية","توصية ABA","توصية أكاديمية","توصية تخصصات أخرى"]],["text","نص التوصية","textarea"]]}};
+const dynField=k=>({type:"dyn",k,l:PSY_DYN[k].t,fields:PSY_DYN[k].fields});
+const tblField=k=>({type:"rating",k:"tbl."+k,rows:PSY_TABLES[k].rows,levels:PSY_TABLES[k].levels||PSY_LEVELS});
+
+/* ---------- school companion daily log + inclusion file (from «سند للإدماج») ---------- */
+const COMP_DIMS=["الانتباه","المشاركة","التنظيم الانفعالي","التفاعل مع الأقران","الاستقلالية"];
+const COMP_OPTS=[{v:"1",l:"1 · صعب",c:"#B3413A"},{v:"2",l:"2 · هش",c:"#C97A2E"},{v:"3",l:"3 · مقبول",c:"#2D5A8A"},{v:"4",l:"4 · جيد جدًا",c:"#2E7D5B"}];
+const EXAM=[
+ {k:"time",ar:"وقت إضافي (ثلث مدة الاختبار)",fr:"Temps supplémentaire (un tiers du temps)"},{k:"room",ar:"قاعة مستقلة وهادئة",fr:"Salle séparée et calme"},
+ {k:"reader",ar:"قراءة التعليمات بصوت مرتفع",fr:"Lecture des consignes à voix haute"},{k:"scribe",ar:"كاتب يدوّن الأجوبة بإملاء من التلميذ",fr:"Secrétaire (rédaction sous dictée)"},
+ {k:"reform",ar:"إعادة صياغة التعليمات",fr:"Reformulation des consignes"},{k:"enlarged",ar:"أوراق اختبار بخط مكبّر",fr:"Sujets en gros caractères"},
+ {k:"breaks",ar:"فترات استراحة مسموح بها",fr:"Pauses autorisées"},{k:"computer",ar:"استعمال الحاسوب",fr:"Usage d'un ordinateur"},
+ {k:"companion",ar:"حضور المرافق(ة)",fr:"Présence de l'accompagnant(e)"},{k:"spelling",ar:"عدم احتساب الأخطاء الإملائية خارج مادة اللغة",fr:"Orthographe non pénalisée hors épreuve de langue"}];
+const LEARN=[
+ {k:"seat",ar:"مقعد قريب من السبورة وبعيد عن المشتتات",fr:"Place près du tableau, loin des distractions"},{k:"chunk",ar:"تعليمات قصيرة، واحدة تلو الأخرى",fr:"Consignes courtes, une à la fois"},
+ {k:"visual",ar:"دعامات بصرية وجدول زمني مصوّر",fr:"Supports visuels et emploi du temps visuel"},{k:"reduce",ar:"تقليص كمية العمل",fr:"Quantité de travail réduite"},
+ {k:"copies",ar:"تسليم نسخ من الدروس",fr:"Copies des cours fournies"},{k:"oral",ar:"إمكانية التقويم الشفهي",fr:"Évaluation orale possible"},
+ {k:"sensory",ar:"فترات راحة حسية مبرمجة",fr:"Pauses sensorielles programmées"},{k:"tokens",ar:"التعزيز الإيجابي (نظام الرموز)",fr:"Renforcement positif (système de jetons)"},
+ {k:"calm",ar:"ركن هادئ متاح",fr:"Coin calme disponible"},{k:"homework",ar:"واجبات منزلية مكيّفة",fr:"Devoirs adaptés"}];
+const PAPERS=[
+ {k:"medical",ar:"شهادة طبية (طبيب نفسي للأطفال أو طبيب أعصاب الأطفال)",fr:"Certificat médical (pédopsychiatre ou neuropédiatre)"},{k:"psych",ar:"تقرير التقييم النفسي / السيكومتري",fr:"Bilan psychologique / psychométrique"},
+ {k:"speech",ar:"تقرير تقويم النطق",fr:"Bilan orthophonique"},{k:"psychomotor",ar:"تقرير الحركية النفسية",fr:"Bilan psychomoteur"},
+ {k:"card",ar:"بطاقة الشخص في وضعية إعاقة",fr:"Carte de personne en situation de handicap"},{k:"parentReq",ar:"طلب التكييف موقع من طرف الأولياء",fr:"Demande d'aménagement signée par les parents"},
+ {k:"pei",ar:"المشروع التربوي الفردي موقع من طرف الفريق",fr:"PEI signé par l'équipe"},{k:"reports",ar:"آخر النتائج الدراسية",fr:"Bulletins scolaires récents"},
+ {k:"convention",ar:"اتفاقية المدرسة – الأسرة – المرافق",fr:"Convention école – famille – accompagnant"}];
+const PSTAT=[["missing","ناقص"],["pending","قيد الإعداد"],["received","متوفر"],["na","غير مطلوب"]];
+const inclusionChild=c=>c.group===GROUPS[1]||c.status==="مدمج في مدرسة";
+function paperStats(c){const p=c.paper||{};const req=PAPERS.filter(x=>p[x.k]!=="na");return {total:req.length,got:req.filter(x=>p[x.k]==="received").length,missing:req.filter(x=>(p[x.k]||"missing")==="missing").length}}
+
+/* ---------- annual plan ---------- */
+const AXES=["التكفل التربوي بالأطفال","مواكبة الأسر","الإدماج المدرسي","تكوين وتأطير الفريق","التحسيس والشراكات","التدبير والتنظيم"];
+const PLAN_STATUS=["مبرمج","قيد الإنجاز","منجز","مؤجل","ملغى"];
+const seasonOf=d=>{const [y,m]=String(d||today()).split("-").map(Number);return m>=9?y:y-1};
+const seasonMonths=y=>[9,10,11,12,1,2,3,4,5,6,7,8].map(m=>(m>=9?y:y+1)+"-"+String(m).padStart(2,"0"));
+const seasonLabel=y=>y+"–"+(y+1);
+
+/* ---------- parent meeting kit (from «سلوك طفلي يتعبني» and its handouts) ---------- */
+const TALK_SECTIONS=[["cover","افتتاح يشرك الآباء ويجمع أمثلتهم"],["yassine","الفكرة الأساسية: السلوك رسالة وجبل الجليد"],["abc","تمرين الخانات الثلاث: قبل، السلوك، بعد"],["steps","أداة وضع الحدّ في ثلاث خطوات"],["help","متى أطلب المساعدة، مهمة الأسبوع، واللقاء القادم"]];
+const cards=(arr,cls)=>`<div class="kgrid">${arr.map(x=>`<div class="kcard ${cls||""}">${x}</div>`).join("")}</div>`;
+const TALK=[
+ {id:"cover",k:"لقاء الآباء والأمهات",t:"سلوك طفلي يتعبني",dark:1,b:`<p class="klead">نوبات الغضب والعناد: كيف أفهمها وكيف أضع الحدود</p><p class="sub">محمد لغظف الشيخ ماء العينين · أخصائي نفسي مدرسي</p>`,m:1,n:"الترحيب. قدّم نفسك في جملتين، ثم قل: «اليوم سنخرج بشيء واحد: طريقة جديدة لرؤية سلوك أطفالنا»."},
+ {id:"hands",k:"لنبدأ",t:"ارفع يدك إذا…",b:cards(["<b>1</b> بكى طفلك في المتجر لأنه يريد شيئاً","<b>2</b> قال لك «لا» أكثر من خمس مرات هذا الأسبوع","<b>3</b> رفعت صوتك عليه ثم ندمت"])+`<p class="sub">انظروا حولكم: لستم وحدكم</p>`,m:2,n:"اقرأ كل جملة وانتظر الأيدي. ارفع يدك أنت أيضاً في الثالثة. الهدف: إزالة الإحساس بالذنب وكسر الجليد."},
+ {id:"talk",k:"دقيقتان مع جارك",t:"ما آخر موقف أتعبكم مع طفلكم؟",b:`<div class="kcard"><b>احكِ الموقف لمن يجلس بجانبك: ماذا حدث؟ وماذا فعلت؟</b><br><span class="sub">ثم نسمع ثلاثة أمثلة من القاعة</span></div>`,m:3,n:"اضبط المؤقت دقيقتين، ثم خذ ثلاثة أمثلة ودوّنها على السبورة: ستعود إليها في التمرين. لا تعلّق ولا تنصح الآن."},
+ {id:"yassine",k:"مشهد نعرفه جميعاً",t:"ياسين، أربع سنوات، في المتجر",b:cards(["<b>1</b> يطلب حلوى عند الصندوق","<b>2</b> أمه تقول: لا","<b>3</b> يرتمي على الأرض ويصرخ، والناس ينظرون"])+`<div class="kcard dark"><b>ماذا نقول لأنفسنا في تلك اللحظة؟</b><br>«يتحدّاني» · «يحرجني أمام الناس» · «طفل مدلّل»</div>`,m:3,n:"احكِ المشهد كقصة، بصوتك وحركتك. اسأل القاعة قبل إظهار الأجوبة: «ماذا يدور في رأسكم في تلك اللحظة؟». ياسين مثال توضيحي وليس حالة حقيقية."},
+ {id:"message",k:"الفكرة الوحيدة",t:"السلوك رسالة",accent:1,b:`<p class="klead">وراء كل نوبة غضب حاجة لم يستطع الطفل أن يقولها بالكلام</p>`,m:1,n:"توقّف، اقرأ الجملة ببطء، واترك لحظة صمت. هذه هي الفكرة الوحيدة التي يجب أن يخرجوا بها."},
+ {id:"iceberg",k:"الفكرة",t:"جبل الجليد: ما نراه وما لا نراه",b:`<div class="kcard dark"><b>فوق الماء: ما نراه</b><br>صراخ · بكاء · ضرب · «لا!» · رمي الأشياء</div><div class="kcard"><b>تحت الماء: ما لا نراه</b><br>تعب · جوع · حاجة للانتباه · خوف أو قلق · صعوبة في التعبير · مهارة لم يتعلمها بعد</div>`,m:4,n:"اسأل أولاً: «ماذا نرى عندما يغضب الطفل؟» ثم «وماذا يمكن أن يكون تحت الماء؟». دع الآباء يقترحون قبل أن تقرأ القائمة."},
+ {id:"cant",k:"الفكرة",t:"«لا يريد» أم «لا يستطيع بعد»؟",b:cards(["<b>إذا قلت: «لا يريد»</b><br>أغضب، أعاقب، وأدخل معه في صراع","<b>إذا قلت: «لا يستطيع بعد»</b><br>أهدأ، أساعده، وأعلّمه المهارة"])+`<p class="sub">التحكم في الانفعالات مهارة تنضج ببطء خلال الطفولة. طفل الثلاث أو الأربع سنوات لا يستطيع بعد أن يهدّئ نفسه وحده.</p>`,m:3,n:"مثال للقاعة: طفل يرمي اللعبة حين يخسر. هل هو «قليل الأدب» أم لم يتعلم بعد كيف يتحمل الخسارة؟ نفس السلوك، تفسيران، وردّان مختلفان تماماً."},
+ {id:"under",k:"نعود إلى المشهد",t:"ماذا كان تحت الماء عند ياسين؟",b:cards(["خرج للتوّ من الروضة","لم يأكل منذ الصباح","جولة تسوق طويلة","الحلوى أمام عينيه عند الصندوق"])+`<div class="kcard dark"><b>رسالته: «أنا متعب وجائع ولم أعد أتحمل»</b></div>`,m:2,n:"اسأل القاعة: «ما الرسالة؟» قبل إظهار الجملة الأخيرة. أكّد: فهم الرسالة لا يعني شراء الحلوى."},
+ {id:"abc",k:"أداة للقراءة",t:"ثلاث خانات لقراءة أي سلوك",b:cards(["<b>قبل</b><br>متعب وجائع، وانتظار طويل عند الصندوق","<b>السلوك</b><br>صراخ وارتماء على الأرض","<b>بعد</b><br>أمه تشتري الحلوى ليسكت"])+`<div class="kcard dark"><b>ماذا تعلّم ياسين؟ أن الصراخ ينجح</b></div>`,m:4,n:"اشرح كل خانة: «قبل» تكشف السبب، و«بعد» تكشف ما يجعل السلوك يتكرر. اسأل: «ماذا تعلّم ياسين؟» قبل إظهار الجواب."},
+ {id:"turn",k:"تمرين: خمس دقائق، اثنان اثنان",t:"دوركم الآن",b:cards(["<b>1</b> اختر موقفاً حقيقياً من هذا الأسبوع","<b>2</b> املأ الخانات الثلاث: قبل، السلوك، بعد","<b>3</b> اسأل: ماذا كان طفلي يحاول أن يقول؟"])+`<div class="kcard"><b>لا يحضرك موقف؟ اختر واحداً</b><br>رفض ارتداء الملابس في الصباح · صراخ عند إطفاء الهاتف · ضرب الأخ الأصغر</div>`,m:10,n:"خمس دقائق للعمل وخمس للمشاركة. وزّع ورقة الخانات الثلاث. تجوّل بين الأزواج. عند المشاركة خذ مثالين أو ثلاثة واسأل دائماً: «ما الرسالة؟». إذا طرح أحدهم حالة معقدة، قل: «هذا يستحق وقتاً خاصاً، نتحدث بعد اللقاء»."},
+ {id:"steps",k:"أداة للتطبيق",t:"وضع الحدّ في ثلاث خطوات",b:cards(["<b>1. سمِّ الشعور</b><br>«أعرف أنك غاضب لأنك تريد الحلوى»","<b>2. ضع الحدّ</b><br>«لن نشتري الحلوى اليوم»","<b>3. قدّم خيارين</b><br>«تختار التفاحة أو الموز؟»"])+`<p class="sub">هدوء في الصوت، وحزم في القرار</p>`,m:5,n:"قل الجمل الثلاث بصوتك كما ستقولها لطفل. نبّه: الخياران يجب أن يكونا مقبولين عندك، والحدّ لا يتغير مهما اشتد الصراخ."},
+ {id:"play",k:"مشهد تمثيلي",t:"نحتاج متطوعاً يلعب دور الطفل",dark:1,b:cards(["<b>المشهد الأول: الطريقة المعتادة</b><br>صراخ، تهديد، ثم استسلام","<b>المشهد الثاني: الخطوات الثلاث</b><br>شعور، حدّ، خياران"])+`<p class="klead">ما الفرق الذي لاحظتموه؟ وكيف شعر «الطفل» في كل مشهد؟</p>`,m:8,n:"أنت تلعب دور الأب أو الأم، والمتطوع يلعب دور الطفل. بالغ قليلاً في المشهد الأول ليضحك الجميع. بعد المشهدين اسأل المتطوع أولاً عن شعوره، ثم القاعة."},
+ {id:"daily",k:"أمثلة من كل يوم",t:"نفس الخطوات في مواقف مختلفة",b:cards(["<b>انتهى وقت الهاتف</b><br>«أعرف أنك تريد المزيد. انتهى وقت الهاتف. نرسم أو نلعب بالكرة؟»","<b>اللباس في الصباح</b><br>«أرى أنك لا تريد أن تلبس. سنخرج بعد قليل. القميص الأزرق أو الأحمر؟»","<b>وقت النوم</b><br>«أعرف أنك تريد أن تلعب أكثر. حان وقت النوم. قصة قصيرة أو أغنية؟»"]),m:3,n:"اطلب من القاعة أن تكمل الجملة قبل إظهارها: «ماذا نقول في الخطوة الأولى؟». ثم اطلب موقفاً من القاعة وابنوا الجملة معاً."},
+ {id:"storm",k:"في قلب النوبة",t:"أثناء العاصفة: ما ينفع وما لا ينفع",b:cards(["<b>ما ينفع</b><br>اهدأ أنت أولاً<br>ابقَ قريباً منه<br>كلمات قليلة وصوت منخفض<br>تحدّث معه بعد أن يهدأ","<b>ما لا ينفع</b><br>الصراخ فوق صراخه<br>النقاش والدروس وسط النوبة<br>التهديد بما لن تنفذه<br>الاستسلام للطلب ليسكت"]),m:4,n:"اسأل: «من جرّب النقاش وسط النوبة؟ هل نجح؟». ذكّر بياسين: الاستسلام يعلّم الطفل أن الصراخ ينجح."},
+ {id:"help",k:"أبعد من مرحلة عابرة",t:"متى أطلب المساعدة؟",b:cards(["السلوك يؤثر على المدرسة أو على حياة الأسرة","نوبات شبه يومية بعد سن الخامسة أو السادسة","يؤذي نفسه أو غيره أو يكسر الأشياء","نوبات طويلة يصعب جداً تهدئتها"])+`<p class="sub">هذه علامات تستحق استشارة مختص، وليست تشخيصاً</p>`,m:5,n:"طمئن أولاً: نوبات الغضب طبيعية في السنوات الأولى. ثم اقرأ العلامات بهدوء. لا تشخّص أي حالة في القاعة؛ وجّه إلى الاستشارة الفردية."},
+ {id:"homework",k:"مهمة الأسبوع",t:"ورقة الملاحظة",b:cards(["<b>1. اختر</b><br>سلوكاً واحداً يتعبك","<b>2. دوّن</b><br>ثلاث مرات: قبل، السلوك، بعد","<b>3. أحضر</b><br>الورقة إلى اللقاء القادم"])+`<div class="kcard dark">في اللقاء القادم نقرأ الأوراق معاً ونبني خطة لكل سلوك</div>`,m:3,n:"وزّع ورقة الملاحظة الآن. أكّد أنها بسيطة: ثلاث ملاحظات فقط في الأسبوع. الورقة هي الجسر إلى اللقاء القادم."},
+ {id:"close",k:"قبل أن نفترق",t:"السلوك رسالة: هذا الأسبوع، حاول أن تقرأها",dark:1,b:cards(["<b>اللقاء القادم</b><br>[التاريخ والمكان]","<b>للتسجيل</b><br>ورقة الأسماء تمرّ عليكم الآن","<b>للاستشارة الفردية</b><br>[رقم الهاتف]"])+`<p class="sub">محمد لغظف الشيخ ماء العينين · أخصائي نفسي مدرسي</p>`,m:5,n:"مرّر ورقة التسجيل الآن وليس بعد الانصراف. أعلن تاريخ اللقاء القادم بوضوح. اختم بالجملة: «السلوك رسالة»."}];
+const REMINDER_TEXT=`بطاقة التذكير: السلوك رسالة
+وراء كل نوبة غضب حاجة لم يستطع الطفل أن يقولها بالكلام.
+
+وضع الحدّ في ثلاث خطوات
+1. سمِّ الشعور: «أعرف أنك غاضب لأنك تريد الحلوى»
+2. ضع الحدّ: «لن نشتري الحلوى اليوم»
+3. قدّم خيارين: «تختار التفاحة أو الموز؟»
+
+أثناء النوبة
+ما ينفع: اهدأ أنت أولاً · ابقَ قريباً منه · كلمات قليلة وصوت منخفض · تحدّث معه بعد أن يهدأ
+ما لا ينفع: الصراخ فوق صراخه · النقاش والدروس وسط النوبة · التهديد بما لن تنفذه · الاستسلام للطلب ليسكت
+
+متى أطلب المساعدة؟
+- نوبات شبه يومية بعد سن الخامسة أو السادسة
+- نوبات طويلة يصعب جداً تهدئتها
+- يؤذي نفسه أو غيره أو يكسر الأشياء
+- السلوك يؤثر على المدرسة أو على حياة الأسرة
+هذه علامات تستحق استشارة مختص، وليست تشخيصاً.
+
+جمعية آفاق — مركز خطوات`;
+const ABC_TEXT=`ورقة الملاحظة: قبل / السلوك / بعد
+اختر سلوكاً واحداً يتعبك، ودوّنه كلما حدث (ثلاث مرات هذا الأسبوع).
+
+مثال:
+- اليوم والوقت: السبت، منتصف النهار
+- قبل: متعب وجائع، وانتظار طويل عند الصندوق
+- السلوك: صراخ وارتماء على الأرض
+- بعد: اشتريت الحلوى فسكت
+
+بعد كل ملاحظة اسأل نفسك: ماذا كان طفلي يحاول أن يقول؟
+أحضر ملاحظاتك معك إلى اللقاء القادم.`;
+
 
 /* ================= helpers ================= */
 const $=id=>document.getElementById(id);
@@ -262,8 +396,8 @@ function toast(m){$("toastText").textContent=m;$("toast").hidden=false;clearTime
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 
 /* ================= state & data layer ================= */
-const COLS=["children","records","goals","activities"];
-let S={children:[],records:[],goals:[],activities:[]};
+const COLS=["children","records","goals","activities","plan"];
+let S={children:[],records:[],goals:[],activities:[],plan:[]};
 let mode="loading",db=null,userCap=null,myId=null,names={},downloads=null;
 /* Google Apps Script hosting: data lives in the owner's Google Sheet, the team signs in with a shared team code */
 let gasCode=ls("afaq.code")||"",myName=ls("afaq.name")||"",loginErr="",_poll=0;
@@ -279,7 +413,7 @@ async function gasStart(){
     clearInterval(_poll);_poll=setInterval(()=>{if(document.visibilityState==="visible")gasLoad().then(render).catch(()=>{})},30000);
   }catch(e){loginErr=apiErr(e);if(String(e).includes("CODE")){gasCode="";ls("afaq.code","")}mode="login";render()}
 }
-let view={tab:"overview",q:"",grp:"",month:today().slice(0,7),armed:null};
+let view={tab:"overview",q:"",grp:"",month:today().slice(0,7),season:seasonOf(today()),slide:0,armed:null};
 let F=null; // open sheet
 
 async function boot(){
@@ -343,6 +477,10 @@ function alertsOf(c){
     if(n>35&&(c.status||"نشط")==="نشط")out.push({lv:"warn",t:"المتابعة الشهرية متأخرة ("+n+" يوم)"});
     if((obs[0].flags||[]).length&&n<=60)out.push({lv:"crit",t:"علامات مهمة في آخر ملاحظة"});
   }
+  const cp=recsOf(c.id,"comp");if(cp.length){const reg=cp.slice(0,5).map(r=>+((r.rate||[])[2]||0)).filter(Boolean);
+    if(reg.length>=3&&reg.reduce((a,b)=>a+b,0)/reg.length<=2.2)out.push({lv:"warn",t:"تنظيم انفعالي هش (متابعة المرافق)"});
+    const inc=cp.filter(r=>r.inc&&(r.inc.b||r.inc.a)&&daysSince(r.date)<=7).length;if(inc)out.push({lv:inc>1?"crit":"warn",t:inc+" حادثة خلال 7 أيام"})}
+  if(c.paper&&inclusionChild(c)){const m=paperStats(c).missing;if(m)out.push({lv:"warn",t:m+" وثيقة ناقصة في الملف الإداري"})}
   const sc=recsOf(c.id,"screen")[0];
   if(sc){const a=screenAnalysis(sc);if(a.cls==="crit")out.push({lv:"crit",t:"رصد: "+a.short});else if(a.cls==="warn")out.push({lv:"warn",t:"رصد: "+a.short})}
   const fb=recsOf(c.id,"fb").find(r=>r.review);
@@ -455,6 +593,37 @@ const TYPES={
    ...SCREEN.map(d=>({t:d.title,fields:[{type:"scale",k:"ans."+d.id,items:d.items,opts:[{v:"0",l:"0 · لا ألاحظه",c:"#2E7D5B"},{v:"1",l:"1 · أحيانًا",c:"#C97A2E"},{v:"2",l:"2 · كثيرًا",c:"#B3413A"}]}]})),
    {t:"حالات تستدعي التوجيه دون انتظار",fields:[{k:"urgent",type:"checks",o:SCREEN_URGENT,red:true},{k:"notes",type:"textarea",l:"ملاحظات المدرّس(ة)"}]}],
   html:viewScreen,text:textScreen},
+ psy:{t:"التقييم النفسي الشامل",d:"استمارة الأخصائي النفسي (توحد / نسخة مرنة)",blank:()=>({caseType:"flex",tbl:{},behaviors_aba:[],fba:[],smart:[],recs:[]}),
+  sections:r=>{const asd=r.caseType==="asd";const T=k=>({t:PSY_TABLES[k].t,fields:[tblField(k)]});
+   return [
+   {t:"معلومات التقييم",fields:[{k:"caseType",type:"seg",l:"نوع الحالة",o:[{v:"asd",l:"توحد (نسخة شاملة)"},{v:"flex",l:"فرط الحركة / إعاقة ذهنية / صعوبات أخرى (نسخة مرنة)"}]},
+    {row:[{k:"date",type:"date",l:"تاريخ التقييم"},{k:"evaltype",type:"select",l:"نوع التقييم",o:["نفسي","سلوكي","أكاديمي","متعدد التخصصات"]}]},
+    {row:[{k:"prevdx",type:"text",l:"التشخيص السابق (إن وجد)"},{k:"grade",type:"text",l:"المستوى الدراسي"}]},
+    {row:[{k:"lang",type:"select",l:"اللغة الأساسية",o:["العربية","الحسانية","الأمازيغية","الفرنسية","أخرى"]},{k:"place",type:"text",l:"مكان إجراء التقييم"}]}]},
+   ...PSY_TEXT.slice(0,1).map(([id,t,fs])=>({t,fields:fs.map(([k,l])=>({k,type:"textarea",l}))})),
+   T("dev"),
+   ...(asd?[{t:PSY_DYN.behaviors.t,fields:[{...dynField("behaviors"),k:"behaviors_aba"}]},{t:PSY_DYN.fba.t,fields:[dynField("fba")]},
+     {t:"تقييم ABA",fields:[{k:"prompt_types",type:"text",l:"أنواع التلقين المستخدمة"},{k:"response_level",type:"select",l:"مستوى الاستجابة العام",o:["مستقل","تلقين بسيط","تلقين متوسط","تلقين كامل"]},tblField("aba")]},T("vb")]:[]),
+   T("psych"),
+   {t:PSY_TABLES.pass.t,fields:[{k:"cog_tool",type:"select",l:"الأداة المستخدمة",o:["ملاحظة إكلينيكية فقط (بدون أداة معيارية)","Raven's Progressive Matrices","CAS / CAS2","Leiter-3","أداة أخرى"]},
+     {k:"cog_norms",type:"select",l:"نوع المعايير المرجعية",o:["لا ينطبق — ملاحظة إكلينيكية","معايير عربية/إقليمية","معايير أمريكية/غربية (غير محلية)","معايير محلية مغربية"]},{k:"cog_score",type:"text",l:"النتيجة / المئين (إن وجدت)"},tblField("pass"),{k:"cog_summary",type:"textarea",l:"ملخص المعالجة المعرفية (نقاط القوة والضعف عبر العمليات الأربع)"}]},
+   T("exec"),T("acad"),T("comm"),
+   {t:PSY_TABLES.sens.t,fields:[tblField("sens"),{k:"sensory_notes",type:"textarea",l:"ملاحظات حسية إضافية"}]},
+   ...PSY_TEXT.slice(1).map(([id,t,fs])=>({t,fields:fs.map(([k,l])=>({k,type:"textarea",l}))})),
+   {t:"الخلاصة والأهداف والتوصيات",fields:[{k:"case_summary",type:"textarea",l:"ملخص الحالة"},{k:"priority_needs",type:"textarea",l:"الاحتياجات ذات الأولوية"},dynField("smart"),dynField("recs"),{k:"followup",type:"date",l:"تاريخ المتابعة القادمة"}]}]},
+  html:r=>`${(r.smart||[]).some(g=>g.goal)?`<div class="fs"><h3>أهداف SMART</h3><ul class="plain">${r.smart.filter(g=>g.goal).map(g=>`<li>${esc(g.goal)}${g.criteria?` <span class="sub">(${esc(g.criteria)})</span>`:""}</li>`).join("")}</ul><button class="btn sm navy" data-act="smartToGoals">إضافة هذه الأهداف إلى المشروع الفردي</button></div>`:""}<div class="docout">${esc(textPsy(r))}</div>`,
+  text:textPsy},
+ comp:{t:"متابعة المرافق اليومية",d:"يوم الطفل في المدرسة: تقييم، عمل، حادثة",blank:()=>({period:"اليوم كاملا",rate:[]}),
+  sections:r=>[{t:"اليوم في المدرسة",fields:[{row:[{k:"date",type:"date",l:"التاريخ"},{k:"period",type:"seg",l:"الفترة",o:["اليوم كاملا","صباحا","مساء"]}]},
+    {type:"scale",k:"rate",items:COMP_DIMS,opts:COMP_OPTS},{k:"tasks",type:"textarea",l:"العمل المدرسي المنجز"}]},
+   {t:"حادثة (ق-س-ن)",lead:"اختياري. املأ فقط إذا حدث سلوك صعب.",fields:[{k:"inc.a",type:"text",l:"القبلي (ما حدث قبل)"},{k:"inc.b",type:"text",l:"السلوك الملاحظ"},{k:"inc.c",type:"text",l:"النتيجة / الاستجابة المقدمة"}]},
+   {t:"رسالة إلى الأسرة",fields:[{k:"note",type:"textarea",l:"ما تريد أن تعرفه الأسرة عن اليوم"}]}],
+  html:r=>`<div class="fs"><div class="chips">${COMP_DIMS.map((d,i)=>{const v=(r.rate||[])[i];return v?`<span class="chip" style="background:${COMP_OPTS[v-1].c};color:#fff">${esc(d)} ${v}</span>`:""}).join("")}</div>${r.tasks?`<div><b>العمل المنجز:</b> ${esc(r.tasks)}</div>`:""}</div>
+   ${r.inc&&(r.inc.a||r.inc.b)?`<div class="alert"><strong>حادثة</strong><br>${r.inc.a?"قبل: "+esc(r.inc.a)+"<br>":""}${r.inc.b?"السلوك: "+esc(r.inc.b)+"<br>":""}${r.inc.c?"الاستجابة: "+esc(r.inc.c):""}</div>`:""}
+   ${r.note?`<div class="fs"><div class="fl">رسالة إلى الأسرة</div><div style="white-space:pre-wrap">${esc(r.note)}</div></div>`:""}`,
+  text:r=>{const L=["متابعة المرافق — "+childLabel(childById(r.childId))+" — "+fd(r.date)+" ("+(r.period||"")+")"];
+   COMP_DIMS.forEach((d,i)=>{const v=(r.rate||[])[i];if(v)L.push("- "+d+": "+COMP_OPTS[v-1].l)});if(r.tasks)L.push("العمل المنجز: "+r.tasks);
+   if(r.inc&&(r.inc.a||r.inc.b))L.push("حادثة — قبل: "+(r.inc.a||"")+" | السلوك: "+(r.inc.b||"")+" | الاستجابة: "+(r.inc.c||""));if(r.note)L.push("رسالة إلى الأسرة: "+r.note);return L.join("\n")}},
  note:{t:"ملاحظة جلسة",d:"جلسة، تواصل مع الأسرة، زيارة",blank:()=>({kind:NOTE_KINDS[0]}),
   sections:r=>[{t:"الملاحظة",fields:[{k:"kind",type:"seg",l:"النوع",o:NOTE_KINDS},{k:"date",type:"date",l:"التاريخ"},{k:"text",type:"textarea",l:"ماذا حدث؟"},{k:"nextStep",type:"textarea",l:"الخطوة التالية"}]}],
   html:r=>`<div class="fs"><div class="chips"><span class="chip acc">${esc(r.kind||"")}</span></div><div style="white-space:pre-wrap">${esc(r.text||"—")}</div>${r.nextStep?`<div><div class="fl">الخطوة التالية</div><div style="white-space:pre-wrap">${esc(r.nextStep)}</div></div>`:""}</div>`,
@@ -467,8 +636,10 @@ const CHILD_FORM={t:"بطاقة الطفل",sections:()=>[{t:"المعلومات
   {row:[{k:"group",type:"select",l:"القسم / البرنامج",o:GROUPS},{k:"status",type:"select",l:"الوضعية",o:STATUSES}]},
   {k:"disability",type:"select",l:"الإعاقة كما هي مكتوبة في الملف",o:DISABILITY},
   {row:[{k:"educator",type:"text",l:"المربي المرجعي"},{k:"school",type:"text",l:"المدرسة (إن وُجدت)"}]},
+  {k:"level",type:"text",l:"المستوى الدراسي",ph:"مثال: الثالث ابتدائي"},
   {k:"notes",type:"textarea",l:"ملاحظات عامة"}]}]};
-const ACT_FORM={t:"نشاط الجمعية",sections:()=>[{t:"النشاط",fields:[
+const ACT_FORM={t:"نشاط الجمعية",sections:r=>[{t:"النشاط",fields:[
+  ...(planOf(seasonOf(r.date)).length?[{k:"planId",type:"select",l:"من الخطة السنوية (اختياري)",o:planOf(seasonOf(r.date)).map(p=>({v:p.id,l:p.title}))}]:[]),
   {k:"type",type:"select",l:"نوع النشاط",o:ACT_TYPES},{k:"title",type:"text",l:"العنوان *",ph:"مثال: سلوك طفلي يتعبني: نوبات الغضب والعناد"},
   {row:[{k:"date",type:"date",l:"التاريخ"},{k:"place",type:"text",l:"المكان"}]},
   {row:[{k:"families",type:"number",l:"عدد الأسر / المشاركين"},{k:"kids",type:"number",l:"عدد الأطفال المعنيين"}]},
@@ -599,7 +770,7 @@ function demoData(){
   const c1="ex1",c2="ex2",c3="ex3";const fill=(arr,n)=>Array.from({length:n},(_,i)=>arr[i%arr.length]);
   return {children:[
     {id:c1,code:"مثال-001",name:"أ. ب.",dob:"2018-03-11",sex:"ذكر",group:GROUPS[0],status:"نشط",disability:"توحد",educator:"مربية (مثال)",createdAt:1},
-    {id:c2,code:"مثال-002",name:"س. م.",dob:"2017-09-02",sex:"أنثى",group:GROUPS[1],status:"مدمج في مدرسة",disability:"شلل دماغي",educator:"مربي (مثال)",school:"مدرسة (مثال)",createdAt:2},
+    {id:c2,code:"مثال-002",name:"س. م.",dob:"2017-09-02",sex:"أنثى",group:GROUPS[1],status:"مدمج في مدرسة",disability:"شلل دماغي",educator:"مربي (مثال)",school:"مدرسة (مثال)",level:"الثالث ابتدائي",acc:{exam:["time","room","companion"],learn:["seat","visual","calm"]},justif:"إعاقة حركية تؤثر على سرعة الكتابة.",paper:{medical:"received",psych:"received",speech:"na",psychomotor:"pending",card:"missing",parentReq:"received",pei:"pending",reports:"received",convention:"missing"},createdAt:2},
     {id:c3,code:"مثال-003",name:"ي. ع.",dob:"2019-01-20",sex:"ذكر",group:GROUPS[0],status:"نشط",disability:"متلازمة داون",educator:"مربية (مثال)",createdAt:3}],
    records:[
     {id:"r1",childId:c1,type:"obs",kind:"first",date:d(70),educator:"مربية (مثال)",ans:{comm:fill(["some","no","some","no","no","no"],6),social:fill(["no","some","no","no","some","no"],6),attention:fill(["no","no","some","some","no","no"],6),motor:fill(["yes","yes","yes","some","some","yes"],6),autonomy:fill(["some","yes","no","some","some","no"],6),learning:fill(["yes","some","some","no","some","yes","some"],7)},notes:{},sensory:[SENSORY[0],SENSORY[2]],flags:[],behaviors:[],goalStatus:{},createdAt:1},
@@ -608,30 +779,38 @@ function demoData(){
     {id:"r4",childId:c2,type:"ready",date:d(20),school:"مدرسة (مثال)",ans:{auto:[RL[0],RL[0],RL[1],RL[0],RL[0]],group:[RL[0],RL[1],RL[0],RL[1],RL[0]],beh:[RL[0],RL[0],RL[1],RL[0]],com:[RL[0],RL[0],RL[0]],learn:[RL[1],RL[1],RL[0],RL[0]],cond:[CL[1],CL[0],CL[0],CL[0],CL[0],CL[1],CL[0],CL[0]]},notes:{},createdAt:4},
     {id:"r5",childId:c2,type:"obs",kind:"followup",date:d(12),ans:{comm:fill(["yes"],6),social:fill(["yes","yes","some","yes","yes","some"],6),attention:fill(["yes","some","yes","yes","some","yes"],6),motor:fill(["some","na","yes","some","some","yes"],6),autonomy:fill(["yes","yes","yes","some","yes","yes"],6),learning:fill(["yes"],7)},notes:{},sensory:[],flags:[],behaviors:[],goalStatus:{},createdAt:5},
     {id:"r6",childId:c3,type:"acad",date:d(15),subjects:["pw"],ans:{pw1:fill(["I","I","G","V","I","I","I","G","M","V","I","PP","FP","NR"],18),pw2:fill(["I","G","V","M","PP"],15)},notes:{},obs:{hand:"اليمين",grip:"خاطئة"},createdAt:6},
+    {id:"r8",childId:c2,type:"comp",date:d(2),period:"اليوم كاملا",rate:["3","3","2","3","4"],tasks:"قراءة نص قصير، تمارين الحساب 1 إلى 4.",inc:{a:"نهاية الاستراحة",b:"رفض الدخول إلى القسم",c:"خمس دقائق في الركن الهادئ ثم عاد"},note:"يوم جيد عموماً.",createdAt:8},
+    {id:"r9",childId:c2,type:"comp",date:d(1),period:"صباحا",rate:["3","4","3","3","4"],tasks:"إملاء مكيّف.",inc:{},createdAt:9},
     {id:"r7",childId:c3,type:"obs",kind:"followup",date:d(8),ans:{comm:fill(["yes","some"],6),social:fill(["yes"],6),attention:fill(["some","no"],6),motor:fill(["yes","some"],6),autonomy:fill(["some"],6),learning:fill(["some","yes"],7)},notes:{},sensory:[],flags:[FLAGS[5]],flagNote:"لا يلتفت للأصوات من خلفه.",behaviors:[],goalStatus:{},createdAt:7}],
    goals:[
     {id:"g1",childId:c1,text:"يطلب الماء بالإشارة دون مساعدة",domain:"التواصل",status:"يتقدّم",createdAt:1},
     {id:"g2",childId:c1,text:"يقبل تغيير النشاط عند الإعلان عنه بصورة",domain:"السلوك والمشاعر",status:"لم يبدأ",createdAt:2},
     {id:"g3",childId:c2,text:"يبقى في مجموعة القسم 15 دقيقة",domain:"الإدماج المدرسي",status:"تحقّق",createdAt:3},
     {id:"g4",childId:c3,text:"يمسك القلم بالإبهام والسبابة والوسطى",domain:"الحركة",status:"يتقدّم",createdAt:4}],
+   plan:(()=>{const y=seasonOf(today()),M=seasonMonths(y);return [
+    {id:"p1",season:y,axis:AXES[1],title:"لقاء شهري للآباء",months:M.slice(1,10),target:9,unit:"لقاء",lead:"الأخصائي النفسي",budget:"1800",indicator:"حضور 12 أسرة على الأقل",status:"قيد الإنجاز",createdAt:1},
+    {id:"p2",season:y,axis:AXES[2],title:"زيارة المدارس المستقبِلة",months:[M[0],M[3],M[6]],target:6,unit:"زيارة",lead:"منسقة مواكبة",status:"قيد الإنجاز",createdAt:2},
+    {id:"p3",season:y,axis:AXES[3],title:"تكوين المربين: الملاحظة والمشروع الفردي",months:[M[2],M[5]],target:2,unit:"دورة",lead:"الأخصائي النفسي",budget:"2500",status:"مبرمج",createdAt:3},
+    {id:"p4",season:y,axis:AXES[0],title:"الاجتماع الشهري للفريق",months:M.slice(0,10),target:10,unit:"اجتماع",lead:"منسقة التربية الخاصة",status:"قيد الإنجاز",createdAt:4}]})(),
    activities:[
-    {id:"a1",type:"لقاء الآباء",title:"سلوك طفلي يتعبني: نوبات الغضب والعناد",date:d(21),place:"مقر الجمعية",families:14,kids:0,lead:"الأخصائي النفسي",notes:"عرض وتمارين تطبيقية، وتسليم المطبوعات.",createdAt:1},
-    {id:"a2",type:"اجتماع شهري للفريق",title:"الاجتماع الشهري",date:d(5),place:"مركز خطوات",families:8,kids:6,lead:"منسقة التربية الخاصة",notes:"مناقشة 6 حالات.",createdAt:2}]};
+    {id:"a1",planId:"p1",type:"لقاء الآباء",title:"سلوك طفلي يتعبني: نوبات الغضب والعناد",date:d(21),place:"مقر الجمعية",families:14,kids:0,lead:"الأخصائي النفسي",notes:"عرض وتمارين تطبيقية، وتسليم المطبوعات.",createdAt:1},
+    {id:"a2",planId:"p4",type:"اجتماع شهري للفريق",title:"الاجتماع الشهري",date:d(5),place:"مركز خطوات",families:8,kids:6,lead:"منسقة التربية الخاصة",notes:"مناقشة 6 حالات.",createdAt:2}]};
 }
 
 /* ================= rendering: shell ================= */
-const ROUTES=[["home","اليوم"],["children","الأطفال"],["meeting","الاجتماع الشهري"],["activities","الأنشطة"],["library","المراجع"]];
-function route(){const h=(location.hash||"").slice(1);if(h.startsWith("child-"))return {r:"child",id:h.slice(6)};return {r:ROUTES.some(x=>x[0]===h)?h:"home"}}
+const ROUTES=[["home","اليوم"],["children","الأطفال"],["meeting","الاجتماع الشهري"],["plan","التخطيط السنوي"],["activities","الأنشطة"],["tools","الأدوات"]];
+const SUBROUTES={talk:"tools",handouts:"tools"};
+function route(){const h=(location.hash||"").slice(1);if(h.startsWith("child-"))return {r:"child",id:h.slice(6)};return {r:ROUTES.some(x=>x[0]===h)||SUBROUTES[h]?h:"home"}}
 function renderBar(cur){
   $("bar").innerHTML=`<a class="brand" href="#home"><span class="mark">آ</span><span><b>فضاء آفاق</b><small>جمعية آفاق — مركز خطوات</small></span></a>
-  <nav class="sec" aria-label="الأقسام">${ROUTES.map(([k,l])=>`<a href="#${k}" ${cur===k||(cur==="child"&&k==="children")?'aria-current="page"':""}>${l}</a>`).join("")}</nav>`;
+  <nav class="sec" aria-label="الأقسام">${ROUTES.map(([k,l])=>`<a href="#${k}" ${cur===k||(cur==="child"&&k==="children")||SUBROUTES[cur]===k?'aria-current="page"':""}>${l}</a>`).join("")}</nav>`;
 }
 function banner(){return mode==="demo"?`<div class="banner"><b>●</b><span>معاينة بأمثلة: الأطفال والبيانات هنا أمثلة فقط ولا يُحفظ شيء. افتح الصفحة المنشورة ليعمل الحفظ والمشاركة مع الفريق.</span></div>`:""}
 function render(){
   const R=route();renderBar(R.r);document.title="فضاء آفاق";
   if(mode==="loading"){$("app").innerHTML=`<div class="loading">جار التحميل…</div>`;return}
   if(mode==="login"){$("app").innerHTML=pageLogin();return}
-  const html=R.r==="child"?pageChild(R.id):R.r==="children"?pageChildren():R.r==="meeting"?pageMeeting():R.r==="activities"?pageActivities():R.r==="library"?pageLibrary():pageHome();
+  const html=R.r==="child"?pageChild(R.id):R.r==="children"?pageChildren():R.r==="meeting"?pageMeeting():R.r==="activities"?pageActivities():R.r==="tools"?pageTools():R.r==="plan"?pagePlan():R.r==="talk"?pageTalk():R.r==="handouts"?pageHandouts():pageHome();
   $("app").innerHTML=banner()+html;resolveNames();
 }
 
@@ -699,9 +878,10 @@ function pageChild(id){
    ${al.length?`<div class="chips" style="margin-top:8px">${al.map(x=>`<span class="chip ${x.lv}">${esc(x.t)}</span>`).join("")}</div>`:""}</div>
    <div class="chips">${armed?`<button class="btn sm" data-act="disarm">إلغاء</button><button class="btn sm danger" data-act="delChild" data-id="${esc(id)}">تأكيد حذف الملف وكل سجلاته</button>`:`<button class="btn sm" data-act="editChild" data-id="${esc(id)}">تعديل البطاقة</button><button class="btn sm ghost" data-act="arm" data-v="child:${esc(id)}">حذف</button>`}</div></div>
   <div class="addbar">${Object.entries(TYPES).map(([k,t])=>`<button data-act="newRec" data-type="${k}" data-child="${esc(id)}"><b>+ ${esc(t.t)}</b><small>${esc(t.d)}</small></button>`).join("")}</div>
-  <div class="tabs" role="tablist">${[["overview","نظرة عامة",null],["timeline","السجل",recs.length],["goals","المشروع الفردي",goals.length]].map(([k,l,n])=>`<button role="tab" data-act="tab" data-v="${k}" aria-selected="${view.tab===k}">${l}${n!=null?`<span class="count">${n}</span>`:""}</button>`).join("")}</div>`;
+  <div class="tabs" role="tablist">${[["overview","نظرة عامة",null],["timeline","السجل",recs.length],["goals","المشروع الفردي",goals.length],["incl","الإدماج المدرسي",null]].map(([k,l,n])=>`<button role="tab" data-act="tab" data-v="${k}" aria-selected="${view.tab===k}">${l}${n!=null?`<span class="count">${n}</span>`:""}</button>`).join("")}</div>`;
   if(view.tab==="timeline")h+=tabTimeline(recs);
   else if(view.tab==="goals")h+=tabGoals(c,goals);
+  else if(view.tab==="incl")h+=tabInclusion(c);
   else h+=tabOverview(c,recs,goals);
   return h;
 }
@@ -726,6 +906,8 @@ function recHint(r){
   if(r.type==="ready")return readyAnalysis(r).dec;
   if(r.type==="fb")return (r.specialist||"")+(r.review?" · مراجعة "+fd(r.review):"");
   if(r.type==="screen")return screenAnalysis(r).dec;
+  if(r.type==="psy")return (r.caseType==="asd"?"نسخة التوحد":"نسخة مرنة")+(r.case_summary?" · "+r.case_summary.slice(0,60):"");
+  if(r.type==="comp"){const v=(r.rate||[]).map(Number).filter(Boolean);return (v.length?"المعدل "+(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1)+" / 4":"")+(r.inc&&r.inc.b?" · حادثة":"")}
   return (r.kind||"")+(r.text?" · "+r.text.slice(0,60):"");
 }
 function tli(r){return `<button class="tli" data-act="openRec" data-id="${esc(r.id)}"><span class="tag ty-${r.type}">${esc(TYPES[r.type].t)}</span><span style="min-width:0"><b>${fdh(r.date)}</b> <span class="sub">· ${esc(whoR(r))}</span><span class="sub" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(recHint(r))}</span></span><span class="sub">←</span></button>`}
@@ -798,7 +980,7 @@ function pageActivities(){
   let cur="";h+=`<div class="stack">`;
   acts.forEach(a=>{const ym=(a.date||"").slice(0,7);if(ym!==cur){if(cur)h+=`</div></div>`;cur=ym;h+=`<div class="panel"><h2>${ym?monthName(ym):"بدون تاريخ"}</h2><div class="list">`}
     const armed=view.armed==="act:"+a.id;
-    h+=`<div class="li"><div class="grow"><div class="t">${esc(a.title||"")}</div><div class="chips" style="margin:3px 0"><span class="chip acc">${esc(a.type||"")}</span><span class="chip">${fdh(a.date)}</span>${a.families?`<span class="chip">${esc(a.families)} مشارك</span>`:""}${a.place?`<span class="chip">${esc(a.place)}</span>`:""}</div>${a.notes?`<div class="sub">${esc(a.notes)}</div>`:""}</div>
+    h+=`<div class="li"><div class="grow"><div class="t">${esc(a.title||"")}</div><div class="chips" style="margin:3px 0"><span class="chip acc">${esc(a.type||"")}</span><span class="chip">${fdh(a.date)}</span>${a.families?`<span class="chip">${esc(a.families)} مشارك</span>`:""}${a.place?`<span class="chip">${esc(a.place)}</span>`:""}${a.planId&&S.plan.find(p=>p.id===a.planId)?`<span class="chip or">الخطة: ${esc(S.plan.find(p=>p.id===a.planId).title)}</span>`:""}</div>${a.notes?`<div class="sub">${esc(a.notes)}</div>`:""}</div>
     <div class="chips">${armed?`<button class="btn sm" data-act="disarm">إلغاء</button><button class="btn sm danger" data-act="delAct" data-id="${esc(a.id)}">تأكيد</button>`:`<button class="btn sm" data-act="editAct" data-id="${esc(a.id)}">تعديل</button><button class="btn sm ghost" data-act="arm" data-v="act:${esc(a.id)}">حذف</button>`}</div></div>`});
   return h+`</div></div></div>`;
 }
@@ -816,11 +998,154 @@ function pageLogin(){
   <label class="f">رمز الفريق<input type="text" id="l-code" autocomplete="off" required></label>
   <button class="btn pri" type="submit">دخول</button></form>`;
 }
-function pageLibrary(){
-  return `<div class="head"><div><div class="eyebrow">الوثائق والأدوات السابقة</div><h1>المراجع</h1></div></div>
-  <p class="sub" style="margin:-6px 0 14px">النماذج الورقية والعروض التي أُعدّت سابقًا للجمعية. البطاقات الرقمية القديمة كانت تحفظ على الهاتف فقط؛ كل ذلك صار في ملفات الأطفال هنا.</p>
-  ${mode==="gas"?`<div class="panel" style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><span class="grow" style="flex:1">أنت مسجّل باسم <b>${esc(myName)}</b> على هذا الهاتف.</span><button class="btn sm" data-act="logout">الخروج / تغيير الاسم</button></div>`:""}
-  <div class="lib">${LIBRARY.map(([t,d,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener"><b>${esc(t)}</b><span class="sub">${esc(d)}</span></a>`).join("")}</div>`;
+/* ---------- psychologist's evaluation text ---------- */
+function textPsy(r){
+  const L=[],c=childById(r.childId),asd=r.caseType==="asd";
+  L.push("ملخص بيانات التقييم النفسي — "+childLabel(c));
+  L.push("نوع الحالة: "+(asd?"توحد (اضطراب طيف التوحد)":"حالة عامة (فرط حركة / إعاقة ذهنية / صعوبات تعلم)")+" | التاريخ: "+fd(r.date));
+  L.push("========================================");
+  const kv=(l,v)=>{if(v)L.push("  - "+l+": "+v)};
+  L.push("\n▪ المعلومات الأساسية");kv("الجنس",c&&c.sex);kv("تاريخ الميلاد",c&&fd(c.dob));kv("المدرسة",c&&c.school);kv("المستوى الدراسي",r.grade);kv("التشخيص السابق",r.prevdx);kv("اللغة الأساسية",r.lang);kv("نوع التقييم",r.evaltype);kv("مكان التقييم",r.place);
+  const tbl=k=>{const rows=PSY_TABLES[k].rows,t=(r.tbl||{})[k]||{};const out=rows.map((x,i)=>{const o=t[i]||{};return o.lv||o.nt?"  - "+x+": "+(o.lv||"—")+(o.nt?" ("+o.nt+")":""):null}).filter(Boolean);if(out.length){L.push("\n▪ "+PSY_TABLES[k].t);out.forEach(x=>L.push(x))}};
+  const txt=i=>{const [,t,fs]=PSY_TEXT[i];const out=fs.filter(([k])=>r[k]);if(out.length){L.push("\n▪ "+t);out.forEach(([k,l])=>L.push("  - "+l+": "+r[k]))}};
+  const dyn=(key,k)=>{const a=(r[key]||[]).filter(o=>Object.values(o).some(Boolean));if(!a.length)return;L.push("\n▪ "+PSY_DYN[k].t);a.forEach((o,i)=>L.push("  "+(i+1)+") "+PSY_DYN[k].fields.filter(([f])=>o[f]).map(([f,l])=>l+": "+o[f]).join(" | ")))};
+  txt(0);tbl("dev");
+  if(asd){dyn("behaviors_aba","behaviors");dyn("fba","fba");if(r.prompt_types||r.response_level){L.push("\n▪ تقييم ABA");kv("أنواع التلقين",r.prompt_types);kv("مستوى الاستجابة العام",r.response_level)}tbl("aba");tbl("vb")}
+  tbl("psych");
+  if(r.cog_tool||r.cog_score||r.cog_summary){L.push("\n▪ المعالجة المعرفية (PASS)");kv("الأداة",r.cog_tool);kv("المعايير",r.cog_norms);kv("النتيجة",r.cog_score)}tbl("pass");kv("ملخص المعالجة المعرفية",r.cog_summary);
+  tbl("exec");tbl("acad");tbl("comm");tbl("sens");kv("ملاحظات حسية",r.sensory_notes);
+  txt(1);txt(2);
+  if(r.case_summary||r.priority_needs){L.push("\n▪ الخلاصة");kv("ملخص الحالة",r.case_summary);kv("الاحتياجات ذات الأولوية",r.priority_needs)}
+  dyn("smart","smart");dyn("recs","recs");if(r.followup)L.push("\n▪ تاريخ المتابعة القادمة: "+fd(r.followup));
+  return L.join("\n");
+}
+
+/* ---------- school inclusion tab (accommodations, paperwork, request letters) ---------- */
+function tabInclusion(c){
+  const acc=c.acc||{exam:[],learn:[]},p=c.paper||{},ps=paperStats(c);
+  const box=(list,g)=>`<div class="stack" style="gap:6px">${list.map(a=>`<label class="chk"><input type="checkbox" id="acc-${g}-${a.k}" data-act="accT" data-g="${g}" data-k="${a.k}" ${(acc[g]||[]).includes(a.k)?"checked":""}><span>${esc(a.ar)}</span></label>`).join("")}</div>`;
+  const comps=recsOf(c.id,"comp").slice(0,10).reverse();
+  return `<div class="grid2"><div class="stack">
+   <div class="panel"><h2>تكييف الامتحانات</h2>${box(EXAM,"exam")}</div>
+   <div class="panel"><h2>التكييفات البيداغوجية في القسم</h2>${box(LEARN,"learn")}</div>
+   <div class="panel stack"><label class="f">التبرير / الحاجات (يُستعمل في نص الطلب)<textarea id="inc-just" placeholder="مثال: صعوبات انتباه موثقة في التقييم النفسي، تظهر خاصة في الكتابة المطوّلة.">${esc(c.justif||"")}</textarea></label><div><button class="btn" data-act="saveJust" data-id="${esc(c.id)}">حفظ التبرير</button></div></div>
+  </div><div class="stack">
+   <div class="panel"><div class="domh" style="margin-bottom:8px"><h2 style="font-size:17px">الملف الإداري</h2><span class="chip ${ps.missing?"warn":"ok"}">${ps.got} من ${ps.total} وثيقة متوفرة</span></div>
+    <div class="list">${PAPERS.map(x=>{const st=p[x.k]||"missing";return `<div class="li"><span class="grow">${esc(x.ar)}</span><select id="pp-${x.k}" data-paper="${x.k}" data-id="${esc(c.id)}" style="width:auto;padding:6px 8px;font-size:14px;color:${st==="missing"?"var(--crit)":st==="pending"?"var(--warn)":st==="received"?"var(--ok)":"var(--muted)"}">${PSTAT.map(([k,l])=>`<option value="${k}" ${st===k?"selected":""}>${l}</option>`).join("")}</select></div>`}).join("")}</div></div>
+   <div class="panel"><h2>وثائق جاهزة</h2><p class="sub" style="margin:0 0 10px">تُبنى من التكييفات المختارة والتبرير ومعلومات الطفل.</p><div class="chips"><button class="btn sm navy" data-act="incDoc" data-lang="ar" data-id="${esc(c.id)}">طلب التكييفات (عربية)</button><button class="btn sm navy" data-act="incDoc" data-lang="fr" data-id="${esc(c.id)}">Demande d'aménagements (FR)</button></div></div>
+   <div class="panel"><h2>متابعة المرافق (آخر 10 أيام)</h2>${comps.length?`<div class="trend">${COMP_DIMS.map((d,i)=>{const v=comps.map(r=>+((r.rate||[])[i]||0)).filter(Boolean);return `<div class="spark"><div class="t"><span>${esc(d)}</span><b>${v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):"—"}</b></div>${spark(v.map(x=>(x-1)/3*100))}</div>`}).join("")}</div>`:`<p class="sub" style="margin:0">يملأ المرافق(ة) «متابعة المرافق اليومية» من أزرار الإضافة أعلاه.</p>`}</div>
+  </div></div>`;
+}
+function incDocText(c,lang){
+  const acc=c.acc||{exam:[],learn:[]},ar=lang==="ar",L=[];
+  const ex=EXAM.filter(a=>(acc.exam||[]).includes(a.k)),le=LEARN.filter(a=>(acc.learn||[]).includes(a.k)),docs=PAPERS.filter(x=>(c.paper||{})[x.k]==="received");
+  if(ar){
+    L.push("إلى السيد(ة) مدير(ة) "+(c.school||"المؤسسة"),"","الموضوع: طلب تكييف ظروف التمدرس والامتحانات","");
+    L.push("تحية طيبة، وبعد،","يشرفنا أن نلتمس منكم تمكين التلميذ(ة) "+childLabel(c)+(c.level?"، المسجل(ة) في مستوى "+c.level:"")+"، من التكييفات التالية، في إطار التربية الدامجة وبتنسيق مع جمعية آفاق (برنامج مواكبة).","");
+    if(c.justif)L.push("الحاجات والتبرير:",c.justif,"");
+    if(ex.length){L.push("تكييف الامتحانات:");ex.forEach(a=>L.push("- "+a.ar));L.push("")}
+    if(le.length){L.push("التكييفات البيداغوجية في القسم:");le.forEach(a=>L.push("- "+a.ar));L.push("")}
+    if(docs.length){L.push("الوثائق المرفقة:");docs.forEach(x=>L.push("- "+x.ar));L.push("")}
+    L.push("وتفضلوا بقبول فائق التقدير والاحترام.","","التاريخ: "+fd(today()),"توقيع الأولياء: ....................","عن جمعية آفاق — مركز خطوات: ....................");
+  }else{
+    L.push("À l'attention de Madame / Monsieur le Directeur de "+(c.school||"l'établissement"),"","Objet : Demande d'aménagements de la scolarité et des examens","");
+    L.push("Madame, Monsieur,","Nous avons l'honneur de solliciter, pour l'élève "+childLabel(c)+(c.level?", inscrit(e) en "+c.level:"")+", les aménagements suivants, dans le cadre de l'éducation inclusive et en coordination avec l'association Afaq (programme Mouwakaba).","");
+    if(c.justif)L.push("Besoins et justification :",c.justif,"");
+    if(ex.length){L.push("Aménagements des examens :");ex.forEach(a=>L.push("- "+a.fr));L.push("")}
+    if(le.length){L.push("Aménagements pédagogiques :");le.forEach(a=>L.push("- "+a.fr));L.push("")}
+    if(docs.length){L.push("Pièces jointes :");docs.forEach(x=>L.push("- "+x.fr));L.push("")}
+    L.push("Veuillez agréer, Madame, Monsieur, l'expression de nos salutations distinguées.","","Date : "+fd(today()),"Signature des parents : ....................","Pour l'association Afaq — Centre Khotowat : ....................");
+  }
+  return L.join("\n");
+}
+function showDoc(title,text){
+  F={kind:"doc",spec:{t:title},col:null,r:{},mode:"doc",doc:text};
+  $("sheet").innerHTML=`<div class="sheetwrap" data-act="backdrop"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="sh-top"><h2>${esc(title)}</h2><button class="btn sm ghost" data-act="close">✕ إغلاق</button></div><div class="sh-body"><div class="docout" dir="auto">${esc(text)}</div></div><div class="sh-foot"><button class="btn pri" data-act="docCopy">نسخ النص</button>${downloads?`<button class="btn" data-act="docDl">تنزيل كملف</button>`:""}</div></div></div>`;
+  document.body.style.overflow="hidden";
+}
+
+/* ---------- annual plan ---------- */
+function planOf(y){return S.plan.filter(p=>p.season===y).sort((a,b)=>AXES.indexOf(a.axis)-AXES.indexOf(b.axis)||(a.createdAt||0)-(b.createdAt||0))}
+function planProgress(p){
+  const acts=S.activities.filter(a=>a.planId===p.id),doneMonths=new Set(acts.map(a=>(a.date||"").slice(0,7)));
+  const cur=today().slice(0,7),closed=p.status==="منجز"||p.status==="ملغى"||p.status==="مؤجل";
+  const late=closed?[]:(p.months||[]).filter(m=>m<cur&&!doneMonths.has(m));
+  return {acts,doneMonths,late,count:acts.length,target:+p.target||(p.months||[]).length||0};
+}
+function pagePlan(){
+  const y=view.season,items=planOf(y),months=seasonMonths(y),cur=today().slice(0,7);
+  const pr=items.map(p=>({p,g:planProgress(p)}));const late=pr.filter(x=>x.g.late.length).length;
+  const budget=items.reduce((s,p)=>s+(parseFloat(String(p.budget||"").replace(/[^\d.]/g,""))||0),0);
+  let h=`<div class="head"><div><div class="eyebrow">الموسم ${seasonLabel(y)} · من شتنبر إلى غشت</div><h1>التخطيط السنوي</h1></div>
+   <select id="season" style="width:auto" aria-label="الموسم">${[y-1,y,y+1].map(s=>`<option value="${s}" ${s===y?"selected":""}>${seasonLabel(s)}</option>`).join("")}</select>
+   ${items.length?`<button class="btn" data-act="copyPlan">نسخ الخطة</button><button class="btn" data-act="copyPlanReport">نسخ تقرير الإنجاز</button>`:""}<button class="btn pri" data-act="newPlan">+ إضافة عمل</button></div>`;
+  if(!items.length)return h+`<div class="roster"><div class="empty"><h3>خطة ${seasonLabel(y)} فارغة</h3><p>أضف أعمال السنة محورًا بمحور: لقاءات الآباء، الورشات، تكوين الفريق، زيارات المدارس… حدّد لكل عمل الأشهر والمسؤول والهدف. عند تسجيل نشاط في «الأنشطة» اربطه بعمل من الخطة، فيظهر المنجز مقابل المبرمج تلقائيًا.</p><p class="sub">المحاور المقترحة: ${AXES.join(" · ")}</p><button class="btn pri" data-act="newPlan">+ إضافة أول عمل</button></div></div>`;
+  h+=`<div class="stats"><div class="stat"><div class="n">${items.length}</div><div class="l">عمل مبرمج</div></div><div class="stat"><div class="n">${items.filter(p=>p.status==="منجز").length}</div><div class="l">منجز</div></div><div class="stat ${late?"warn":""}"><div class="n">${late}</div><div class="l">متأخر عن موعده</div></div><div class="stat"><div class="n">${budget?budget.toLocaleString("fr-FR"):"—"}</div><div class="l">الميزانية التقديرية (درهم)</div></div></div>`;
+  const now=pr.filter(x=>(x.p.months||[]).includes(cur)&&x.p.status!=="ملغى");
+  h+=`<div class="panel" style="margin-bottom:14px"><h2>مبرمج هذا الشهر — ${monthName(cur)}</h2>${now.length?`<div class="list">${now.map(({p,g})=>`<div class="li"><div class="grow"><div class="t">${esc(p.title)}</div><div class="sub">${esc(p.axis||"")}${p.lead?" · "+esc(p.lead):""}</div></div>${g.doneMonths.has(cur)?`<span class="chip ok">سُجّل نشاط</span>`:`<button class="btn sm pri" data-act="actFromPlan" data-id="${esc(p.id)}">تسجيل النشاط</button>`}</div>`).join("")}</div>`:`<p class="sub" style="margin:0">لا شيء مبرمج هذا الشهر.</p>`}</div>`;
+  h+=`<div class="panel"><h2>الجدول الزمني</h2><div class="lgrow" style="margin-bottom:8px"><span><i style="background:var(--ok)"></i>أُنجز في هذا الشهر</span><span><i style="background:var(--navy-soft);border:1px solid var(--navy)"></i>مبرمج</span><span><i style="background:var(--crit-soft);border:1px solid var(--crit)"></i>فات موعده بدون نشاط</span></div>
+   <div class="gantt"><table><thead><tr><th class="gt">العمل</th>${months.map(m=>`<th class="${m===cur?"now":""}">${MONTHS[+m.slice(5)-1]}</th>`).join("")}<th>الإنجاز</th></tr></thead><tbody>`;
+  AXES.concat(items.map(p=>p.axis).filter(a=>a&&!AXES.includes(a))).filter((a,i,arr)=>arr.indexOf(a)===i).forEach(ax=>{const rows=pr.filter(x=>(x.p.axis||AXES[0])===ax);if(!rows.length)return;
+    h+=`<tr><td class="gax" colspan="${months.length+2}">${esc(ax)}</td></tr>`;
+    rows.forEach(({p,g})=>{h+=`<tr><td class="gt"><button class="glink" data-act="editPlan" data-id="${esc(p.id)}">${esc(p.title)}</button><span class="sub">${esc(p.lead||"")}${p.status&&p.status!=="مبرمج"?" · "+esc(p.status):""}</span></td>${months.map(m=>{const pl=(p.months||[]).includes(m),dn=g.doneMonths.has(m);const cls=dn?"gdone":pl&&g.late.includes(m)?"glate":pl?"gplan":"";return `<td class="${m===cur?"now":""}"><span class="gc ${cls}">${dn?"✓":g.late.includes(m)?"!":""}</span></td>`}).join("")}<td class="gnum">${g.count}${g.target?" / "+g.target:""}${p.unit?" <span class='sub'>"+esc(p.unit)+"</span>":""}</td></tr>`})});
+  return h+`</tbody></table></div></div>`;
+}
+function planText(report){
+  const y=view.season,items=planOf(y),L=[(report?"تقرير إنجاز الخطة السنوية":"الخطة السنوية")+" — جمعية آفاق، مركز خطوات — الموسم "+seasonLabel(y),"========================================"];
+  if(report){const g=items.map(planProgress);L.push("عدد الأعمال المبرمجة: "+items.length+" | منجز: "+items.filter(p=>p.status==="منجز").length+" | متأخر: "+g.filter(x=>x.late.length).length+" | تاريخ التقرير: "+fd(today()))}
+  AXES.concat(items.map(p=>p.axis).filter(a=>a&&!AXES.includes(a))).filter((a,i,arr)=>arr.indexOf(a)===i).forEach(ax=>{const rows=items.filter(p=>(p.axis||AXES[0])===ax);if(!rows.length)return;L.push("\n▪ "+ax);
+    rows.forEach(p=>{const g=planProgress(p);
+      if(report)L.push("  - "+p.title+": "+(p.status||"مبرمج")+" — المنجز "+g.count+(g.target?" من "+g.target:"")+(p.unit?" "+p.unit:"")+(g.late.length?" — متأخر: "+g.late.map(monthName).join("، "):""));
+      else{L.push("  - "+p.title);if(p.desc)L.push("     الوصف: "+p.desc);if((p.months||[]).length)L.push("     الأشهر: "+p.months.map(m=>MONTHS[+m.slice(5)-1]).join("، "));if(p.lead)L.push("     المسؤول: "+p.lead);if(p.target)L.push("     الهدف: "+p.target+" "+(p.unit||""));if(p.indicator)L.push("     مؤشر النجاح: "+p.indicator);if(p.partners)L.push("     الشركاء: "+p.partners);if(p.budget)L.push("     الميزانية التقديرية: "+p.budget+" درهم")}})});
+  return L.join("\n");
+}
+const PLAN_FORM={t:"عمل في الخطة السنوية",sections:r=>[{t:"العمل",fields:[
+  {row:[{k:"axis",type:"select",l:"المحور",o:AXES},{k:"status",type:"select",l:"الحالة",o:PLAN_STATUS}]},
+  {k:"title",type:"text",l:"العمل / النشاط *",ph:"مثال: لقاء شهري للآباء حول السلوك"},{k:"desc",type:"textarea",l:"الوصف والأهداف"},
+  {k:"months",type:"checks",l:"الأشهر المبرمجة (الموسم "+seasonLabel(r.season)+")",o:seasonMonths(r.season).map(m=>({v:m,l:monthName(m)})),grid:true},
+  {row:[{k:"target",type:"number",l:"الهدف (عدد)"},{k:"unit",type:"text",l:"الوحدة",ph:"لقاء، ورشة، أسرة، طفل…"}]},
+  {row:[{k:"lead",type:"text",l:"المسؤول"},{k:"budget",type:"text",l:"الميزانية التقديرية (درهم)"}]},
+  {k:"indicator",type:"text",l:"مؤشر النجاح",ph:"مثال: حضور 15 أسرة على الأقل في كل لقاء"},{k:"partners",type:"text",l:"الشركاء"}]}]};
+
+/* ---------- tools ---------- */
+function pageTools(){
+  const tools=[
+   ["#talk","عرض لقاء الآباء: سلوك طفلي يتعبني","17 شريحة مع ملاحظات المنشّط والتوقيت. اعرضه من الهاتف أو الحاسوب."],
+   ["#handouts","مطبوعات لقاء الآباء","ورقة الملاحظة (قبل / السلوك / بعد) وبطاقة التذكير، جاهزة للنسخ وإرسالها للأسر."],
+   ["#plan","التخطيط السنوي","أعمال الموسم حسب المحاور، الجدول الزمني، والمنجز مقابل المبرمج."],
+   ["new:psy","التقييم النفسي الشامل","الاستمارة الكاملة للأخصائي النفسي: نسخة التوحد ونسخة مرنة، مع ملخص جاهز للتقرير."],
+   ["new:screen","شبكة رصد التعثرات النمائية","للمدرّسين: التعليم الأولي والسنتان الأولى والثانية ابتدائي، مع قاعدة القرار."],
+   ["new:comp","متابعة المرافق اليومية","للمرافق(ة) داخل المدرسة: تقييم اليوم، العمل المنجز، الحوادث، رسالة للأسرة."],
+   ["incl","الإدماج المدرسي (سند)","التكييفات والملف الإداري وطلب التكييف بالعربية والفرنسية، في تبويب «الإدماج المدرسي» بملف كل طفل."]];
+  return `<div class="head"><div><div class="eyebrow">كل الأدوات داخل التطبيق</div><h1>الأدوات</h1></div></div>
+  ${mode==="gas"?`<div class="panel" style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><span style="flex:1">أنت مسجّل باسم <b>${esc(myName)}</b> على هذا الهاتف.</span><button class="btn sm" data-act="logout">الخروج / تغيير الاسم</button></div>`:""}
+  <div class="lib">${tools.map(([h,t,d])=>h.startsWith("#")?`<a href="${h}"><b>${esc(t)}</b><span class="sub">${esc(d)}</span></a>`:`<a href="#" data-act="${h==="incl"?"goIncl":"toolNew"}" data-type="${h.slice(4)}"><b>${esc(t)}</b><span class="sub">${esc(d)}</span><span class="chip or" style="align-self:flex-start;margin-top:4px">${h==="incl"?"أطفال برنامج مواكبة":"اختر الطفل وابدأ"}</span></a>`).join("")}</div>`;
+}
+function pageTalk(){
+  const i=Math.max(0,Math.min(TALK.length-1,view.slide||0)),s=TALK[i],total=TALK.reduce((a,x)=>a+x.m,0),before=TALK.slice(0,i).reduce((a,x)=>a+x.m,0);
+  return `<div class="head"><div><div class="eyebrow"><a href="#tools" style="color:inherit">الأدوات</a> · لقاء الآباء والأمهات · نحو ${total} دقيقة</div><h1>سلوك طفلي يتعبني</h1></div><button class="btn" data-act="talkAct">تسجيل هذا اللقاء كنشاط</button></div>
+  <div class="talkwrap"><div class="slide ${s.dark?"dark":""} ${s.accent?"accent":""}"><div class="kick">${esc(s.k)}</div><h2>${esc(s.t)}</h2><div class="kbody">${s.b}</div><div class="kfoot">${i+1} / ${TALK.length}</div></div>
+   <div class="chips" style="justify-content:space-between"><button class="btn" data-act="slide" data-v="${i-1}" ${i===0?"disabled":""}>→ السابقة</button><span class="sub" style="align-self:center">الدقيقة ${before} من ${total}</span><button class="btn pri" data-act="slide" data-v="${i+1}" ${i===TALK.length-1?"disabled":""}>التالية ←</button></div>
+   <details class="panel" ${view.notes?"open":""} id="talkNotes"><summary class="fl" style="cursor:pointer">ملاحظات المنشّط · ${s.m} ${s.m>2?"دقائق":"دقيقة"}</summary><p style="margin:8px 0 0">${esc(s.n)}</p></details>
+   <div class="panel"><h2>الأجزاء</h2><div class="list">${TALK_SECTIONS.map(([id,d])=>{const j=TALK.findIndex(x=>x.id===id);return `<button class="li" data-act="slide" data-v="${j}" style="border-inline:0;border-bottom:0;background:none;width:100%;text-align:start;cursor:pointer;color:inherit"><span class="chip ${i>=j?"acc":""}">${j+1}</span><span class="grow">${esc(d)}</span></button>`}).join("")}</div></div></div>`;
+}
+function pageHandouts(){
+  return `<div class="head"><div><div class="eyebrow"><a href="#tools" style="color:inherit">الأدوات</a> · لقاء الآباء: سلوك طفلي يتعبني</div><h1>مطبوعات اللقاء</h1></div></div>
+  <div class="grid2"><div class="stack">
+   <div class="panel"><div class="domh"><h2 style="font-size:17px">ورقة الملاحظة: قبل / السلوك / بعد</h2><button class="btn sm" data-act="copyAbc">نسخ للأسر</button></div>
+    <p class="sub">اختر سلوكاً واحداً يتعبك، ودوّنه كلما حدث. السطر الأول مثال، والثاني للتمرين في القاعة، والثلاثة الأخيرة لمهمة الأسبوع.</p>
+    <div class="gantt"><table class="abc"><thead><tr><th>اليوم والوقت</th><th>قبل: ماذا كان يحدث؟</th><th>السلوك: ماذا فعل طفلي؟</th><th>بعد: ماذا فعلتُ وماذا حدث؟</th></tr></thead><tbody>
+     <tr class="ex"><td>مثال: السبت، منتصف النهار</td><td>متعب وجائع، وانتظار طويل عند الصندوق</td><td>صراخ وارتماء على الأرض</td><td>اشتريت الحلوى فسكت</td></tr>
+     ${["في القاعة","الملاحظة 1","الملاحظة 2","الملاحظة 3"].map(x=>`<tr><td>${x}</td><td></td><td></td><td></td></tr>`).join("")}</tbody></table></div>
+    <p style="margin:10px 0 0"><b>بعد كل ملاحظة اسأل نفسك:</b> ماذا كان طفلي يحاول أن يقول؟</p></div>
+   <div class="panel"><h2>ورقة التسجيل للقاء القادم</h2><p class="sub" style="margin:0">سجّل عدد الحضور ومن يطلب استشارة فردية في «الأنشطة» عند تسجيل اللقاء. لا تُدخل أرقام هواتف الأسر في التطبيق.</p><div style="margin-top:10px"><button class="btn" data-act="talkAct">تسجيل اللقاء كنشاط</button></div></div>
+  </div><div class="stack">
+   <div class="panel"><div class="domh"><h2 style="font-size:17px">بطاقة التذكير: السلوك رسالة</h2><button class="btn sm pri" data-act="copyReminder">نسخ للواتساب</button></div>
+    <p>وراء كل نوبة غضب حاجة لم يستطع الطفل أن يقولها بالكلام.</p>
+    <div class="fl">وضع الحدّ في ثلاث خطوات</div><ol class="plain"><li><b>سمِّ الشعور:</b> «أعرف أنك غاضب لأنك تريد الحلوى»</li><li><b>ضع الحدّ:</b> «لن نشتري الحلوى اليوم»</li><li><b>قدّم خيارين:</b> «تختار التفاحة أو الموز؟»</li></ol>
+    <div class="two" style="margin-top:10px"><div class="kcard"><b>ما ينفع</b><br>اهدأ أنت أولاً<br>ابقَ قريباً منه<br>كلمات قليلة وصوت منخفض<br>تحدّث معه بعد أن يهدأ</div><div class="kcard"><b>ما لا ينفع</b><br>الصراخ فوق صراخه<br>النقاش والدروس وسط النوبة<br>التهديد بما لن تنفذه<br>الاستسلام للطلب ليسكت</div></div>
+    <div class="fl" style="margin-top:10px">متى أطلب المساعدة؟</div><ul class="plain"><li>نوبات شبه يومية بعد سن الخامسة أو السادسة</li><li>نوبات طويلة يصعب جداً تهدئتها</li><li>يؤذي نفسه أو غيره أو يكسر الأشياء</li><li>السلوك يؤثر على المدرسة أو على حياة الأسرة</li></ul><p class="sub">هذه علامات تستحق استشارة مختص، وليست تشخيصاً.</p></div>
+  </div></div>`;
 }
 
 /* ================= sheet (forms + record view) ================= */
@@ -828,7 +1153,8 @@ function openForm(kind,opts){
   // kind: record type key | "child" | "act"
   const o=opts||{};let spec,col,r;
   if(kind==="child"){spec=CHILD_FORM;col="children";r=o.r?clone(o.r):{id:uid(),status:"نشط",group:GROUPS[0],createdAt:Date.now()}}
-  else if(kind==="act"){spec=ACT_FORM;col="activities";r=o.r?clone(o.r):{id:uid(),type:ACT_TYPES[0],date:today(),createdAt:Date.now()}}
+  else if(kind==="act"){spec=ACT_FORM;col="activities";r=o.r?clone(o.r):{id:uid(),type:ACT_TYPES[0],date:today(),createdAt:Date.now(),...(o.prefill||{})}}
+  else if(kind==="plan"){spec=PLAN_FORM;col="plan";r=o.r?clone(o.r):{id:uid(),season:view.season,axis:AXES[0],status:"مبرمج",months:[],createdAt:Date.now()}}
   else{spec=TYPES[kind];col="records";r=o.r?clone(o.r):{id:uid(),type:kind,childId:o.child||"",date:today(),...spec.blank(),createdAt:Date.now()};
     if(!o.r&&kind==="obs"){const c=childById(o.child);if(c&&c.educator)r.educator=c.educator;if(!recsOf(o.child,"obs").length)r.kind="first"}
     if(o.spec)r.specialist=SPECIALISTS.find(s=>o.spec.includes(s.replace("الأخصائي ","")))||"";if(o.reason)r.reason=o.reason}
@@ -844,9 +1170,11 @@ function fieldHtml(f){
    case "alert":return `<div class="alert">${f.html}</div>`;
    case "text":case "date":case "number":return `<label class="f">${esc(f.l)}<input type="${f.type}" id="${id}" data-bind="${f.k}" value="${esc(v??"")}" ${f.ph?`placeholder="${esc(f.ph)}"`:""}></label>`;
    case "textarea":return `<label class="f">${esc(f.l)}<textarea id="${id}" data-bind="${f.k}" ${f.ph?`placeholder="${esc(f.ph)}"`:""}>${esc(v??"")}</textarea></label>`;
-   case "select":return `<label class="f">${esc(f.l)}<select id="${id}" data-bind="${f.k}"><option value="">اختر</option>${f.o.map(x=>`<option ${v===x?"selected":""}>${esc(x)}</option>`).join("")}</select></label>`;
+   case "select":return `<label class="f">${esc(f.l)}<select id="${id}" data-bind="${f.k}"><option value="">اختر</option>${f.o.map(x=>{const val=typeof x==="object"?x.v:x,l=typeof x==="object"?x.l:x;return `<option value="${esc(val)}" ${v===val?"selected":""}>${esc(l)}</option>`}).join("")}</select></label>`;
+   case "rating":{const t=v||{};return `<div class="stack" style="gap:0">${f.rows.map((row,i)=>{const o=t[i]||{};return `<div class="rrow"><span>${esc(row)}</span><select id="${id}-${i}-lv" data-bind="${f.k}.${i}.lv" aria-label="${esc(row)}"><option value="">المستوى</option>${f.levels.map(l=>`<option ${o.lv===l?"selected":""}>${esc(l)}</option>`).join("")}</select><input type="text" id="${id}-${i}-nt" data-bind="${f.k}.${i}.nt" value="${esc(o.nt||"")}" placeholder="ملاحظات" aria-label="ملاحظات: ${esc(row)}"></div>`}).join("")}</div>`}
+   case "dyn":{const arr=Array.isArray(v)?v:[];return `<div class="fl">${esc(f.l)}</div>`+arr.map((o,i)=>`<div class="beh"><div class="domh"><span>${i+1}</span><button type="button" class="btn sm ghost" data-act="dynDel" data-k="${f.k}" data-i="${i}">حذف</button></div>${f.fields.map(([k,l,t,opts])=>fieldHtml({k:f.k+"."+i+"."+k,type:t,l,o:opts})).join("")}</div>`).join("")+`<button type="button" class="add" data-act="dynAdd" data-k="${f.k}">+ إضافة</button>`}
    case "seg":return `<div class="stack" style="gap:6px"><span class="fl">${esc(f.l)}</span><div class="seg">${f.o.map(x=>{const val=typeof x==="object"?x.v:x,l=typeof x==="object"?x.l:x;return `<button type="button" class="${v===val?"on":""}" data-act="seg" data-k="${f.k}" data-v="${esc(val)}" aria-pressed="${v===val}">${esc(l)}</button>`}).join("")}</div></div>`;
-   case "checks":{const sel=Array.isArray(v)?v:[];return `<div class="stack" style="gap:6px">${f.l?`<span class="fl">${esc(f.l)}</span>`:""}${f.o.map((x,i)=>{const val=typeof x==="object"?x.v:x,l=typeof x==="object"?x.l:x;return `<label class="chk ${f.red?"red":""}"><input type="checkbox" id="${id}-${i}" data-act="chk" data-k="${f.k}" data-v="${esc(val)}" ${f.rerender?'data-rr="1"':""} ${sel.includes(val)?"checked":""}><span>${esc(l)}</span></label>`}).join("")}</div>`}
+   case "checks":{const sel=Array.isArray(v)?v:[];return `<div class="stack" style="gap:6px">${f.l?`<span class="fl">${esc(f.l)}</span>`:""}<div class="${f.grid?"cgrid":"stack"}" style="gap:6px">${f.o.map((x,i)=>{const val=typeof x==="object"?x.v:x,l=typeof x==="object"?x.l:x;return `<label class="chk ${f.red?"red":""}"><input type="checkbox" id="${id}-${i}" data-act="chk" data-k="${f.k}" data-v="${esc(val)}" ${f.rerender?'data-rr="1"':""} ${sel.includes(val)?"checked":""}><span>${esc(l)}</span></label>`}).join("")}</div></div>`}
    case "list":{const arr=Array.isArray(v)?v:[];return `<div class="stack" style="gap:6px"><span class="fl">${esc(f.l)}</span>${f.ph.map((p,i)=>`<input type="text" id="${id}-${i}" data-bindlist="${f.k}" data-i="${i}" value="${esc(arr[i]||"")}" placeholder="${esc(p)}">`).join("")}</div>`}
    case "scale":{const arr=Array.isArray(v)?v:[];const opts=f.opts.concat(f.na?[{v:"na",l:"لا ينطبق",c:"#8A97A8"}]:[]);const done=arr.filter(x=>x!=null).length;
      return `<div class="sub">أجبت على ${done} من ${f.items.length}</div>`+f.items.map((q,i)=>`<div class="item ${arr[i]!=null?"done":""}"><div class="q"><span class="num">${(f.start||1)+i}</span> ${esc(q)}</div><div class="opts ${f.many?"many":""}" style="--n:${f.many?Math.min(opts.length,4):opts.length}">${opts.map(o=>`<button type="button" class="${arr[i]===o.v?"on":""}" style="--c:${o.c}" data-act="sc" data-k="${f.k}" data-i="${i}" data-v="${esc(o.v)}" data-n="${f.items.length}" aria-pressed="${arr[i]===o.v}">${esc(o.l)}</button>`).join("")}</div></div>`).join("")}
@@ -866,7 +1194,7 @@ function renderSheet(first){
   if(!F){closeSheet();return}
   const body=$("sheet").querySelector(".sh-body");const top=body&&!first?body.scrollTop:0;
   const r=F.r,isRec=F.col==="records";const c=isRec?childById(r.childId):null;
-  let title=(F.kind==="child"?(F.isNew?"طفل جديد":"تعديل بطاقة الطفل"):F.kind==="act"?(F.isNew?"تسجيل نشاط":"تعديل النشاط"):F.spec.t)+(c?" — "+childLabel(c):"");
+  let title=(F.kind==="child"?(F.isNew?"طفل جديد":"تعديل بطاقة الطفل"):F.kind==="act"?(F.isNew?"تسجيل نشاط":"تعديل النشاط"):F.kind==="plan"?(F.isNew?"عمل جديد في الخطة":"تعديل العمل"):F.spec.t)+(c?" — "+childLabel(c):"");
   let main,foot;
   if(F.mode==="view"){
     main=F.spec.html(r)+`<p class="sub">سجّله ${esc(whoR(r))}${r.updatedAt?" · آخر تعديل "+new Date(r.updatedAt).toLocaleDateString("ar-MA"):""}</p>`;
@@ -876,7 +1204,8 @@ function renderSheet(first){
     const secs=F.spec.sections(r);
     main=(isRec&&!r.childId?`<div class="fs"><label class="f">الطفل *<select id="f-child" data-bind="childId"><option value="">اختر الطفل</option>${[...S.children].sort((a,b)=>(a.code||"").localeCompare(b.code||"")).map(x=>`<option value="${esc(x.id)}">${esc(childLabel(x))}</option>`).join("")}</select></label></div>`:"")
       +secs.map(s=>`<section class="fs"><h3>${esc(s.t)}</h3>${s.lead?`<p class="lead">${esc(s.lead)}</p>`:""}${s.fields.map(fieldHtml).join("")}</section>`).join("");
-    foot=`<button class="btn" data-act="close">إلغاء</button><button class="btn pri" data-act="save">${isRec?"حفظ وعرض النتيجة":"حفظ"}</button>`;
+    foot=F.armed?`<button class="btn" data-act="sDisarm">إلغاء</button><button class="btn danger" data-act="sDel">تأكيد الحذف النهائي</button>`
+      :`<button class="btn" data-act="close">إلغاء</button><button class="btn pri" data-act="save">${isRec?"حفظ وعرض النتيجة":"حفظ"}</button>${F.col==="plan"&&!F.isNew?`<button class="btn ghost" data-act="sArm">حذف</button>`:""}`;
   }
   $("sheet").innerHTML=`<div class="sheetwrap" data-act="backdrop"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="sh-top"><h2>${esc(title)}</h2><button class="btn sm ghost" data-act="close" aria-label="إغلاق">✕ إغلاق</button></div><div class="sh-body">${main}</div><div class="sh-foot">${foot}</div></div></div>`;
   document.body.style.overflow="hidden";
@@ -886,6 +1215,7 @@ async function saveSheet(){
   const r=F.r;
   if(F.col==="children"&&(!(r.code||"").trim()||!(r.name||"").trim())){toast("الرمز والاسم الأول إلزاميان.");return}
   if(F.col==="activities"&&!(r.title||"").trim()){toast("اكتب عنوان النشاط.");return}
+  if(F.col==="plan"&&!(r.title||"").trim()){toast("اكتب عنوان العمل.");return}
   if(F.col==="records"&&!r.childId){toast("اختر الطفل أولًا.");return}
   if(F.col==="records"&&r.type==="acad"&&!(r.subjects||[]).length){toast("اختر مادة واحدة على الأقل.");return}
   if(F.col==="records"){if(!r.by)r.by=myId||null;if(!r.byName&&myName)r.byName=myName;r.updatedAt=Date.now()}
@@ -905,6 +1235,7 @@ async function copyText(t){
 /* ================= events ================= */
 document.addEventListener("click",async e=>{
   const el=e.target.closest("[data-act]");if(!el)return;const a=el.dataset.act;
+  if(el.getAttribute("href")==="#")e.preventDefault();
   if(a==="backdrop"&&e.target!==el)return;
   switch(a){
    case "go":location.hash=el.dataset.href.slice(1);break;
@@ -929,6 +1260,27 @@ document.addEventListener("click",async e=>{
    case "sugg":$("g-text").value=el.dataset.t;$("g-dom").value=el.dataset.d;break;
    case "copyMeeting":copyText(meetingText());break;
    case "copyActs":copyText(actsText());break;
+   case "dynAdd":{let arr=getP(F.r,el.dataset.k);if(!Array.isArray(arr)){arr=[];setP(F.r,el.dataset.k,arr)}arr.push({});renderSheet();break}
+   case "dynDel":getP(F.r,el.dataset.k).splice(+el.dataset.i,1);renderSheet();break;
+   case "accT":{const c=childById(route().id);if(!c)break;const acc=clone(c.acc||{exam:[],learn:[]});const g=el.dataset.g,k=el.dataset.k;acc[g]=(acc[g]||[]).filter(x=>x!==k);if(el.checked)acc[g].push(k);await put("children",{...c,acc}).catch(()=>{});break}
+   case "saveJust":{const c=childById(el.dataset.id);if(c){await put("children",{...c,justif:$("inc-just").value}).catch(()=>{});toast("تم الحفظ")}break}
+   case "incDoc":{const c=childById(el.dataset.id);if(c)showDoc(el.dataset.lang==="ar"?"طلب التكييفات — "+childLabel(c):"Demande d'aménagements — "+childLabel(c),incDocText(c,el.dataset.lang));break}
+   case "docCopy":copyText(F.doc);break;
+   case "docDl":{try{await downloads.save({filename:(F.spec.t).replace(/[\\/:*?"<>|\s]+/g,"_")+".txt",data:F.doc});toast("تم التنزيل")}catch(err){if(!err||err.code!=="declined")toast("تعذّر التنزيل. استعمل «نسخ النص».")}break}
+   case "smartToGoals":{const r=F.r,have=new Set(goalsOf(r.childId).map(g=>g.text));let n=0;
+     for(const g of (r.smart||[]).filter(g=>g.goal&&!have.has(g.goal))){await put("goals",{id:uid(),childId:r.childId,text:g.goal,domain:"",who:g.responsible||"",review:"",status:"لم يبدأ",createdAt:Date.now()}).catch(()=>{});n++}
+     toast(n?"أُضيف "+n+" هدف إلى المشروع الفردي":"الأهداف موجودة من قبل");break}
+   case "newPlan":openForm("plan");break;
+   case "editPlan":openForm("plan",{r:S.plan.find(x=>x.id===el.dataset.id)});break;
+   case "copyPlan":copyText(planText(false));break;
+   case "copyPlanReport":copyText(planText(true));break;
+   case "actFromPlan":{const p=S.plan.find(x=>x.id===el.dataset.id);if(p)openForm("act",{prefill:{planId:p.id,title:p.title,lead:p.lead||""}});break}
+   case "toolNew":openForm(el.dataset.type,{child:""});break;
+   case "goIncl":view.grp=GROUPS[1];location.hash="children";break;
+   case "slide":view.slide=+el.dataset.v;view.notes=!!($("talkNotes")&&$("talkNotes").open);render();break;
+   case "talkAct":openForm("act",{prefill:{type:"لقاء الآباء",title:"سلوك طفلي يتعبني: نوبات الغضب والعناد"}});break;
+   case "copyAbc":copyText(ABC_TEXT);break;
+   case "copyReminder":copyText(REMINDER_TEXT);break;
    case "logout":gasCode="";ls("afaq.code","");clearInterval(_poll);mode="login";render();break;
    /* sheet */
    case "backdrop":case "close":closeSheet();break;
@@ -943,7 +1295,7 @@ document.addEventListener("click",async e=>{
    case "sEdit":F.mode="edit";renderSheet(true);break;
    case "sArm":F.armed=true;renderSheet();break;
    case "sDisarm":F.armed=false;renderSheet();break;
-   case "sDel":{const id=F.r.id;closeSheet();await remove("records",id).catch(()=>{});toast("تم الحذف");break}
+   case "sDel":{const id=F.r.id,col=F.col;closeSheet();await remove(col,id).catch(()=>{});toast("تم الحذف");break}
    case "copy":copyText(F.spec.text(F.r));break;
    case "dl":{const r=F.r,c=childById(r.childId);try{await downloads.save({filename:(F.spec.t+"_"+(c?c.code:"")+"_"+r.date).replace(/[\\/:*?"<>|\s]+/g,"_")+".txt",data:F.spec.text(r)});toast("تم التنزيل")}catch(err){if(!err||err.code!=="declined")toast("تعذّر التنزيل. استعمل «نسخ النص».")}break}
   }
@@ -958,6 +1310,8 @@ document.addEventListener("change",e=>{
   const el=e.target;
   if(F&&el.tagName==="SELECT"&&el.dataset.bind){setP(F.r,el.dataset.bind,el.value);if(el.dataset.bind==="childId")renderSheet()}
   if(el.id==="grp"){view.grp=el.value;render()}
+  if(el.id==="season"){view.season=+el.value;render()}
+  if(el.dataset.paper){const c=childById(el.dataset.id);if(c)put("children",{...c,paper:{...(c.paper||{}),[el.dataset.paper]:el.value}}).catch(()=>{})}
   if(el.id==="month"&&el.value){view.month=el.value;render()}
 });
 document.addEventListener("submit",async e=>{
@@ -967,6 +1321,8 @@ document.addEventListener("submit",async e=>{
   const id=route().id,text=$("g-text").value.trim();if(!text){toast("اكتب نص الهدف.");return}
   try{await put("goals",{id:uid(),childId:id,text,domain:$("g-dom").value,review:$("g-rev").value,who:$("g-who").value.trim(),status:"لم يبدأ",createdAt:Date.now()});toast("تمت إضافة الهدف")}catch(_){}
 });
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&F)closeSheet()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&F){closeSheet();return}
+  if(!F&&route().r==="talk"&&!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)){const d=e.key==="ArrowLeft"?1:e.key==="ArrowRight"?-1:0;
+    if(d){view.slide=Math.max(0,Math.min(TALK.length-1,(view.slide||0)+d));render()}}});
 boot();
 </script>
