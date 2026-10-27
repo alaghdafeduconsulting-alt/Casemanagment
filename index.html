@@ -203,6 +203,47 @@ table.abc{min-width:640px}.abc td,.abc th{border:1px solid var(--line)}.abc td{h
 @media (max-width:560px){.rrow{grid-template-columns:1fr 1fr}.rrow span{grid-column:1/-1;font-weight:700}}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
 .cgrid .chk{padding:7px 9px;font-size:14px}
+.strip{display:flex;gap:3px;overflow-x:auto;padding:6px 2px 10px}
+.wk{flex:0 0 40px;border-radius:7px;padding:6px 0 5px;text-align:center;font-size:11px;color:#152B47;border:2px solid transparent}
+.wk b{display:block;font-size:14px;font-family:var(--f-display);font-weight:800}
+.wk.ev{background:#FBE3CC!important;color:#A85F1E}
+.wk.fin{background:#1E3A5F!important;color:#fff}
+.wk.now{border-color:var(--orange)}
+.hol{flex:0 0 14px;border-radius:4px;background:repeating-linear-gradient(45deg,#C9CED6 0 3px,transparent 3px 6px)}
+.holsw{background:repeating-linear-gradient(45deg,#C9CED6 0 3px,transparent 3px 6px)!important;border:1px solid #C9CED6}
+.u1{background:#DCE7F3}.u2{background:#D5E8E6}.u3{background:#E3DEF0}.u4{background:#DDE9DA}.u5{background:#EFDDE3}.u6{background:#E4E6EA}
+:root{--u-ev:#FBE3CC}
+.kidrow{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;cursor:pointer;background:var(--card);color:inherit;text-align:start}
+.kidrow:hover{border-color:var(--navy)}
+.dom-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.dom-row:last-child{border-bottom:0}
+.dom-row .dn{font-weight:600}
+@media (max-width:560px){.dom-row{grid-template-columns:1fr auto}.dom-row .seg{grid-column:1/-1;order:3}}
+.tog{appearance:none;width:42px;height:24px;background:var(--line);border-radius:20px;position:relative;cursor:pointer;margin:0}
+.tog:checked{background:var(--orange)}
+.tog::after{content:"";position:absolute;top:3px;right:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:right .15s}
+.tog:checked::after{right:21px}
+.seg.res button.on.ok{background:#2E7D5B;border-color:#2E7D5B;color:#fff}.seg.res button.on.mid{background:#B7791F;border-color:#B7791F;color:#fff}.seg.res button.on.no{background:#B5586F;border-color:#B5586F;color:#fff}
+.unit{border:1px solid var(--line);border-radius:12px;margin-top:10px;overflow:hidden;background:var(--card)}
+.unit-h{width:100%;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;background:none;border:0;color:inherit;text-align:start}
+.unit-h .t{font-weight:800;font-family:var(--f-display);font-size:16px}
+.unit-h .d{font-size:12.5px;color:var(--muted)}
+.unit-b{padding:0 14px 14px}
+.dom-block{margin-top:12px;display:flex;flex-direction:column;gap:7px}
+.dom-block h3{font-size:15px;color:var(--navy);border-inline-start:4px solid var(--orange);padding-inline-start:8px}
+.goal .gr{display:grid;grid-template-columns:minmax(0,1fr) 170px auto;gap:6px;align-items:center}
+@media (max-width:560px){.goal .gr{grid-template-columns:1fr auto}.goal .gr select{grid-column:1/-1;order:3}}
+.goal .smart{font-size:13px;color:var(--muted);line-height:1.7}
+.ttgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.day{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--card)}
+.day h3{font-size:16px;color:var(--navy);margin-bottom:8px}
+.slot{display:grid;grid-template-columns:100px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:6px}
+.slot span{font-size:12.5px;color:var(--muted);direction:ltr;text-align:right}
+.slot select{padding:7px 8px;font-size:14px}
+.slot select.dom{border-inline-start:4px solid var(--orange)}.slot select.rt{border-inline-start:4px solid var(--line)}
+.preview{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;max-height:75vh}
+#printArea{display:none}
+@media print{@page{size:A4 landscape;margin:10mm}#root{display:none!important}#printArea{display:block}#printArea .doc{min-width:0}body{background:#fff}}
 .toast{position:fixed;inset-inline:0;bottom:calc(20px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;z-index:40}
 .toast div{background:var(--text);color:var(--bg);padding:9px 18px;border-radius:20px;font-size:14.5px;max-width:90vw}
 .loading{padding:60px 0;text-align:center;color:var(--muted)}
@@ -215,6 +256,7 @@ table.abc{min-width:640px}.abc td,.abc th{border:1px solid var(--line)}.abc td{h
 <div id="sheet"></div>
 <div class="toast" id="toast" hidden><div id="toastText"></div></div>
 </div>
+<div id="printArea" dir="rtl"></div>
 
 <script>
 /* ================= reference data (from the association's forms) ================= */
@@ -318,11 +360,24 @@ const inclusionChild=c=>c.group===GROUPS[1]||c.status==="مدمج في مدرس�
 function paperStats(c){const p=c.paper||{};const req=PAPERS.filter(x=>p[x.k]!=="na");return {total:req.length,got:req.filter(x=>p[x.k]==="received").length,missing:req.filter(x=>(p[x.k]||"missing")==="missing").length}}
 
 /* ---------- annual plan ---------- */
-const AXES=["التكفل التربوي بالأطفال","مواكبة الأسر","الإدماج المدرسي","تكوين وتأطير الفريق","التحسيس والشراكات","التدبير والتنظيم"];
-const PLAN_STATUS=["مبرمج","قيد الإنجاز","منجز","مؤجل","ملغى"];
 const seasonOf=d=>{const [y,m]=String(d||today()).split("-").map(Number);return m>=9?y:y-1};
 const seasonMonths=y=>[9,10,11,12,1,2,3,4,5,6,7,8].map(m=>(m>=9?y:y+1)+"-"+String(m).padStart(2,"0"));
 const seasonLabel=y=>y+"–"+(y+1);
+/* ---------- annual plan & timetable (from «التخطيط السنوي وجدولة الحصص») ---------- */
+const BANK = {"LS":[{"id":"LS1-01","t":1,"x":"يشرب من كأس مفتوح دون انسكاب كبير","i":"4 من 5 وجبات"},{"id":"LS1-02","t":1,"x":"يأكل بيده أطعمة صغيرة (خبز، فاكهة مقطعة) دون مساعدة","i":"4 من 5 وجبات"},{"id":"LS1-03","t":1,"x":"يبقى جالسًا إلى الطاولة حتى نهاية الوجبة","i":"5 دقائق على الأقل، 4 من 5 أيام"},{"id":"LS1-04","t":1,"x":"ينزع حذاءه وجواربه","i":"باستقلالية، 4 من 5 مرات"},{"id":"LS1-05","t":1,"x":"يعبّر عن حاجته لدخول المرحاض (بإشارة أو صورة أو كلمة)","i":"مرة يوميًا على الأقل لمدة 5 أيام"},{"id":"LS1-06","t":1,"x":"يغسل يديه ويجففهما بمساعدة","i":"ينجز 3 خطوات من 5 وحده"},{"id":"LS2-01","t":2,"x":"يأكل بالملعقة دون انسكاب كبير","i":"4 من 5 وجبات"},{"id":"LS2-02","t":2,"x":"يغسل يديه بالتسلسل الكامل: فتح الصنبور، الصابون، الفرك، الشطف، التجفيف","i":"5 خطوات من 5 بتلقين إيمائي فقط"},{"id":"LS2-03","t":2,"x":"يلبس سروالًا بخصر مطاطي وقميصًا مفتوحًا","i":"4 من 5 مرات"},{"id":"LS2-04","t":2,"x":"يستعمل المرحاض عند توجيهه ويبقى جافًا خلال الفترة الصباحية","i":"4 من 5 أيام"},{"id":"LS2-05","t":2,"x":"يضع أغراضه (محفظة، معطف) في مكانها عند الدخول","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"LS2-06","t":2,"x":"يمسح فمه بمنديل بعد الأكل","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"LS3-01","t":3,"x":"يفتح علبة الأكل وقارورة الماء بنفسه","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"LS3-02","t":3,"x":"يلبس المعطف ويخلعه ويغلق السحّاب","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"LS3-03","t":3,"x":"يستعمل المرحاض باستقلالية كاملة بما فيها غسل اليدين","i":"5 أيام متتالية"},{"id":"LS3-04","t":3,"x":"يغسل أسنانه بالتسلسل مع مراقبة فقط","i":"4 من 5 مرات"},{"id":"LS3-05","t":3,"x":"يتوقف فورًا عند سماع «قف» في الساحة أو الشارع","i":"5 من 5 مرات"},{"id":"LS3-06","t":3,"x":"يتبع الروتين اليومي للقسم بالاعتماد على جدول مصور","i":"3 انتقالات يوميًا دون تلقين لفظي"}],"CS":[{"id":"CS1-01","t":1,"x":"يطلب شيئًا يرغب فيه (بكلمة أو إشارة أو صورة)","i":"5 طلبات مختلفة يوميًا دون تلقين"},{"id":"CS1-02","t":1,"x":"يردد أصواتًا أو كلمات بعد المربي","i":"10 كلمات مختلفة"},{"id":"CS1-03","t":1,"x":"ينتظر دوره في نشاط ثنائي مع الراشد","i":"5 ثوانٍ دون سلوك مشكل"},{"id":"CS1-04","t":1,"x":"يلعب بلعبة لعبًا وظيفيًا (يدحرج السيارة، يطعم الدمية)","i":"دقيقتان متواصلتان"},{"id":"CS1-05","t":1,"x":"يرد التحية أو يلوّح بيده","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"CS2-01","t":2,"x":"يطلب بجملة من كلمتين («أعطني ماء»)","i":"5 طلبات يوميًا"},{"id":"CS2-02","t":2,"x":"يرفض بطريقة مقبولة («لا»، هز الرأس) بدل البكاء أو الدفع","i":"4 من 5 مواقف"},{"id":"CS2-03","t":2,"x":"يطلب المساعدة («ساعدني») عند الحاجة","i":"4 من 5 مواقف"},{"id":"CS2-04","t":2,"x":"يلعب بجانب الأقران ويتبادل لعبة معهم","i":"مرتان في الحصة، بتلقين لفظي"},{"id":"CS2-05","t":2,"x":"يكمل كلمات من أناشيد مألوفة عندما يتوقف المربي","i":"5 أناشيد"},{"id":"CS2-06","t":2,"x":"يشارك في نشاط جماعي قصير دون مغادرة المكان","i":"5 دقائق"},{"id":"CS3-01","t":3,"x":"يسأل للحصول على معلومة («أين؟»، «ماذا؟»)","i":"مرتان يوميًا دون تلقين"},{"id":"CS3-02","t":3,"x":"يجيب عن أسئلة شخصية (اسمك؟ عمرك؟ اسم أمك؟)","i":"5 أسئلة من 5"},{"id":"CS3-03","t":3,"x":"يبادر بدعوة قرين للعب","i":"مرة يوميًا لمدة 5 أيام"},{"id":"CS3-04","t":3,"x":"يلعب لعبة بقواعد بسيطة وتبادل أدوار مع قرين","i":"10 دقائق"},{"id":"CS3-05","t":3,"x":"يتبع تعليمات جماعية دون تلقين فردي","i":"4 من 5 تعليمات"}],"KN":[{"id":"KN1-01","t":1,"x":"يلتفت عند مناداته باسمه","i":"4 من 5 مرات"},{"id":"KN1-02","t":1,"x":"يشير إلى أجزاء جسمه عند الطلب","i":"5 أجزاء"},{"id":"KN1-03","t":1,"x":"يشير إلى أشياء مألوفة عند تسميتها","i":"10 أشياء"},{"id":"KN1-04","t":1,"x":"ينفذ تعليمات من خطوة واحدة (اجلس، تعال، أعطني)","i":"5 تعليمات مختلفة"},{"id":"KN2-01","t":2,"x":"يشير إلى الألوان الأساسية أو يسميها","i":"4 ألوان"},{"id":"KN2-02","t":2,"x":"يتعرف على الدائرة والمربع والمثلث","i":"3 أشكال"},{"id":"KN2-03","t":2,"x":"يشير إلى صور أو يسميها (حيوانات، أطعمة، أدوات)","i":"20 صورة"},{"id":"KN2-04","t":2,"x":"يميز: كبير/صغير، فوق/تحت","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"KN2-05","t":2,"x":"ينفذ تعليمات من خطوتين («خذ الكرة وضعها في العلبة»)","i":"4 من 5 تعليمات"},{"id":"KN3-01","t":3,"x":"يتعرف على الأشياء من وظيفتها («أشر إلى ما نأكل به»)","i":"10 أشياء"},{"id":"KN3-02","t":3,"x":"يميز: داخل/خارج، كثير/قليل، طويل/قصير","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"KN3-03","t":3,"x":"يتعرف على أفراد الأسرة وبعض المهن (طبيب، معلم، شرطي)","i":"8 عناصر"},{"id":"KN3-04","t":3,"x":"يميز الليل من النهار ولحظات اليوم (صباح، زوال، مساء)","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"KN3-05","t":3,"x":"يجيب عن «ماذا؟ من؟ أين؟» حول صورة","i":"4 من 5 أسئلة"}],"CG":[{"id":"CG1-01","t":1,"x":"يجلس لنشاط على الطاولة","i":"3 دقائق دون مغادرة"},{"id":"CG1-02","t":1,"x":"يقلد حركات كبرى (تصفيق، رفع اليدين، ضرب الطاولة)","i":"5 حركات"},{"id":"CG1-03","t":1,"x":"يطابق مجسمًا بمجسم مماثل","i":"5 أزواج"},{"id":"CG1-04","t":1,"x":"يكمل لعبة تركيب من 2–3 قطع","i":"وحده، 4 من 5 مرات"},{"id":"CG1-05","t":1,"x":"يبحث عن شيء أُخفي أمامه تحت غطاء","i":"4 من 5 مرات"},{"id":"CG2-01","t":2,"x":"يجلس للنشاط","i":"10 دقائق دون مغادرة"},{"id":"CG2-02","t":2,"x":"يطابق صورة بصورة، وصورة بمجسم","i":"10 عناصر"},{"id":"CG2-03","t":2,"x":"يصنف أشياء حسب اللون أو الشكل","i":"فئتان، دون خطأ"},{"id":"CG2-04","t":2,"x":"يقلد سلسلة من حركتين متتاليتين","i":"5 سلاسل"},{"id":"CG2-05","t":2,"x":"يكمل لغزًا (Puzzle) من 4–6 قطع","i":"وحده"},{"id":"CG2-06","t":2,"x":"يتذكر مكان شيء أُخفي بعد انتظار","i":"10 ثوانٍ"},{"id":"CG3-01","t":3,"x":"يصنف حسب الفئة (حيوانات، أطعمة، ملابس)","i":"3 فئات"},{"id":"CG3-02","t":3,"x":"يكمل نمطًا (أحمر-أزرق-أحمر-…)","i":"نمط من عنصرين ثم ثلاثة"},{"id":"CG3-03","t":3,"x":"يرتب 3 صور متسلسلة لحدث بسيط","i":"4 من 5 قصص"},{"id":"CG3-04","t":3,"x":"يكتشف الشيء المختلف أو الناقص في مجموعة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"CG3-05","t":3,"x":"يكمل لغزًا من 8–12 قطعة","i":"وحده"},{"id":"CG3-06","t":3,"x":"يتذكر 3 أشياء عُرضت عليه ثم أُخفيت","i":"4 من 5 محاولات"}],"SM":[{"id":"SM1-01","t":1,"x":"يمشي على شريط عريض مرسوم على الأرض","i":"3 أمتار دون الخروج عنه"},{"id":"SM1-02","t":1,"x":"يصعد الدرج ممسكًا بالدرابزين","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"SM1-03","t":1,"x":"يرمي كرة كبيرة نحو شخص","i":"مسافة متر، 4 من 5"},{"id":"SM1-04","t":1,"x":"يقفز بالقدمين معًا في المكان","i":"3 قفزات متتالية"},{"id":"SM1-05","t":1,"x":"يتقبل نشاطًا لمسيًا (رمل، ماء، عجين) دون رفض","i":"دقيقتان"},{"id":"SM2-01","t":2,"x":"يلتقط كرة كبيرة مرماة نحوه","i":"من مترين، 3 من 5"},{"id":"SM2-02","t":2,"x":"يقفز فوق خط أو حاجز منخفض","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"SM2-03","t":2,"x":"يقف على قدم واحدة","i":"3 ثوانٍ"},{"id":"SM2-04","t":2,"x":"يجتاز مسارًا حركيًا بالترتيب","i":"3 محطات"},{"id":"SM2-05","t":2,"x":"يستعمل وسيلة تهدئة يقترحها المربي عند الانزعاج (ركن هادئ، تنفس، ضغط عميق)","i":"4 من 5 مواقف، بتلقين"},{"id":"SM3-01","t":3,"x":"يحجل على قدم واحدة","i":"3 حجلات"},{"id":"SM3-02","t":3,"x":"يمشي على عارضة توازن منخفضة","i":"مترين دون نزول"},{"id":"SM3-03","t":3,"x":"يركل كرة نحو هدف","i":"3 من 5"},{"id":"SM3-04","t":3,"x":"يجتاز مسارًا حركيًا بالترتيب","i":"5 محطات"},{"id":"SM3-05","t":3,"x":"يطلب استراحة حسية بنفسه عند الحاجة","i":"مرة يوميًا دون تلقين لمدة 5 أيام"}],"FM":[{"id":"FM1-01","t":1,"x":"يضع قطعًا كبيرة في علبة ويخرجها","i":"10 قطع"},{"id":"FM1-02","t":1,"x":"يُدخل حلقات كبيرة في عمود","i":"5 حلقات"},{"id":"FM1-03","t":1,"x":"يمزق الورق بيديه قطعًا","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"FM1-04","t":1,"x":"يضغط ويعجن الصلصال","i":"دقيقتان"},{"id":"FM1-05","t":1,"x":"يقلب صفحات كتاب مقوّى صفحة صفحة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"FM2-01","t":2,"x":"يلضم خرزًا كبيرًا في خيط","i":"5 خرزات"},{"id":"FM2-02","t":2,"x":"يلصق أشكالًا جاهزة في مكان محدد على الورقة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"FM2-03","t":2,"x":"يفتح غطاء علبة لولبي ويغلقه","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"FM2-04","t":2,"x":"يقص الورق بمقص آمن قصًا حرًا","i":"5 قصات"},{"id":"FM2-05","t":2,"x":"يشكل كرات وأصابع من الصلصال","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"FM3-01","t":3,"x":"يقص على خط مستقيم","i":"15 سم، انحراف أقل من 1 سم"},{"id":"FM3-02","t":3,"x":"يلضم خرزًا صغيرًا حسب نمط من لونين","i":"8 خرزات"},{"id":"FM3-03","t":3,"x":"يطوي ورقة نصفين مع تطابق الحواف","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"FM3-04","t":3,"x":"ينجز عملًا يدويًا من 3 خطوات تبعًا لنموذج (قص، لصق، تزيين)","i":"بتلقين إيمائي فقط"},{"id":"FM3-05","t":3,"x":"ينقل أشياء صغيرة بملقط","i":"5 أشياء"}],"AR":[{"id":"AR1-01","t":1,"x":"يمسك قلم تلوين غليظًا ويترك أثرًا على الورق","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"AR1-02","t":1,"x":"يطبع بأصابعه أو بكفه بالصباغة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"AR1-03","t":1,"x":"يستجيب للموسيقى بحركة (تصفيق، تمايل)","i":"3 أناشيد"},{"id":"AR1-04","t":1,"x":"يلون مساحة كبيرة دون شرط احترام الحدود","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"AR2-01","t":2,"x":"يلون داخل شكل كبير","i":"خروج عن الحدود في أقل من 3 مواضع"},{"id":"AR2-02","t":2,"x":"يقلد رسم خط ودائرة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"AR2-03","t":2,"x":"يلون بالفرشاة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"AR2-04","t":2,"x":"يؤدي حركات أنشودة مع المجموعة","i":"أنشودتان كاملتان"},{"id":"AR2-05","t":2,"x":"يختار لونًا عندما يُسأل «أي لون تريد؟»","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"AR3-01","t":3,"x":"يلون داخل حدود رسم متوسط الحجم","i":"دون خروج تقريبًا"},{"id":"AR3-02","t":3,"x":"يرسم إنسانًا بسيطًا (رأس، جسم، أطراف)","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"AR3-03","t":3,"x":"يرسم شكلًا بسيطًا عند الطلب (بيت، شمس، شجرة)","i":"3 رسوم"},{"id":"AR3-04","t":3,"x":"يردد أنشودة قصيرة كاملة مع الإيقاع","i":"أنشودتان"},{"id":"AR3-05","t":3,"x":"يقلد إيقاعًا بسيطًا على الطبل","i":"2–3 ضربات"}],"PW":[{"id":"PW1-01","t":1,"x":"يمسك القلم بقبضة كاملة ويخربش","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW1-02","t":1,"x":"يقلد خطًا عموديًا","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW1-03","t":1,"x":"يتتبع بإصبعه خطًا على الرمل أو الورق","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW2-01","t":2,"x":"يمسك القلم بمسكة ثلاثية (مع مُمسك قلم عند الحاجة)","i":"طوال النشاط"},{"id":"PW2-02","t":2,"x":"يقلد خطًا أفقيًا وعموديًا ودائرة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW2-03","t":2,"x":"يصل بين نقطتين بخط","i":"10 أزواج"},{"id":"PW2-04","t":2,"x":"يتتبع خطوطًا مستقيمة منقطة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW3-01","t":3,"x":"ينسخ الأشكال: + ، دائرة، مربع","i":"من نموذج"},{"id":"PW3-02","t":3,"x":"يتتبع خطوطًا منحنية ومتعرجة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW3-03","t":3,"x":"يرسم علامات بين سطرين دون تجاوزهما","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW3-04","t":3,"x":"يتتبع حروفًا بسيطة منقطة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"PW3-05","t":3,"x":"ينسخ الحرف الأول من اسمه من نموذج","i":"4 من 5 محاولات، في حصتين متتاليتين"}],"RD":[{"id":"RD1-01","t":1,"x":"يميز أصواتًا من محيطه (حيوانات، أدوات)","i":"6 أصوات"},{"id":"RD1-02","t":1,"x":"يتعرف على اسمه مكتوبًا من بين بطاقتين","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"RD1-03","t":1,"x":"يطابق حرفًا بحرف مماثل","i":"الحروف المدروسة"},{"id":"RD2-01","t":2,"x":"يميز الصوت الأول في كلمات مألوفة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"RD2-02","t":2,"x":"يشير إلى الحرف المدروس عند نطقه","i":"كل حروف الوحدة"},{"id":"RD2-03","t":2,"x":"ينطق الحرف المدروس بالحركات القصيرة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"RD2-04","t":2,"x":"يطابق كلمة مكتوبة بصورتها","i":"5 كلمات"},{"id":"RD3-01","t":3,"x":"يقرأ مقاطع (حرف + حركة، حرف + مد)","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"RD3-02","t":3,"x":"يقرأ كلمات من 2–3 حروف مدروسة","i":"8 من 10 كلمات"},{"id":"RD3-03","t":3,"x":"يقرأ جملة من 2–3 كلمات","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"RD3-04","t":3,"x":"يجيب عن سؤال حول جملة قرأها","i":"4 من 5 محاولات، في حصتين متتاليتين"}],"WR":[{"id":"WR1-01","t":1,"x":"يمسك القلم مسكة صحيحة أثناء الكتابة","i":"طوال النشاط"},{"id":"WR1-02","t":1,"x":"يلون الحرف المجوف دون خروج كبير","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"WR1-03","t":1,"x":"يتتبع الحرف المدروس منقطًا","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"WR2-01","t":2,"x":"ينسخ الحرف المدروس منفصلًا من نموذج","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"WR2-02","t":2,"x":"ينسخ الحرف في أول الكلمة ووسطها وآخرها","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"WR2-03","t":2,"x":"يكتب اسمه من نموذج","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"WR3-01","t":3,"x":"يكتب الحرف المدروس إملاءً","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"WR3-02","t":3,"x":"ينسخ كلمات من 2–3 حروف","i":"5 كلمات"},{"id":"WR3-03","t":3,"x":"يكتب اسمه دون نموذج","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"WR3-04","t":3,"x":"يكمل كلمة بالحرف الناقص","i":"4 من 5 محاولات، في حصتين متتاليتين"}],"EX":[{"id":"EX1-01","t":1,"x":"يسمي أشياء مألوفة","i":"10 أشياء"},{"id":"EX1-02","t":1,"x":"يسمي أفعالًا في صور (يأكل، ينام، يجري)","i":"5 أفعال"},{"id":"EX2-01","t":2,"x":"يعبر عن صورة بجملة من 2–3 كلمات","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"EX2-02","t":2,"x":"يصف شيئًا بصفة (أحمر، كبير، ساخن)","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"EX2-03","t":2,"x":"يخبر بما فعله قبل قليل بمساعدة صورة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"EX3-01","t":3,"x":"يصف صورة بجملتين أو أكثر","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"EX3-02","t":3,"x":"يعيد سرد قصة قصيرة بمساعدة 3 صور","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"EX3-03","t":3,"x":"يستعمل الضمائر أنا/أنت/هو استعمالًا صحيحًا","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"EX3-04","t":3,"x":"يجيب عن «لماذا؟» بجواب بسيط","i":"4 من 5 محاولات، في حصتين متتاليتين"}],"MA":[{"id":"MA1-01","t":1,"x":"يعد آليًا من 1 إلى 5","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"MA1-02","t":1,"x":"يعطي «واحدًا» فقط عند الطلب","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"MA1-03","t":1,"x":"يميز كثير/قليل","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"MA2-01","t":2,"x":"يعد آليًا إلى 10","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"MA2-02","t":2,"x":"يعد الأشياء بلمسها واحدًا واحدًا","i":"حتى 5"},{"id":"MA2-03","t":2,"x":"يتعرف على الأرقام 1–5 ويطابقها","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"MA2-04","t":2,"x":"يربط العدد بالمعدود","i":"1–5"},{"id":"MA3-01","t":3,"x":"يربط العدد بالمعدود","i":"1–10"},{"id":"MA3-02","t":3,"x":"يكتب الأرقام 1–10 من نموذج ثم إملاءً","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"MA3-03","t":3,"x":"يقارن بين عددين (أكبر/أصغر)","i":"حتى 10"},{"id":"MA3-04","t":3,"x":"يضيف باستعمال المحسوسات","i":"مجموع حتى 5"},{"id":"MA3-05","t":3,"x":"يُنقص باستعمال المحسوسات","i":"ضمن 5"}],"GE":[{"id":"GE1-01","t":1,"x":"يضع الأشكال في لوحة التركيب (دائرة، مربع، مثلث)","i":"3 أشكال"},{"id":"GE1-02","t":1,"x":"يطابق شكلًا بشكل مماثل","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"GE2-01","t":2,"x":"يسمي الأشكال الأساسية","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"GE2-02","t":2,"x":"يميز: فوق/تحت/أمام/خلف بجسمه ثم بالأشياء","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"GE2-03","t":2,"x":"يصنف أشياء حسب الشكل","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"GE3-01","t":3,"x":"يرسم الأشكال الأساسية","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"GE3-02","t":3,"x":"يتعرف على الأشكال في محيطه (الباب مستطيل، الساعة دائرة)","i":"5 أمثلة"},{"id":"GE3-03","t":3,"x":"يميز يمينه من يساره","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"GE3-04","t":3,"x":"يبني بالمكعبات مجسمًا تبعًا لنموذج","i":"3–5 مكعبات"}],"QR":[{"id":"QR1-01","t":1,"x":"ينصت لتلاوة قصيرة دون مقاطعة","i":"دقيقة واحدة"},{"id":"QR1-02","t":1,"x":"يردد كلمة أو مقطعًا من الآية بعد المربي","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"QR1-03","t":1,"x":"يكمل آخر كلمة من آيات الفاتحة","i":"4 آيات من 7"},{"id":"QR2-01","t":2,"x":"يحفظ سورة الفاتحة كاملة","i":"دون تلقين"},{"id":"QR2-02","t":2,"x":"يحفظ سورتي الإخلاص والكوثر","i":"دون تلقين"},{"id":"QR2-03","t":2,"x":"يكمل الآية عندما يبدأها المربي","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"QR3-01","t":3,"x":"يحفظ سور الفلق والناس والعصر","i":"دون تلقين"},{"id":"QR3-02","t":3,"x":"يتلو السورة كاملة وحده أمام المجموعة","i":"4 من 5 محاولات، في حصتين متتاليتين"},{"id":"QR3-03","t":3,"x":"يقول البسملة قبل الأكل والنشاط دون تذكير","i":"4 من 5 أيام"}]};
+const SK={};Object.keys(BANK).forEach(d=>BANK[d].forEach(s=>{s.d=d;SK[s.id]=s}));
+const DEFAULT_IND="4 من 5 محاولات، في حصتين متتاليتين";
+const DOM={LS:"المهارات الحياتية",CS:"التواصل والتفاعل الاجتماعي",KN:"المهارات المعرفية",CG:"المهارات العقلية",SM:"المهارات الحس حركية",FM:"الأعمال اليدوية",AR:"التربية التشكيلية والموسيقية",PW:"ما قبل الكتابة",RD:"القراءة",WR:"الكتابة",EX:"التعبير",MA:"الحساب",GE:"الهندسة",QR:"القرآن الكريم"};
+const LEVELS={
+ pre:{name:"المستوى التمهيدي",doms:["LS","FM","AR","CG","SM","PW","KN"],print:["KN","PW","SM","CG","AR","FM","LS"],groups:[["التعلمات الداعمة",7]]},
+ first:{name:"المستوى الأول",doms:["LS","FM","AR","CG","SM","QR","GE","MA","EX","WR","RD"],print:["RD","WR","EX","MA","GE","QR","SM","CG","AR","FM","LS"],groups:[["اللغة العربية",3],["الرياضيات",2],["التربية الإسلامية",1],["التعلمات الداعمة",5]]}};
+const ROUTINES={R1:"استقبال وروتين صباحي",R2:"استراحة وأكل",R3:"نشاط جماعي وأناشيد",R4:"لعب حر",R5:"التحضير للخروج"};
+const PROMPTS=["مستقل","تلقين إيمائي","تلقين لفظي","تلقين نموذجي","تلقين جسدي جزئي"];
+const ALLDAYS=["الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+const UNITS=[{u:1,w:[1,2,3,4],ev:5},{u:2,w:[6,7,8,9],ev:10},{u:3,w:[11,12,13,14],ev:15},{u:4,w:[16,17,18,19],ev:20},{u:5,w:[21,22,23,24,25],ev:26},{u:6,w:[27,28,29],ev:30}];
+const RES=[["ok","تحقق"],["mid","جزئيًا"],["no","لم يتحقق"]];
+const ORG_NAME="جمعية آفاق لتأهيل وإدماج الأشخاص في وضعية إعاقة";
+
 
 /* ---------- parent meeting kit (from «سلوك طفلي يتعبني» and its handouts) ---------- */
 const TALK_SECTIONS=[["cover","افتتاح يشرك الآباء ويجمع أمثلتهم"],["yassine","الفكرة الأساسية: السلوك رسالة وجبل الجليد"],["abc","تمرين الخانات الثلاث: قبل، السلوك، بعد"],["steps","أداة وضع الحدّ في ثلاث خطوات"],["help","متى أطلب المساعدة، مهمة الأسبوع، واللقاء القادم"]];
@@ -639,7 +694,6 @@ const CHILD_FORM={t:"بطاقة الطفل",sections:()=>[{t:"المعلومات
   {k:"level",type:"text",l:"المستوى الدراسي",ph:"مثال: الثالث ابتدائي"},
   {k:"notes",type:"textarea",l:"ملاحظات عامة"}]}]};
 const ACT_FORM={t:"نشاط الجمعية",sections:r=>[{t:"النشاط",fields:[
-  ...(planOf(seasonOf(r.date)).length?[{k:"planId",type:"select",l:"من الخطة السنوية (اختياري)",o:planOf(seasonOf(r.date)).map(p=>({v:p.id,l:p.title}))}]:[]),
   {k:"type",type:"select",l:"نوع النشاط",o:ACT_TYPES},{k:"title",type:"text",l:"العنوان *",ph:"مثال: سلوك طفلي يتعبني: نوبات الغضب والعناد"},
   {row:[{k:"date",type:"date",l:"التاريخ"},{k:"place",type:"text",l:"المكان"}]},
   {row:[{k:"families",type:"number",l:"عدد الأسر / المشاركين"},{k:"kids",type:"number",l:"عدد الأطفال المعنيين"}]},
@@ -787,14 +841,14 @@ function demoData(){
     {id:"g2",childId:c1,text:"يقبل تغيير النشاط عند الإعلان عنه بصورة",domain:"السلوك والمشاعر",status:"لم يبدأ",createdAt:2},
     {id:"g3",childId:c2,text:"يبقى في مجموعة القسم 15 دقيقة",domain:"الإدماج المدرسي",status:"تحقّق",createdAt:3},
     {id:"g4",childId:c3,text:"يمسك القلم بالإبهام والسبابة والوسطى",domain:"الحركة",status:"يتقدّم",createdAt:4}],
-   plan:(()=>{const y=seasonOf(today()),M=seasonMonths(y);return [
-    {id:"p1",season:y,axis:AXES[1],title:"لقاء شهري للآباء",months:M.slice(1,10),target:9,unit:"لقاء",lead:"الأخصائي النفسي",budget:"1800",indicator:"حضور 12 أسرة على الأقل",status:"قيد الإنجاز",createdAt:1},
-    {id:"p2",season:y,axis:AXES[2],title:"زيارة المدارس المستقبِلة",months:[M[0],M[3],M[6]],target:6,unit:"زيارة",lead:"منسقة مواكبة",status:"قيد الإنجاز",createdAt:2},
-    {id:"p3",season:y,axis:AXES[3],title:"تكوين المربين: الملاحظة والمشروع الفردي",months:[M[2],M[5]],target:2,unit:"دورة",lead:"الأخصائي النفسي",budget:"2500",status:"مبرمج",createdAt:3},
-    {id:"p4",season:y,axis:AXES[0],title:"الاجتماع الشهري للفريق",months:M.slice(0,10),target:10,unit:"اجتماع",lead:"منسقة التربية الخاصة",status:"قيد الإنجاز",createdAt:4}]})(),
+   plan:(()=>{const y=seasonOf(today());return [
+    {id:"kid-"+y+"-ex1",kind:"kid",season:y,childId:"ex1",level:"pre",doms:{LS:true,FM:true,AR:true,CG:true,SM:true,PW:true,KN:true},tier:{LS:1,FM:1,AR:1,CG:1,SM:2,PW:1,KN:1},
+     units:{"1":{LS:[{id:"LS1-01",x:SK["LS1-01"].x,i:SK["LS1-01"].i,p:"تلقين إيمائي",res:"ok"}],KN:[{id:"KN1-01",x:SK["KN1-01"].x,i:SK["KN1-01"].i,p:"تلقين لفظي",res:"mid"}],SM:[{id:"SM2-01",x:SK["SM2-01"].x,i:SK["SM2-01"].i,p:"مستقل",res:"ok"}]},
+      "2":{KN:[{id:"KN1-01",x:SK["KN1-01"].x,i:SK["KN1-01"].i,p:"تلقين إيمائي"}],LS:[{id:"LS1-02",x:SK["LS1-02"].x,i:SK["LS1-02"].i,p:""}]}}},
+    {id:"tt-"+y+"-pre",kind:"tt",season:y,level:"pre",slots:["08:30–09:15","09:15–10:00","10:00–10:30","10:30–11:15","11:15–12:00"],cells:{"الاثنين|0":"R1","الاثنين|1":"KN","الاثنين|2":"R2","الاثنين|3":"FM","الاثنين|4":"R5","الثلاثاء|0":"R1","الثلاثاء|1":"PW","الثلاثاء|2":"R2","الثلاثاء|3":"SM"}}]})(),
    activities:[
-    {id:"a1",planId:"p1",type:"لقاء الآباء",title:"سلوك طفلي يتعبني: نوبات الغضب والعناد",date:d(21),place:"مقر الجمعية",families:14,kids:0,lead:"الأخصائي النفسي",notes:"عرض وتمارين تطبيقية، وتسليم المطبوعات.",createdAt:1},
-    {id:"a2",planId:"p4",type:"اجتماع شهري للفريق",title:"الاجتماع الشهري",date:d(5),place:"مركز خطوات",families:8,kids:6,lead:"منسقة التربية الخاصة",notes:"مناقشة 6 حالات.",createdAt:2}]};
+    {id:"a1",type:"لقاء الآباء",title:"سلوك طفلي يتعبني: نوبات الغضب والعناد",date:d(21),place:"مقر الجمعية",families:14,kids:0,lead:"الأخصائي النفسي",notes:"عرض وتمارين تطبيقية، وتسليم المطبوعات.",createdAt:1},
+    {id:"a2",type:"اجتماع شهري للفريق",title:"الاجتماع الشهري",date:d(5),place:"مركز خطوات",families:8,kids:6,lead:"منسقة التربية الخاصة",notes:"مناقشة 6 حالات.",createdAt:2}]};
 }
 
 /* ================= rendering: shell ================= */
@@ -878,10 +932,11 @@ function pageChild(id){
    ${al.length?`<div class="chips" style="margin-top:8px">${al.map(x=>`<span class="chip ${x.lv}">${esc(x.t)}</span>`).join("")}</div>`:""}</div>
    <div class="chips">${armed?`<button class="btn sm" data-act="disarm">إلغاء</button><button class="btn sm danger" data-act="delChild" data-id="${esc(id)}">تأكيد حذف الملف وكل سجلاته</button>`:`<button class="btn sm" data-act="editChild" data-id="${esc(id)}">تعديل البطاقة</button><button class="btn sm ghost" data-act="arm" data-v="child:${esc(id)}">حذف</button>`}</div></div>
   <div class="addbar">${Object.entries(TYPES).map(([k,t])=>`<button data-act="newRec" data-type="${k}" data-child="${esc(id)}"><b>+ ${esc(t.t)}</b><small>${esc(t.d)}</small></button>`).join("")}</div>
-  <div class="tabs" role="tablist">${[["overview","نظرة عامة",null],["timeline","السجل",recs.length],["goals","المشروع الفردي",goals.length],["incl","الإدماج المدرسي",null]].map(([k,l,n])=>`<button role="tab" data-act="tab" data-v="${k}" aria-selected="${view.tab===k}">${l}${n!=null?`<span class="count">${n}</span>`:""}</button>`).join("")}</div>`;
+  <div class="tabs" role="tablist">${[["overview","نظرة عامة",null],["timeline","السجل",recs.length],["goals","المشروع الفردي",goals.length],["incl","الإدماج المدرسي",null],["annual","الخطة السنوية",null]].map(([k,l,n])=>`<button role="tab" data-act="tab" data-v="${k}" aria-selected="${view.tab===k}">${l}${n!=null?`<span class="count">${n}</span>`:""}</button>`).join("")}</div>`;
   if(view.tab==="timeline")h+=tabTimeline(recs);
   else if(view.tab==="goals")h+=tabGoals(c,goals);
   else if(view.tab==="incl")h+=tabInclusion(c);
+  else if(view.tab==="annual")h+=kidPlanHtml(c);
   else h+=tabOverview(c,recs,goals);
   return h;
 }
@@ -980,7 +1035,7 @@ function pageActivities(){
   let cur="";h+=`<div class="stack">`;
   acts.forEach(a=>{const ym=(a.date||"").slice(0,7);if(ym!==cur){if(cur)h+=`</div></div>`;cur=ym;h+=`<div class="panel"><h2>${ym?monthName(ym):"بدون تاريخ"}</h2><div class="list">`}
     const armed=view.armed==="act:"+a.id;
-    h+=`<div class="li"><div class="grow"><div class="t">${esc(a.title||"")}</div><div class="chips" style="margin:3px 0"><span class="chip acc">${esc(a.type||"")}</span><span class="chip">${fdh(a.date)}</span>${a.families?`<span class="chip">${esc(a.families)} مشارك</span>`:""}${a.place?`<span class="chip">${esc(a.place)}</span>`:""}${a.planId&&S.plan.find(p=>p.id===a.planId)?`<span class="chip or">الخطة: ${esc(S.plan.find(p=>p.id===a.planId).title)}</span>`:""}</div>${a.notes?`<div class="sub">${esc(a.notes)}</div>`:""}</div>
+    h+=`<div class="li"><div class="grow"><div class="t">${esc(a.title||"")}</div><div class="chips" style="margin:3px 0"><span class="chip acc">${esc(a.type||"")}</span><span class="chip">${fdh(a.date)}</span>${a.families?`<span class="chip">${esc(a.families)} مشارك</span>`:""}${a.place?`<span class="chip">${esc(a.place)}</span>`:""}</div>${a.notes?`<div class="sub">${esc(a.notes)}</div>`:""}</div>
     <div class="chips">${armed?`<button class="btn sm" data-act="disarm">إلغاء</button><button class="btn sm danger" data-act="delAct" data-id="${esc(a.id)}">تأكيد</button>`:`<button class="btn sm" data-act="editAct" data-id="${esc(a.id)}">تعديل</button><button class="btn sm ghost" data-act="arm" data-v="act:${esc(a.id)}">حذف</button>`}</div></div>`});
   return h+`</div></div></div>`;
 }
@@ -1064,55 +1119,174 @@ function showDoc(title,text){
   document.body.style.overflow="hidden";
 }
 
-/* ---------- annual plan ---------- */
-function planOf(y){return S.plan.filter(p=>p.season===y).sort((a,b)=>AXES.indexOf(a.axis)-AXES.indexOf(b.axis)||(a.createdAt||0)-(b.createdAt||0))}
-function planProgress(p){
-  const acts=S.activities.filter(a=>a.planId===p.id),doneMonths=new Set(acts.map(a=>(a.date||"").slice(0,7)));
-  const cur=today().slice(0,7),closed=p.status==="منجز"||p.status==="ملغى"||p.status==="مؤجل";
-  const late=closed?[]:(p.months||[]).filter(m=>m<cur&&!doneMonths.has(m));
-  return {acts,doneMonths,late,count:acts.length,target:+p.target||(p.months||[]).length||0};
-}
+/* ---------- annual plan & timetable ---------- */
+const DOC_CSS=`.doc{font-family:'IBM Plex Sans Arabic','Tajawal',Tahoma,sans-serif;color:#111;background:#fff;min-width:980px;font-size:11px;direction:rtl}
+.doc .dh{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #E08E45;padding-bottom:6px;margin-bottom:8px}
+.doc .dh h2{font-size:19px;color:#1E3A5F;font-weight:900;margin:0}
+.doc .dh .m{font-size:11.5px;color:#374151;line-height:1.7}
+.doc .org{font-size:11px;color:#C97430;font-weight:700}
+.doc table{width:100%;border-collapse:collapse;margin-bottom:6px}
+.doc th,.doc td{border:1px solid #9CA3AF;padding:4px 5px;vertical-align:top;text-align:right}
+.doc th{background:#1E3A5F;color:#fff;font-weight:700;font-size:11px;text-align:center;vertical-align:middle;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.doc th.g{background:#2D6A9F}
+.doc td.c{text-align:center;vertical-align:middle}
+.doc tr.ev td{background:#FBE3CC;text-align:center;font-weight:700;color:#7A4312;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.doc tr.sp td{background:#EEF3F8;text-align:center;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.doc .gl{margin:0 0 4px;line-height:1.45;font-size:10px}
+.doc .gl b{color:#1E3A5F;font-size:9px;direction:ltr;unicode-bidi:embed}
+.doc .box{display:inline-block;width:18px;height:18px;border:1px solid #6B7280;border-radius:3px;line-height:18px}
+.doc h4{font-size:12.5px;color:#1E3A5F;margin:6px 0 3px}
+.doc td.na{background:#E5E7EB;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.doc tr.ds>td{border-top:2px solid #1E3A5F}
+.doc td.dom{background:#EEF3F8;font-weight:700;color:#1E3A5F;vertical-align:middle}
+.doc .nos{display:inline-block;font-size:9px;color:#B5586F}
+.doc .legend{font-size:10.5px;color:#374151;margin-top:4px}
+.doc .tt td{height:34px;text-align:center;vertical-align:middle;font-weight:600}
+.doc .tt td.tm{direction:ltr;font-weight:400;color:#374151;width:90px}
+.doc .rt{color:#6B7280;font-weight:400}`;
+document.head.insertAdjacentHTML("beforeend","<style>"+DOC_CSS+"</style>");
+const lastUnitWeek=U=>U.ev;
+function firstMondayFrom(ds){const d=new Date(ds+"T12:00:00");while(d.getDay()!==1)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)}
+function yearDoc(){const y=view.season;return S.plan.find(p=>p.kind==="year"&&p.season===y)||{id:"year-"+y,kind:"year",season:y,start:firstMondayFrom(y+"-09-14"),days:ALLDAYS.slice(0,5),holidays:[]}}
+function ttDoc(level){const y=view.season;return S.plan.find(p=>p.kind==="tt"&&p.season===y&&p.level===level)||{id:"tt-"+y+"-"+level,kind:"tt",season:y,level,slots:["08:30–09:15","09:15–10:00","10:00–10:30","10:30–11:15","11:15–12:00"],cells:{}}}
+function kidDoc(cid){const y=view.season;return S.plan.find(p=>p.kind==="kid"&&p.season===y&&p.childId===cid)||null}
+function newKidDoc(cid,level){const L=LEVELS[level];return {id:"kid-"+y_()+"-"+cid,kind:"kid",season:view.season,childId:cid,level,doms:Object.fromEntries(L.doms.map(d=>[d,true])),tier:Object.fromEntries(L.doms.map(d=>[d,1])),units:{}}}
+const y_=()=>view.season;
+function weekStart(Y,n){if(!Y.start)return null;const off=n-1+(Y.holidays||[]).filter(h=>+h.after<n).reduce((s,h)=>s+(+h.n||1),0);const d=new Date(Y.start+"T12:00:00");d.setDate(d.getDate()+7*off);return d.toISOString().slice(0,10)}
+const ddmm=ds=>ds?ds.slice(8,10)+"/"+ds.slice(5,7):"";
+function currentWeek(Y){const t=today();for(let n=1;n<=30;n++){const s=weekStart(Y,n);if(!s)return 0;const e=new Date(s+"T12:00:00");e.setDate(e.getDate()+7);if(t>=s&&t<e.toISOString().slice(0,10))return n}return 0}
+const unitOf=n=>UNITS.find(U=>U.w.includes(n)||U.ev===n);
+function unitRange(Y,U){const a=weekStart(Y,U.w[0]),b=weekStart(Y,U.ev);return a?ddmm(a)+" – "+ddmm(b):""}
+function kidStats(k){let tot=0,ok=0,ev=0;Object.values(k.units||{}).forEach(u=>Object.values(u).forEach(gs=>gs.forEach(g=>{tot++;if(g.res){ev++;if(g.res==="ok")ok++}})));return {tot,ok,ev}}
+function goalSmart(g,U,Y){return `${g.x}${g.p?" — بمستوى: "+g.p:""} — معيار النجاح: ${g.i||DEFAULT_IND} — المدة: الوحدة ${U.u} (الأسابيع ${U.w[0]}–${U.w[U.w.length-1]}${Y&&Y.start?"، "+unitRange(Y,U):""})، التقويم في الأسبوع ${U.ev}`}
+function usedIds(k,beforeU){const s=new Set(),ok=new Set();UNITS.forEach(U=>{if(beforeU&&U.u>=beforeU)return;Object.values((k.units||{})[U.u]||{}).forEach(gs=>gs.forEach(g=>{s.add(g.id);if(g.res==="ok")ok.add(g.id)}))});return {s,ok}}
+async function saveKid(k){await put("plan",k).catch(()=>{})}
+
 function pagePlan(){
-  const y=view.season,items=planOf(y),months=seasonMonths(y),cur=today().slice(0,7);
-  const pr=items.map(p=>({p,g:planProgress(p)}));const late=pr.filter(x=>x.g.late.length).length;
-  const budget=items.reduce((s,p)=>s+(parseFloat(String(p.budget||"").replace(/[^\d.]/g,""))||0),0);
-  let h=`<div class="head"><div><div class="eyebrow">الموسم ${seasonLabel(y)} · من شتنبر إلى غشت</div><h1>التخطيط السنوي</h1></div>
-   <select id="season" style="width:auto" aria-label="الموسم">${[y-1,y,y+1].map(s=>`<option value="${s}" ${s===y?"selected":""}>${seasonLabel(s)}</option>`).join("")}</select>
-   ${items.length?`<button class="btn" data-act="copyPlan">نسخ الخطة</button><button class="btn" data-act="copyPlanReport">نسخ تقرير الإنجاز</button>`:""}<button class="btn pri" data-act="newPlan">+ إضافة عمل</button></div>`;
-  if(!items.length)return h+`<div class="roster"><div class="empty"><h3>خطة ${seasonLabel(y)} فارغة</h3><p>أضف أعمال السنة محورًا بمحور: لقاءات الآباء، الورشات، تكوين الفريق، زيارات المدارس… حدّد لكل عمل الأشهر والمسؤول والهدف. عند تسجيل نشاط في «الأنشطة» اربطه بعمل من الخطة، فيظهر المنجز مقابل المبرمج تلقائيًا.</p><p class="sub">المحاور المقترحة: ${AXES.join(" · ")}</p><button class="btn pri" data-act="newPlan">+ إضافة أول عمل</button></div></div>`;
-  h+=`<div class="stats"><div class="stat"><div class="n">${items.length}</div><div class="l">عمل مبرمج</div></div><div class="stat"><div class="n">${items.filter(p=>p.status==="منجز").length}</div><div class="l">منجز</div></div><div class="stat ${late?"warn":""}"><div class="n">${late}</div><div class="l">متأخر عن موعده</div></div><div class="stat"><div class="n">${budget?budget.toLocaleString("fr-FR"):"—"}</div><div class="l">الميزانية التقديرية (درهم)</div></div></div>`;
-  const now=pr.filter(x=>(x.p.months||[]).includes(cur)&&x.p.status!=="ملغى");
-  h+=`<div class="panel" style="margin-bottom:14px"><h2>مبرمج هذا الشهر — ${monthName(cur)}</h2>${now.length?`<div class="list">${now.map(({p,g})=>`<div class="li"><div class="grow"><div class="t">${esc(p.title)}</div><div class="sub">${esc(p.axis||"")}${p.lead?" · "+esc(p.lead):""}</div></div>${g.doneMonths.has(cur)?`<span class="chip ok">سُجّل نشاط</span>`:`<button class="btn sm pri" data-act="actFromPlan" data-id="${esc(p.id)}">تسجيل النشاط</button>`}</div>`).join("")}</div>`:`<p class="sub" style="margin:0">لا شيء مبرمج هذا الشهر.</p>`}</div>`;
-  h+=`<div class="panel"><h2>الجدول الزمني</h2><div class="lgrow" style="margin-bottom:8px"><span><i style="background:var(--ok)"></i>أُنجز في هذا الشهر</span><span><i style="background:var(--navy-soft);border:1px solid var(--navy)"></i>مبرمج</span><span><i style="background:var(--crit-soft);border:1px solid var(--crit)"></i>فات موعده بدون نشاط</span></div>
-   <div class="gantt"><table><thead><tr><th class="gt">العمل</th>${months.map(m=>`<th class="${m===cur?"now":""}">${MONTHS[+m.slice(5)-1]}</th>`).join("")}<th>الإنجاز</th></tr></thead><tbody>`;
-  AXES.concat(items.map(p=>p.axis).filter(a=>a&&!AXES.includes(a))).filter((a,i,arr)=>arr.indexOf(a)===i).forEach(ax=>{const rows=pr.filter(x=>(x.p.axis||AXES[0])===ax);if(!rows.length)return;
-    h+=`<tr><td class="gax" colspan="${months.length+2}">${esc(ax)}</td></tr>`;
-    rows.forEach(({p,g})=>{h+=`<tr><td class="gt"><button class="glink" data-act="editPlan" data-id="${esc(p.id)}">${esc(p.title)}</button><span class="sub">${esc(p.lead||"")}${p.status&&p.status!=="مبرمج"?" · "+esc(p.status):""}</span></td>${months.map(m=>{const pl=(p.months||[]).includes(m),dn=g.doneMonths.has(m);const cls=dn?"gdone":pl&&g.late.includes(m)?"glate":pl?"gplan":"";return `<td class="${m===cur?"now":""}"><span class="gc ${cls}">${dn?"✓":g.late.includes(m)?"!":""}</span></td>`}).join("")}<td class="gnum">${g.count}${g.target?" / "+g.target:""}${p.unit?" <span class='sub'>"+esc(p.unit)+"</span>":""}</td></tr>`})});
-  return h+`</tbody></table></div></div>`;
+  const tab=view.ptab||"year";
+  const tabs=[["year","السنة"],["kids","الأطفال"],["tt","جدول الحصص"],["print","الطباعة"]];
+  return `<div class="head"><div><div class="eyebrow">${esc(ORG_NAME)} · الموسم ${seasonLabel(view.season)}</div><h1>التخطيط السنوي وجدولة الحصص</h1></div>
+   <select id="season" style="width:auto" aria-label="الموسم">${[view.season-1,view.season,view.season+1].map(s=>`<option value="${s}" ${s===view.season?"selected":""}>${seasonLabel(s)}</option>`).join("")}</select></div>
+  <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button role="tab" data-act="ptab" data-v="${k}" aria-selected="${tab===k}">${l}</button>`).join("")}</div>`
+  +(tab==="kids"?planKids():tab==="tt"?planTT():tab==="print"?planPrint():planYear());
 }
-function planText(report){
-  const y=view.season,items=planOf(y),L=[(report?"تقرير إنجاز الخطة السنوية":"الخطة السنوية")+" — جمعية آفاق، مركز خطوات — الموسم "+seasonLabel(y),"========================================"];
-  if(report){const g=items.map(planProgress);L.push("عدد الأعمال المبرمجة: "+items.length+" | منجز: "+items.filter(p=>p.status==="منجز").length+" | متأخر: "+g.filter(x=>x.late.length).length+" | تاريخ التقرير: "+fd(today()))}
-  AXES.concat(items.map(p=>p.axis).filter(a=>a&&!AXES.includes(a))).filter((a,i,arr)=>arr.indexOf(a)===i).forEach(ax=>{const rows=items.filter(p=>(p.axis||AXES[0])===ax);if(!rows.length)return;L.push("\n▪ "+ax);
-    rows.forEach(p=>{const g=planProgress(p);
-      if(report)L.push("  - "+p.title+": "+(p.status||"مبرمج")+" — المنجز "+g.count+(g.target?" من "+g.target:"")+(p.unit?" "+p.unit:"")+(g.late.length?" — متأخر: "+g.late.map(monthName).join("، "):""));
-      else{L.push("  - "+p.title);if(p.desc)L.push("     الوصف: "+p.desc);if((p.months||[]).length)L.push("     الأشهر: "+p.months.map(m=>MONTHS[+m.slice(5)-1]).join("، "));if(p.lead)L.push("     المسؤول: "+p.lead);if(p.target)L.push("     الهدف: "+p.target+" "+(p.unit||""));if(p.indicator)L.push("     مؤشر النجاح: "+p.indicator);if(p.partners)L.push("     الشركاء: "+p.partners);if(p.budget)L.push("     الميزانية التقديرية: "+p.budget+" درهم")}})});
-  return L.join("\n");
+function yearStrip(Y){
+  const cur=currentWeek(Y);let h=`<div class="strip">`;
+  for(let n=1;n<=30;n++){const U=unitOf(n),s=weekStart(Y,n),ev=U&&U.ev===n;
+    h+=`<div class="wk u${U?U.u:6} ${ev?"ev":""} ${cur&&n<cur?"fin":""} ${n===cur?"now":""}" title="${ev?"أسبوع تقويم الوحدة "+U.u:"الوحدة "+(U?U.u:"")}${s?" — "+fd(s):""}"><b>${n}</b>${s?ddmm(s):""}</div>`;
+    (Y.holidays||[]).filter(x=>+x.after===n).forEach(x=>{for(let i=0;i<(+x.n||1);i++)h+=`<div class="hol" title="${esc(x.label||"عطلة")}"></div>`})}
+  return h+`</div>`;
 }
-const PLAN_FORM={t:"عمل في الخطة السنوية",sections:r=>[{t:"العمل",fields:[
-  {row:[{k:"axis",type:"select",l:"المحور",o:AXES},{k:"status",type:"select",l:"الحالة",o:PLAN_STATUS}]},
-  {k:"title",type:"text",l:"العمل / النشاط *",ph:"مثال: لقاء شهري للآباء حول السلوك"},{k:"desc",type:"textarea",l:"الوصف والأهداف"},
-  {k:"months",type:"checks",l:"الأشهر المبرمجة (الموسم "+seasonLabel(r.season)+")",o:seasonMonths(r.season).map(m=>({v:m,l:monthName(m)})),grid:true},
-  {row:[{k:"target",type:"number",l:"الهدف (عدد)"},{k:"unit",type:"text",l:"الوحدة",ph:"لقاء، ورشة، أسرة، طفل…"}]},
-  {row:[{k:"lead",type:"text",l:"المسؤول"},{k:"budget",type:"text",l:"الميزانية التقديرية (درهم)"}]},
-  {k:"indicator",type:"text",l:"مؤشر النجاح",ph:"مثال: حضور 15 أسرة على الأقل في كل لقاء"},{k:"partners",type:"text",l:"الشركاء"}]}]};
+function planYear(){
+  const Y=yearDoc(),cur=currentWeek(Y),U=cur?unitOf(cur):null;
+  return `<div class="panel" style="margin-bottom:14px">${cur?`<div class="domh"><h2 style="font-size:17px">الأسبوع ${cur} — الوحدة ${U.u}</h2>${U.ev===cur?`<span class="chip or">أسبوع التقويم: سجّل نتائج الأهداف</span>`:`<span class="chip acc">التقويم في الأسبوع ${U.ev}</span>`}</div>`:`<h2>السنة الدراسية</h2>`}
+   ${yearStrip(Y)}
+   <div class="lgrow"><span><i style="background:var(--u-ev)"></i>أسبوع تقويم</span><span><i style="background:#1E3A5F"></i>أسبوع منتهٍ</span><span><i class="holsw"></i>عطلة</span></div></div>
+  <div class="grid2"><div class="panel"><h2>الوحدات</h2><div class="list">${UNITS.map(U=>`<div class="li"><span class="gc u${U.u}" style="color:#152B47">${U.u}</span><div class="grow"><div class="t">الوحدة ${U.u}: الأسابيع ${U.w[0]}–${U.w[U.w.length-1]}</div><div class="sub">${unitRange(Y,U)} · التقويم في الأسبوع ${U.ev}${weekStart(Y,U.ev)?" ("+fd(weekStart(Y,U.ev))+")":""}</div></div></div>`).join("")}</div></div>
+  <div class="panel stack"><h2 style="margin:0">إعدادات السنة</h2>
+   <label class="f">بداية الأسبوع الأول (يوم الاثنين)<input type="date" id="y-start" value="${esc(Y.start||"")}"></label>
+   <div><div class="fl" style="margin-bottom:6px">أيام الحصص</div><div class="cgrid">${ALLDAYS.map(d=>`<label class="chk"><input type="checkbox" id="yd-${d}" data-act="yday" data-v="${d}" ${(Y.days||[]).includes(d)?"checked":""}><span>${d}</span></label>`).join("")}</div></div>
+   <div><div class="fl" style="margin-bottom:6px">العطل (تُدرج بعد الأسبوع المحدد)</div>
+    ${(Y.holidays||[]).map((x,i)=>`<div class="rrow"><input type="text" id="yh-l-${i}" data-hol="${i}" data-f="label" value="${esc(x.label||"")}" placeholder="اسم العطلة"><input type="number" id="yh-a-${i}" data-hol="${i}" data-f="after" value="${esc(x.after||"")}" min="1" max="29" aria-label="بعد الأسبوع"><span class="chips"><input type="number" id="yh-n-${i}" data-hol="${i}" data-f="n" value="${esc(x.n||1)}" min="1" max="4" style="width:70px" aria-label="عدد الأسابيع"><button class="btn sm ghost" data-act="holDel" data-i="${i}">حذف</button></span></div>`).join("")}
+    <p class="sub" style="margin:4px 0 8px">لكل عطلة: الاسم، بعد أي أسبوع، وعدد أسابيعها. أدخلها حسب المقرر الرسمي للموسم.</p>
+    <button class="add" data-act="holAdd">+ إضافة عطلة</button></div></div></div>`;
+}
+function planKids(){
+  const kids=S.children.filter(c=>(c.status||"نشط")!=="متوقف").sort((a,b)=>(a.code||"").localeCompare(b.code||""));
+  const sel=view.planKid&&childById(view.planKid);
+  if(sel)return `<button class="btn ghost sm" data-act="kidBack" style="margin-bottom:8px">→ كل الأطفال</button>`+kidPlanHtml(sel);
+  if(!kids.length)return `<div class="roster"><div class="empty"><h3>لا يوجد أطفال بعد</h3><p>أضف الأطفال من «الأطفال» ثم ارجع هنا لإعداد خطة كل طفل.</p></div></div>`;
+  return `<div class="panel"><h2>خطط الأطفال — ${seasonLabel(view.season)}</h2><p class="sub" style="margin:-4px 0 10px">لكل طفل: المستوى، المجالات، ومستوى البداية في كل مجال، ثم أهداف كل وحدة ونتائج تقويمها.</p>
+   ${kids.map(c=>{const k=kidDoc(c.id),st=k?kidStats(k):null;return `<button class="kidrow" data-act="kidOpen" data-id="${esc(c.id)}"><span><span class="code">${esc(c.code||"")}</span> · ${esc(c.name||"")}<span class="sub" style="display:block">${k?esc(LEVELS[k.level].name)+" · "+st.tot+" هدف":"لم تُعدّ الخطة بعد"}</span></span>${k&&st.ev?`<span style="text-align:start"><span class="sub">${st.ok} من ${st.ev} محقق</span><span class="meter" style="display:block;width:90px"><i style="width:${Math.round(st.ok/st.ev*100)}%;background:var(--ok)"></i></span></span>`:`<span class="sub">←</span>`}</button>`}).join("")}</div>`;
+}
+function kidPlanHtml(c){
+  const k=kidDoc(c.id),Y=yearDoc();
+  if(!k)return `<div class="panel stack"><h2 style="margin:0">خطة ${esc(childLabel(c))} — ${seasonLabel(view.season)}</h2><p class="sub" style="margin:0">اختر مستوى الطفل لبدء الخطة.</p><div class="chips">${Object.entries(LEVELS).map(([lv,L])=>`<button class="btn pri" data-act="kidInit" data-id="${esc(c.id)}" data-v="${lv}">${L.name}</button>`).join("")}</div></div>`;
+  const L=LEVELS[k.level],st=kidStats(k),cur=currentWeek(Y),curU=cur?unitOf(cur).u:1;const open=view.openUnit||curU;
+  let h=`<div class="panel stack"><div class="domh"><h2 style="margin:0;font-size:18px">${esc(childLabel(c))}</h2><span class="chip ${st.ev?"ok":""}">${st.ok} / ${st.ev} هدف محقق · ${st.tot} مبرمج</span></div>
+   <div class="seg">${Object.entries(LEVELS).map(([lv,LL])=>`<button class="${k.level===lv?"on":""}" data-act="kidLevel" data-id="${esc(c.id)}" data-v="${lv}">${LL.name}</button>`).join("")}</div>
+   <div><div class="fl">المجالات ومستوى البداية</div>${L.doms.map(d=>`<div class="dom-row"><span class="dn">${esc(DOM[d])}</span><span class="seg">${[1,2,3].map(t=>`<button class="${(k.tier||{})[d]===t?"on":""}" data-act="kidTier" data-id="${esc(c.id)}" data-d="${d}" data-v="${t}" ${k.doms[d]===false?"disabled":""}>المستوى ${t}</button>`).join("")}</span><input type="checkbox" class="tog" id="dom-${d}" data-act="kidDom" data-id="${esc(c.id)}" data-d="${d}" ${k.doms[d]!==false?"checked":""} aria-label="${esc(DOM[d])} مفعّل"></div>`).join("")}</div></div>`;
+  UNITS.forEach(U=>{const unit=(k.units||{})[U.u]||{},n=Object.values(unit).reduce((s,g)=>s+g.length,0),isOpen=open===U.u;
+    h+=`<div class="unit ${isOpen?"open":""}"><button class="unit-h" data-act="unitT" data-v="${U.u}"><span><span class="t">الوحدة ${U.u}</span> <span class="d">الأسابيع ${U.w[0]}–${U.w[U.w.length-1]}${Y.start?" · "+unitRange(Y,U):""} · التقويم الأسبوع ${U.ev}</span></span><span class="chip ${U.u===curU?"or":""}">${n} هدف</span></button>`;
+    if(isOpen){const {s:used,ok}=usedIds(k,U.u);
+      h+=`<div class="unit-b"><div class="chips" style="margin:8px 0"><button class="btn sm navy" data-act="unitSuggest" data-id="${esc(c.id)}" data-u="${U.u}">اقتراح أهداف هذه الوحدة</button><span class="sub" style="align-self:center">يحمل الأهداف غير المحققة من الوحدة السابقة، ويضيف هدفًا جديدًا من بنك الأهداف لكل مجال.</span></div>`;
+      L.doms.filter(d=>k.doms[d]!==false).forEach(d=>{const gs=unit[d]||[];const inUnit=new Set(gs.map(g=>g.id));
+        const opts=BANK[d].filter(b=>!inUnit.has(b.id)&&!ok.has(b.id)).sort((a,b)=>(a.t===(k.tier||{})[d]?-1:0)-(b.t===(k.tier||{})[d]?-1:0)||a.t-b.t);
+        h+=`<div class="dom-block"><h3>${esc(DOM[d])}</h3>${gs.map((g,i)=>`<div class="goal"><div class="gr"><b style="font-size:14px">${esc(g.x)} <span class="sub" dir="ltr">${esc(g.id||"")}</span></b>
+          <select class="pr" id="gp-${U.u}-${d}-${i}" data-gp="${U.u}|${d}|${i}" data-id="${esc(c.id)}" aria-label="مستوى التلقين"><option value="">مستوى التلقين</option>${PROMPTS.map(p=>`<option ${g.p===p?"selected":""}>${p}</option>`).join("")}</select>
+          <button class="btn sm ghost" data-act="goalDel" data-id="${esc(c.id)}" data-v="${U.u}|${d}|${i}" aria-label="حذف">✕</button></div>
+          <div class="smart">${esc(goalSmart(g,U,Y))}</div>
+          <div class="seg res" style="margin-top:6px">${RES.map(([v,l])=>`<button class="${g.res===v?"on "+v:""}" data-act="goalRes" data-id="${esc(c.id)}" data-v="${U.u}|${d}|${i}|${v}">${l}</button>`).join("")}</div></div>`).join("")}
+          <select id="ga-${U.u}-${d}" data-gadd="${U.u}|${d}" data-id="${esc(c.id)}" aria-label="إضافة هدف"><option value="">+ إضافة هدف من البنك…</option>${[1,2,3].map(t=>{const o=opts.filter(b=>b.t===t);return o.length?`<optgroup label="المستوى ${t}">${o.map(b=>`<option value="${b.id}">${used.has(b.id)?"↺ ":""}${esc(b.x)}</option>`).join("")}</optgroup>`:""}).join("")}</select></div>`});
+      h+=`</div>`}
+    h+=`</div>`});
+  return h;
+}
+function kidMutate(cid,fn){const k=clone(kidDoc(cid));fn(k);return saveKid(k)}
+function suggestUnit(k,Uu){
+  const prev=(k.units||{})[Uu-1]||{},{s:used,ok}=usedIds(k,Uu);k.units=k.units||{};const unit=k.units[Uu]=k.units[Uu]||{};
+  LEVELS[k.level].doms.filter(d=>k.doms[d]!==false).forEach(d=>{const gs=unit[d]=unit[d]||[];const have=new Set(gs.map(g=>g.id));
+    (prev[d]||[]).filter(g=>g.res&&g.res!=="ok"&&!have.has(g.id)).forEach(g=>{gs.push({id:g.id,x:g.x,i:g.i,p:g.p||""});have.add(g.id)});
+    if(!gs.length){const t=(k.tier||{})[d]||1;const b=BANK[d].filter(x=>x.t>=t&&!used.has(x.id)&&!ok.has(x.id)).sort((a,b)=>a.t-b.t)[0];if(b)gs.push({id:b.id,x:b.x,i:b.i||DEFAULT_IND,p:""})}});
+}
+function planTT(){
+  const lv=view.ttLevel||"pre",T=ttDoc(lv),Y=yearDoc(),L=LEVELS[lv];const days=ALLDAYS.filter(d=>(Y.days||[]).includes(d));
+  const count={};Object.values(T.cells||{}).forEach(v=>{if(DOM[v])count[v]=(count[v]||0)+1});
+  return `<div class="panel stack" style="margin-bottom:14px"><div class="seg">${Object.entries(LEVELS).map(([k,LL])=>`<button class="${lv===k?"on":""}" data-act="ttLevel" data-v="${k}">${LL.name}</button>`).join("")}</div>
+   <div><div class="fl">الحصص في الأسبوع</div><div class="chips" style="margin-top:6px">${L.doms.map(d=>`<span class="chip ${count[d]?"acc":"warn"}">${esc(DOM[d])}: ${count[d]||0}</span>`).join("")}</div></div>
+   <div><div class="fl" style="margin-bottom:6px">توقيت الحصص</div>${(T.slots||[]).map((s,i)=>`<div class="chips" style="margin-bottom:6px"><input type="text" id="ts-${i}" data-slot="${i}" value="${esc(s)}" style="width:160px" dir="ltr" aria-label="توقيت الحصة ${i+1}"><button class="btn sm ghost" data-act="slotDel" data-i="${i}">حذف</button></div>`).join("")}<button class="add" data-act="slotAdd">+ إضافة حصة</button></div></div>
+  <div class="ttgrid">${days.map(d=>`<div class="day"><h3>${d}</h3>${(T.slots||[]).map((s,i)=>{const v=(T.cells||{})[d+"|"+i]||"";return `<div class="slot"><span>${esc(s)}</span><select id="tc-${d}-${i}" data-cell="${d}|${i}" class="${DOM[v]?"dom":ROUTINES[v]?"rt":"empty"}" aria-label="${d} ${esc(s)}"><option value="">—</option><optgroup label="الروتين">${Object.entries(ROUTINES).map(([k,l])=>`<option value="${k}" ${v===k?"selected":""}>${l}</option>`).join("")}</optgroup><optgroup label="المجالات">${L.doms.map(k=>`<option value="${k}" ${v===k?"selected":""}>${DOM[k]}</option>`).join("")}</optgroup></select></div>`}).join("")}</div>`).join("")||`<p class="sub">اختر أيام الحصص في تبويب «السنة».</p>`}</div>`;
+}
+/* ---------- printable documents ---------- */
+function docHead(title,meta){return `<div class="dh"><div><div class="org">${esc(ORG_NAME)} — مركز خطوات</div><h2>${esc(title)}</h2></div><div class="m">${meta}</div></div>`}
+function docAnnual(c){
+  const k=kidDoc(c.id),Y=yearDoc();if(!k)return `<p>لم تُعدّ خطة هذا الطفل بعد.</p>`;const L=LEVELS[k.level];
+  let h=`<div class="doc">`+docHead("المشروع التربوي الفردي — الخطة السنوية",`الطفل: <b>${esc(childLabel(c))}</b><br>${esc(L.name)} · الموسم ${seasonLabel(view.season)}${c.educator?"<br>المربي(ة): "+esc(c.educator):""}`);
+  h+=`<table><thead><tr><th rowspan="2" style="width:90px">الوحدة</th>${L.groups.map(([g,n])=>`<th class="g" colspan="${n}">${esc(g)}</th>`).join("")}</tr><tr>${L.print.map(d=>`<th>${esc(DOM[d])}</th>`).join("")}</tr></thead><tbody>`;
+  UNITS.forEach(U=>{const unit=(k.units||{})[U.u]||{};
+    h+=`<tr class="ds"><td class="c"><b>الوحدة ${U.u}</b><br>الأسابيع ${U.w[0]}–${U.w[U.w.length-1]}<br>${unitRange(Y,U)}</td>${L.print.map(d=>k.doms[d]===false?`<td class="na"></td>`:`<td>${(unit[d]||[]).map(g=>`<p class="gl"><b>${esc(g.id||"")}</b> ${esc(g.x)}${g.res?` <span class="nos">${esc(RES.find(r=>r[0]===g.res)[1])}</span>`:""}</p>`).join("")}</td>`).join("")}</tr>
+    <tr class="ev"><td colspan="${L.print.length+1}">أسبوع التقويم ${U.ev}${weekStart(Y,U.ev)?" — "+fd(weekStart(Y,U.ev)):""}</td></tr>`;
+    (Y.holidays||[]).filter(x=>+x.after>=U.w[0]&&+x.after<=U.ev).forEach(x=>{h+=`<tr class="sp"><td colspan="${L.print.length+1}">${esc(x.label||"عطلة")}</td></tr>`})});
+  return h+`</tbody></table><p class="legend">معيار النجاح الافتراضي: ${DEFAULT_IND}. الخانة الرمادية: مجال غير مبرمج لهذا الطفل.</p></div>`;
+}
+function docUnit(c,Uu){
+  const k=kidDoc(c.id),Y=yearDoc(),U=UNITS[Uu-1];if(!k)return `<p>لم تُعدّ خطة هذا الطفل بعد.</p>`;const L=LEVELS[k.level],unit=(k.units||{})[Uu]||{};
+  let h=`<div class="doc">`+docHead("بطاقة تقويم الوحدة "+Uu,`الطفل: <b>${esc(childLabel(c))}</b> · ${esc(L.name)}<br>الأسابيع ${U.w[0]}–${U.w[U.w.length-1]} ${unitRange(Y,U)} · التقويم: الأسبوع ${U.ev}`);
+  h+=`<table><thead><tr><th>المجال</th><th>الهدف</th><th>معيار النجاح</th><th>مستوى التلقين</th>${RES.map(r=>`<th style="width:60px">${r[1]}</th>`).join("")}</tr></thead><tbody>`;
+  L.print.filter(d=>k.doms[d]!==false).forEach(d=>{const gs=unit[d]||[];if(!gs.length)return;gs.forEach((g,i)=>{h+=`<tr class="${i===0?"ds":""}">${i===0?`<td class="dom" rowspan="${gs.length}">${esc(DOM[d])}</td>`:""}<td><b dir="ltr" style="font-size:9px;color:#1E3A5F">${esc(g.id||"")}</b> ${esc(g.x)}</td><td>${esc(g.i||DEFAULT_IND)}</td><td class="c">${esc(g.p||"")}</td>${RES.map(r=>`<td class="c"><span class="box">${g.res===r[0]?"✓":""}</span></td>`).join("")}</tr>`})});
+  return h+`</tbody></table><h4>ملاحظات المربي(ة)</h4><p>........................................................................................................................................</p></div>`;
+}
+function docTT(lv){
+  const T=ttDoc(lv),Y=yearDoc(),days=ALLDAYS.filter(d=>(Y.days||[]).includes(d));
+  let h=`<div class="doc">`+docHead("جدول الحصص الأسبوعي",`${esc(LEVELS[lv].name)} · الموسم ${seasonLabel(view.season)}`);
+  h+=`<table class="tt"><thead><tr><th>التوقيت</th>${days.map(d=>`<th>${d}</th>`).join("")}</tr></thead><tbody>${(T.slots||[]).map((s,i)=>`<tr><td class="tm">${esc(s)}</td>${days.map(d=>{const v=(T.cells||{})[d+"|"+i]||"";return `<td class="${ROUTINES[v]?"rt":""}">${esc(DOM[v]||ROUTINES[v]||"")}</td>`}).join("")}</tr>`).join("")}</tbody></table></div>`;
+  return h;
+}
+function currentDoc(){
+  const t=view.pdoc||"annual",kids=S.children.filter(c=>kidDoc(c.id));const c=childById(view.pchild)||kids[0];
+  if(t==="tt")return {title:"جدول الحصص — "+LEVELS[view.pttl||"pre"].name,html:docTT(view.pttl||"pre")};
+  if(!c)return {title:"",html:`<p class="sub">لا توجد خطط أطفال بعد. أعدّها من تبويب «الأطفال».</p>`};
+  if(t==="unit")return {title:"تقويم الوحدة "+(view.punit||1)+" — "+childLabel(c),html:docUnit(c,view.punit||1)};
+  return {title:"الخطة السنوية — "+childLabel(c),html:docAnnual(c)};
+}
+function planPrint(){
+  const t=view.pdoc||"annual",kids=S.children.filter(c=>kidDoc(c.id)),D=currentDoc();
+  return `<div class="panel stack" style="margin-bottom:12px"><div class="seg">${[["annual","الخطة السنوية للطفل"],["unit","بطاقة تقويم الوحدة"],["tt","جدول الحصص"]].map(([k,l])=>`<button class="${t===k?"on":""}" data-act="pdoc" data-v="${k}">${l}</button>`).join("")}</div>
+   <div class="chips">${t!=="tt"?`<select id="pchild" style="width:auto">${kids.map(c=>`<option value="${esc(c.id)}" ${view.pchild===c.id?"selected":""}>${esc(childLabel(c))}</option>`).join("")}</select>`:`<select id="pttl" style="width:auto">${Object.entries(LEVELS).map(([k,L])=>`<option value="${k}" ${(view.pttl||"pre")===k?"selected":""}>${L.name}</option>`).join("")}</select>`}
+    ${t==="unit"?`<select id="punit" style="width:auto">${UNITS.map(U=>`<option value="${U.u}" ${(view.punit||1)===U.u?"selected":""}>الوحدة ${U.u}</option>`).join("")}</select>`:""}
+    ${mode==="gas"?`<button class="btn pri" data-act="doPrint">طباعة</button>`:""}${downloads?`<button class="btn" data-act="dlDoc">تنزيل للطباعة (HTML)</button>`:""}</div>
+   <p class="sub" style="margin:0">الطباعة بالعرض (A4 أفقي). ${mode==="gas"?"":"زر «طباعة» يظهر في نسخة Google؛ هنا يمكنك تنزيل الوثيقة وفتحها في المتصفح أو Word لطباعتها."}</p></div>
+  <div class="preview">${D.html}</div>`;
+}
+function docFile(D){return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>${esc(D.title)}</title><style>${DOC_CSS}@page{size:A4 landscape;margin:10mm}body{margin:0;font-family:Tahoma,Arial,sans-serif}.doc{min-width:0}</style></head><body>${D.html}</body></html>`}
+
 
 /* ---------- tools ---------- */
 function pageTools(){
   const tools=[
    ["#talk","عرض لقاء الآباء: سلوك طفلي يتعبني","17 شريحة مع ملاحظات المنشّط والتوقيت. اعرضه من الهاتف أو الحاسوب."],
    ["#handouts","مطبوعات لقاء الآباء","ورقة الملاحظة (قبل / السلوك / بعد) وبطاقة التذكير، جاهزة للنسخ وإرسالها للأسر."],
-   ["#plan","التخطيط السنوي","أعمال الموسم حسب المحاور، الجدول الزمني، والمنجز مقابل المبرمج."],
+   ["#plan","التخطيط السنوي وجدولة الحصص","السنة في 30 أسبوعًا و6 وحدات، خطة كل طفل من بنك الأهداف، جدول الحصص، والوثائق المطبوعة."],
    ["new:psy","التقييم النفسي الشامل","الاستمارة الكاملة للأخصائي النفسي: نسخة التوحد ونسخة مرنة، مع ملخص جاهز للتقرير."],
    ["new:screen","شبكة رصد التعثرات النمائية","للمدرّسين: التعليم الأولي والسنتان الأولى والثانية ابتدائي، مع قاعدة القرار."],
    ["new:comp","متابعة المرافق اليومية","للمرافق(ة) داخل المدرسة: تقييم اليوم، العمل المنجز، الحوادث، رسالة للأسرة."],
@@ -1154,7 +1328,6 @@ function openForm(kind,opts){
   const o=opts||{};let spec,col,r;
   if(kind==="child"){spec=CHILD_FORM;col="children";r=o.r?clone(o.r):{id:uid(),status:"نشط",group:GROUPS[0],createdAt:Date.now()}}
   else if(kind==="act"){spec=ACT_FORM;col="activities";r=o.r?clone(o.r):{id:uid(),type:ACT_TYPES[0],date:today(),createdAt:Date.now(),...(o.prefill||{})}}
-  else if(kind==="plan"){spec=PLAN_FORM;col="plan";r=o.r?clone(o.r):{id:uid(),season:view.season,axis:AXES[0],status:"مبرمج",months:[],createdAt:Date.now()}}
   else{spec=TYPES[kind];col="records";r=o.r?clone(o.r):{id:uid(),type:kind,childId:o.child||"",date:today(),...spec.blank(),createdAt:Date.now()};
     if(!o.r&&kind==="obs"){const c=childById(o.child);if(c&&c.educator)r.educator=c.educator;if(!recsOf(o.child,"obs").length)r.kind="first"}
     if(o.spec)r.specialist=SPECIALISTS.find(s=>o.spec.includes(s.replace("الأخصائي ","")))||"";if(o.reason)r.reason=o.reason}
@@ -1194,7 +1367,7 @@ function renderSheet(first){
   if(!F){closeSheet();return}
   const body=$("sheet").querySelector(".sh-body");const top=body&&!first?body.scrollTop:0;
   const r=F.r,isRec=F.col==="records";const c=isRec?childById(r.childId):null;
-  let title=(F.kind==="child"?(F.isNew?"طفل جديد":"تعديل بطاقة الطفل"):F.kind==="act"?(F.isNew?"تسجيل نشاط":"تعديل النشاط"):F.kind==="plan"?(F.isNew?"عمل جديد في الخطة":"تعديل العمل"):F.spec.t)+(c?" — "+childLabel(c):"");
+  let title=(F.kind==="child"?(F.isNew?"طفل جديد":"تعديل بطاقة الطفل"):F.kind==="act"?(F.isNew?"تسجيل نشاط":"تعديل النشاط"):F.spec.t)+(c?" — "+childLabel(c):"");
   let main,foot;
   if(F.mode==="view"){
     main=F.spec.html(r)+`<p class="sub">سجّله ${esc(whoR(r))}${r.updatedAt?" · آخر تعديل "+new Date(r.updatedAt).toLocaleDateString("ar-MA"):""}</p>`;
@@ -1205,7 +1378,7 @@ function renderSheet(first){
     main=(isRec&&!r.childId?`<div class="fs"><label class="f">الطفل *<select id="f-child" data-bind="childId"><option value="">اختر الطفل</option>${[...S.children].sort((a,b)=>(a.code||"").localeCompare(b.code||"")).map(x=>`<option value="${esc(x.id)}">${esc(childLabel(x))}</option>`).join("")}</select></label></div>`:"")
       +secs.map(s=>`<section class="fs"><h3>${esc(s.t)}</h3>${s.lead?`<p class="lead">${esc(s.lead)}</p>`:""}${s.fields.map(fieldHtml).join("")}</section>`).join("");
     foot=F.armed?`<button class="btn" data-act="sDisarm">إلغاء</button><button class="btn danger" data-act="sDel">تأكيد الحذف النهائي</button>`
-      :`<button class="btn" data-act="close">إلغاء</button><button class="btn pri" data-act="save">${isRec?"حفظ وعرض النتيجة":"حفظ"}</button>${F.col==="plan"&&!F.isNew?`<button class="btn ghost" data-act="sArm">حذف</button>`:""}`;
+      :`<button class="btn" data-act="close">إلغاء</button><button class="btn pri" data-act="save">${isRec?"حفظ وعرض النتيجة":"حفظ"}</button>`;
   }
   $("sheet").innerHTML=`<div class="sheetwrap" data-act="backdrop"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="sh-top"><h2>${esc(title)}</h2><button class="btn sm ghost" data-act="close" aria-label="إغلاق">✕ إغلاق</button></div><div class="sh-body">${main}</div><div class="sh-foot">${foot}</div></div></div>`;
   document.body.style.overflow="hidden";
@@ -1215,7 +1388,6 @@ async function saveSheet(){
   const r=F.r;
   if(F.col==="children"&&(!(r.code||"").trim()||!(r.name||"").trim())){toast("الرمز والاسم الأول إلزاميان.");return}
   if(F.col==="activities"&&!(r.title||"").trim()){toast("اكتب عنوان النشاط.");return}
-  if(F.col==="plan"&&!(r.title||"").trim()){toast("اكتب عنوان العمل.");return}
   if(F.col==="records"&&!r.childId){toast("اختر الطفل أولًا.");return}
   if(F.col==="records"&&r.type==="acad"&&!(r.subjects||[]).length){toast("اختر مادة واحدة على الأقل.");return}
   if(F.col==="records"){if(!r.by)r.by=myId||null;if(!r.byName&&myName)r.byName=myName;r.updatedAt=Date.now()}
@@ -1270,17 +1442,32 @@ document.addEventListener("click",async e=>{
    case "smartToGoals":{const r=F.r,have=new Set(goalsOf(r.childId).map(g=>g.text));let n=0;
      for(const g of (r.smart||[]).filter(g=>g.goal&&!have.has(g.goal))){await put("goals",{id:uid(),childId:r.childId,text:g.goal,domain:"",who:g.responsible||"",review:"",status:"لم يبدأ",createdAt:Date.now()}).catch(()=>{});n++}
      toast(n?"أُضيف "+n+" هدف إلى المشروع الفردي":"الأهداف موجودة من قبل");break}
-   case "newPlan":openForm("plan");break;
-   case "editPlan":openForm("plan",{r:S.plan.find(x=>x.id===el.dataset.id)});break;
-   case "copyPlan":copyText(planText(false));break;
-   case "copyPlanReport":copyText(planText(true));break;
-   case "actFromPlan":{const p=S.plan.find(x=>x.id===el.dataset.id);if(p)openForm("act",{prefill:{planId:p.id,title:p.title,lead:p.lead||""}});break}
    case "toolNew":openForm(el.dataset.type,{child:""});break;
    case "goIncl":view.grp=GROUPS[1];location.hash="children";break;
    case "slide":view.slide=+el.dataset.v;view.notes=!!($("talkNotes")&&$("talkNotes").open);render();break;
    case "talkAct":openForm("act",{prefill:{type:"لقاء الآباء",title:"سلوك طفلي يتعبني: نوبات الغضب والعناد"}});break;
    case "copyAbc":copyText(ABC_TEXT);break;
    case "copyReminder":copyText(REMINDER_TEXT);break;
+   case "ptab":view.ptab=el.dataset.v;render();break;
+   case "yday":{const Y=clone(yearDoc());Y.days=ALLDAYS.filter(d=>d===el.dataset.v?el.checked:(Y.days||[]).includes(d));await put("plan",Y).catch(()=>{});break}
+   case "holAdd":{const Y=clone(yearDoc());(Y.holidays=Y.holidays||[]).push({label:"عطلة",after:"",n:1});await put("plan",Y).catch(()=>{});break}
+   case "holDel":{const Y=clone(yearDoc());Y.holidays.splice(+el.dataset.i,1);await put("plan",Y).catch(()=>{});break}
+   case "kidOpen":view.planKid=el.dataset.id;view.openUnit=0;render();break;
+   case "kidBack":view.planKid=null;render();break;
+   case "kidInit":await saveKid(newKidDoc(el.dataset.id,el.dataset.v));break;
+   case "kidLevel":await kidMutate(el.dataset.id,k=>{const L=LEVELS[el.dataset.v];k.level=el.dataset.v;L.doms.forEach(d=>{if(k.doms[d]===undefined)k.doms[d]=true;if(!(k.tier||{})[d])(k.tier=k.tier||{})[d]=1})});break;
+   case "kidTier":await kidMutate(el.dataset.id,k=>{(k.tier=k.tier||{})[el.dataset.d]=+el.dataset.v});break;
+   case "kidDom":await kidMutate(el.dataset.id,k=>{k.doms[el.dataset.d]=el.checked});break;
+   case "unitT":{const u=+el.dataset.v,Y=yearDoc(),cw=currentWeek(Y),cu=cw?unitOf(cw).u:1;view.openUnit=(view.openUnit||cu)===u?-1:u;render();break}
+   case "unitSuggest":await kidMutate(el.dataset.id,k=>suggestUnit(k,+el.dataset.u));break;
+   case "goalDel":{const [u,d,i]=el.dataset.v.split("|");await kidMutate(el.dataset.id,k=>{k.units[u][d].splice(+i,1)});break}
+   case "goalRes":{const [u,d,i,v]=el.dataset.v.split("|");await kidMutate(el.dataset.id,k=>{const g=k.units[u][d][+i];g.res=g.res===v?"":v});break}
+   case "ttLevel":view.ttLevel=el.dataset.v;render();break;
+   case "slotAdd":{const T=clone(ttDoc(view.ttLevel||"pre"));T.slots.push("");await put("plan",T).catch(()=>{});break}
+   case "slotDel":{const T=clone(ttDoc(view.ttLevel||"pre")),i=+el.dataset.i;T.slots.splice(i,1);const c2={};Object.entries(T.cells||{}).forEach(([key,v])=>{const [d,n]=key.split("|");if(+n<i)c2[key]=v;else if(+n>i)c2[d+"|"+(+n-1)]=v});T.cells=c2;await put("plan",T).catch(()=>{});break}
+   case "pdoc":view.pdoc=el.dataset.v;render();break;
+   case "doPrint":{const D=currentDoc();$("printArea").innerHTML=D.html;try{window.print()}catch(err){toast("تعذّرت الطباعة من هنا.")}break}
+   case "dlDoc":{const D=currentDoc();try{await downloads.save({filename:D.title.replace(/[\\/:*?"<>|\s]+/g,"_")+".html",data:docFile(D)});toast("تم التنزيل")}catch(err){if(!err||err.code!=="declined")toast("تعذّر التنزيل.")}break}
    case "logout":gasCode="";ls("afaq.code","");clearInterval(_poll);mode="login";render();break;
    /* sheet */
    case "backdrop":case "close":closeSheet();break;
@@ -1311,6 +1498,15 @@ document.addEventListener("change",e=>{
   if(F&&el.tagName==="SELECT"&&el.dataset.bind){setP(F.r,el.dataset.bind,el.value);if(el.dataset.bind==="childId")renderSheet()}
   if(el.id==="grp"){view.grp=el.value;render()}
   if(el.id==="season"){view.season=+el.value;render()}
+  if(el.id==="y-start"){const Y=clone(yearDoc());Y.start=el.value;put("plan",Y).catch(()=>{})}
+  if(el.dataset.hol){const Y=clone(yearDoc());Y.holidays[+el.dataset.hol][el.dataset.f]=el.value;put("plan",Y).catch(()=>{})}
+  if(el.dataset.gp){const [u,d,i]=el.dataset.gp.split("|");kidMutate(el.dataset.id,k=>{k.units[u][d][+i].p=el.value})}
+  if(el.dataset.gadd&&el.value){const [u,d]=el.dataset.gadd.split("|"),b=SK[el.value];kidMutate(el.dataset.id,k=>{k.units=k.units||{};const U=k.units[u]=k.units[u]||{};(U[d]=U[d]||[]).push({id:b.id,x:b.x,i:b.i||DEFAULT_IND,p:""})})}
+  if(el.dataset.slot){const T=clone(ttDoc(view.ttLevel||"pre"));T.slots[+el.dataset.slot]=el.value;put("plan",T).catch(()=>{})}
+  if(el.dataset.cell){const T=clone(ttDoc(view.ttLevel||"pre"));(T.cells=T.cells||{})[el.dataset.cell]=el.value;put("plan",T).catch(()=>{})}
+  if(el.id==="pchild"){view.pchild=el.value;render()}
+  if(el.id==="pttl"){view.pttl=el.value;render()}
+  if(el.id==="punit"){view.punit=+el.value;render()}
   if(el.dataset.paper){const c=childById(el.dataset.id);if(c)put("children",{...c,paper:{...(c.paper||{}),[el.dataset.paper]:el.value}}).catch(()=>{})}
   if(el.id==="month"&&el.value){view.month=el.value;render()}
 });
