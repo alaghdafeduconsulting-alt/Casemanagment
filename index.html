@@ -265,12 +265,27 @@ function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorag
 const COLS=["children","records","goals","activities"];
 let S={children:[],records:[],goals:[],activities:[]};
 let mode="loading",db=null,userCap=null,myId=null,names={},downloads=null;
+/* Google Apps Script hosting: data lives in the owner's Google Sheet, the team signs in with a shared team code */
+let gasCode=ls("afaq.code")||"",myName=ls("afaq.name")||"",loginErr="",_poll=0;
+const isGas=()=>!!(window.google&&google.script&&google.script.run);
+function api(fn,...args){return new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(rej)[fn](...args))}
+const apiErr=e=>{const m=String(e&&e.message||e);return m.includes("BAD_CODE")?"رمز الفريق غير صحيح.":m.includes("NO_CODE")?"لم يُحدَّد رمز الفريق بعد في ورقة «الإعدادات».":"تعذّر الاتصال. تحقق من الإنترنت وأعد المحاولة."};
+async function gasLoad(){
+  const data=JSON.parse(await api("apiList",gasCode));COLS.forEach(c=>S[c]=data[c]||[]);
+}
+async function gasStart(){
+  if(!gasCode||!myName){mode="login";render();return}
+  try{await gasLoad();mode="gas";loginErr="";render();
+    clearInterval(_poll);_poll=setInterval(()=>{if(document.visibilityState==="visible")gasLoad().then(render).catch(()=>{})},30000);
+  }catch(e){loginErr=apiErr(e);if(String(e).includes("CODE")){gasCode="";ls("afaq.code","")}mode="login";render()}
+}
 let view={tab:"overview",q:"",grp:"",month:today().slice(0,7),armed:null};
 let F=null; // open sheet
 
 async function boot(){
   window.addEventListener("hashchange",()=>{view.armed=null;render();window.scrollTo(0,0)});
   render();
+  if(isGas()){gasStart();return}
   const cl=window.claude;
   if(cl&&cl.use){
     cl.use("downloads").then(d=>{downloads=d}).catch(()=>{});
@@ -291,13 +306,18 @@ async function boot(){
 let _raf=0;function schedule(){cancelAnimationFrame(_raf);_raf=requestAnimationFrame(render)}
 async function put(col,obj){
   const {id,...rest}=obj;const body=clone(rest);
+  if(mode==="gas"){const row={...body,id};const i=S[col].findIndex(x=>x.id===id);if(i<0)S[col].push(row);else S[col][i]=row;render();
+    try{await api("apiPut",gasCode,col,JSON.stringify(row))}catch(e){toast("لم يتم الحفظ: "+apiErr(e));gasLoad().then(render).catch(()=>{});throw e}return}
   if(mode==="live"){try{await db.collection(col).doc(id).set(body)}catch(e){toast(e&&e.code==="quota_exceeded"?"مساحة التخزين ممتلئة: احذف عناصر قديمة.":"لم يتم الحفظ. تحقق من الاتصال وأعد المحاولة.");throw e}}
   else{const i=S[col].findIndex(x=>x.id===id);const row={...body,id};if(i<0)S[col].push(row);else S[col][i]=row;render()}
 }
 async function remove(col,id){
+  if(mode==="gas"){S[col]=S[col].filter(x=>x.id!==id);render();
+    try{await api("apiRemove",gasCode,col,id)}catch(e){toast("لم يتم الحذف: "+apiErr(e));gasLoad().then(render).catch(()=>{});throw e}return}
   if(mode==="live"){try{await db.collection(col).doc(id).delete()}catch(e){toast("لم يتم الحذف. أعد المحاولة.");throw e}}
   else{S[col]=S[col].filter(x=>x.id!==id);render()}
 }
+function whoR(r){return (r&&r.byName)||who(r&&r.by)}
 function who(id){if(!id)return "عضو الفريق";const p=names[id];return (p&&p.name)||"عضو الفريق"}
 let _nameReq=new Set();
 function resolveNames(){
@@ -610,6 +630,7 @@ function banner(){return mode==="demo"?`<div class="banner"><b>●</b><span>مع
 function render(){
   const R=route();renderBar(R.r);document.title="فضاء آفاق";
   if(mode==="loading"){$("app").innerHTML=`<div class="loading">جار التحميل…</div>`;return}
+  if(mode==="login"){$("app").innerHTML=pageLogin();return}
   const html=R.r==="child"?pageChild(R.id):R.r==="children"?pageChildren():R.r==="meeting"?pageMeeting():R.r==="activities"?pageActivities():R.r==="library"?pageLibrary():pageHome();
   $("app").innerHTML=banner()+html;resolveNames();
 }
@@ -633,7 +654,7 @@ function pageHome(){
    <div class="stat"><div class="n">${actsM}</div><div class="l">نشاط هذا الشهر</div></div></div>
   <div class="grid2"><div class="stack">
    <div class="panel"><h2>التنبيهات</h2>${al.filter(x=>x.a.length).length?`<div class="list">${al.filter(x=>x.a.length).sort((a,b)=>b.a.filter(z=>z.lv==="crit").length-a.a.filter(z=>z.lv==="crit").length).slice(0,12).map(({c,a})=>`<a class="li" href="#child-${esc(c.id)}" style="color:inherit;text-decoration:none"><div class="grow"><div class="t">${esc(childLabel(c))}</div><div class="chips">${a.map(x=>`<span class="chip ${x.lv}">${esc(x.t)}</span>`).join("")}</div></div><span class="sub">←</span></a>`).join("")}</div>`:`<p class="sub" style="margin:0">لا توجد تنبيهات. كل الأطفال لهم متابعة حديثة.</p>`}</div>
-   <div class="panel"><h2>آخر ما سُجِّل</h2>${recent.length?`<div class="list">${recent.map(r=>`<button class="li" data-act="openRec" data-id="${esc(r.id)}" style="border-inline:0;border-bottom:0;background:none;width:100%;text-align:start;cursor:pointer;color:inherit"><span class="tag ty-${r.type}">${esc(TYPES[r.type].t)}</span><div class="grow"><div class="t">${esc(childLabel(childById(r.childId)))}</div><div class="sub">${fdh(r.date)} · ${esc(who(r.by))}</div></div></button>`).join("")}</div>`:`<p class="sub" style="margin:0">لم يُسجَّل شيء بعد.</p>`}</div>
+   <div class="panel"><h2>آخر ما سُجِّل</h2>${recent.length?`<div class="list">${recent.map(r=>`<button class="li" data-act="openRec" data-id="${esc(r.id)}" style="border-inline:0;border-bottom:0;background:none;width:100%;text-align:start;cursor:pointer;color:inherit"><span class="tag ty-${r.type}">${esc(TYPES[r.type].t)}</span><div class="grow"><div class="t">${esc(childLabel(childById(r.childId)))}</div><div class="sub">${fdh(r.date)} · ${esc(whoR(r))}</div></div></button>`).join("")}</div>`:`<p class="sub" style="margin:0">لم يُسجَّل شيء بعد.</p>`}</div>
   </div><div class="stack">
    <div class="panel"><h2>المواعيد القريبة</h2>${agenda.length?`<div class="list">${agenda.map(a=>`<a class="li" href="#child-${esc(a.c)}" style="color:inherit;text-decoration:none"><span class="chip ${a.d<today()?"warn":"acc"}">${fdh(a.d)}</span><div class="grow"><div class="t">${esc(childLabel(childById(a.c)))}</div><div class="sub">${esc(a.t)}</div></div></a>`).join("")}</div>`:`<p class="sub" style="margin:0">لا مواعيد مراجعة خلال الأسبوعين القادمين. تُضاف المواعيد من «رد الأخصائي».</p>`}</div>
    <div class="panel"><h2>الاجتماع الشهري</h2><p class="sub" style="margin:0 0 10px">جدول أعمال ${monthName(ym)} جاهز من الملاحظات المسجلة: الإحالات حسب الأخصائي، والعلامات المهمة، والأطفال بدون متابعة.</p><a class="btn navy" href="#meeting">فتح جدول الأعمال</a></div>
@@ -707,7 +728,7 @@ function recHint(r){
   if(r.type==="screen")return screenAnalysis(r).dec;
   return (r.kind||"")+(r.text?" · "+r.text.slice(0,60):"");
 }
-function tli(r){return `<button class="tli" data-act="openRec" data-id="${esc(r.id)}"><span class="tag ty-${r.type}">${esc(TYPES[r.type].t)}</span><span style="min-width:0"><b>${fdh(r.date)}</b> <span class="sub">· ${esc(who(r.by))}</span><span class="sub" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(recHint(r))}</span></span><span class="sub">←</span></button>`}
+function tli(r){return `<button class="tli" data-act="openRec" data-id="${esc(r.id)}"><span class="tag ty-${r.type}">${esc(TYPES[r.type].t)}</span><span style="min-width:0"><b>${fdh(r.date)}</b> <span class="sub">· ${esc(whoR(r))}</span><span class="sub" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(recHint(r))}</span></span><span class="sub">←</span></button>`}
 function tabTimeline(recs){return recs.length?`<div class="tl">${recs.map(tli).join("")}</div>`:`<div class="roster"><div class="empty"><h3>السجل فارغ</h3><p>كل ملاحظة أو تقييم أو رد أخصائي يُسجَّل هنا بالتاريخ واسم من سجّله.</p></div></div>`}
 function tabGoals(c,goals){
   return `<div class="grid2"><div class="panel"><h2>الأهداف (${goals.length})</h2>${goals.length?`<div class="stack">${goals.map(g=>{const armed=view.armed==="goal:"+g.id;return `<div class="goal"><div><b>${esc(g.text)}</b><div class="sub">${esc(g.domain||"")}${g.who?" · المسؤول: "+esc(g.who):""}${g.review?" · المراجعة: "+fd(g.review):""}</div></div>
@@ -787,9 +808,18 @@ function actsText(){
   ACT_TYPES.forEach(t=>{const l=yr.filter(a=>a.type===t);if(!l.length)return;L.push("\n▪ "+t+" ("+l.length+")");l.forEach(a=>L.push("  - "+fd(a.date)+": "+(a.title||"")+(a.families?" — "+a.families+" مشارك":"")+(a.place?" — "+a.place:"")))});
   return L.join("\n");
 }
+function pageLogin(){
+  return `<form id="loginForm" class="panel stack" style="max-width:440px;margin:30px auto"><h1 style="font-size:24px">الدخول إلى فضاء آفاق</h1>
+  <p class="sub" style="margin:0">اطلب رمز الفريق من مسؤول الجمعية. يُحفظ على هذا الهاتف فلا تحتاج إلى كتابته مرة أخرى.</p>
+  ${loginErr?`<div class="alert">${esc(loginErr)}</div>`:""}
+  <label class="f">اسمك (يظهر بجانب ما تسجّله)<input type="text" id="l-name" value="${esc(myName)}" placeholder="مثال: المربية فاطمة" required></label>
+  <label class="f">رمز الفريق<input type="text" id="l-code" autocomplete="off" required></label>
+  <button class="btn pri" type="submit">دخول</button></form>`;
+}
 function pageLibrary(){
   return `<div class="head"><div><div class="eyebrow">الوثائق والأدوات السابقة</div><h1>المراجع</h1></div></div>
   <p class="sub" style="margin:-6px 0 14px">النماذج الورقية والعروض التي أُعدّت سابقًا للجمعية. البطاقات الرقمية القديمة كانت تحفظ على الهاتف فقط؛ كل ذلك صار في ملفات الأطفال هنا.</p>
+  ${mode==="gas"?`<div class="panel" style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><span class="grow" style="flex:1">أنت مسجّل باسم <b>${esc(myName)}</b> على هذا الهاتف.</span><button class="btn sm" data-act="logout">الخروج / تغيير الاسم</button></div>`:""}
   <div class="lib">${LIBRARY.map(([t,d,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener"><b>${esc(t)}</b><span class="sub">${esc(d)}</span></a>`).join("")}</div>`;
 }
 
@@ -839,7 +869,7 @@ function renderSheet(first){
   let title=(F.kind==="child"?(F.isNew?"طفل جديد":"تعديل بطاقة الطفل"):F.kind==="act"?(F.isNew?"تسجيل نشاط":"تعديل النشاط"):F.spec.t)+(c?" — "+childLabel(c):"");
   let main,foot;
   if(F.mode==="view"){
-    main=F.spec.html(r)+`<p class="sub">سجّله ${esc(who(r.by))}${r.updatedAt?" · آخر تعديل "+new Date(r.updatedAt).toLocaleDateString("ar-MA"):""}</p>`;
+    main=F.spec.html(r)+`<p class="sub">سجّله ${esc(whoR(r))}${r.updatedAt?" · آخر تعديل "+new Date(r.updatedAt).toLocaleDateString("ar-MA"):""}</p>`;
     foot=F.armed?`<button class="btn" data-act="sDisarm">إلغاء</button><button class="btn danger" data-act="sDel">تأكيد الحذف النهائي</button>`
       :`<button class="btn pri" data-act="copy">نسخ النص لإرساله</button>${downloads?`<button class="btn" data-act="dl">تنزيل كملف</button>`:""}<button class="btn" data-act="sEdit">تعديل</button><button class="btn ghost" data-act="sArm">حذف</button>`;
   }else{
@@ -858,7 +888,7 @@ async function saveSheet(){
   if(F.col==="activities"&&!(r.title||"").trim()){toast("اكتب عنوان النشاط.");return}
   if(F.col==="records"&&!r.childId){toast("اختر الطفل أولًا.");return}
   if(F.col==="records"&&r.type==="acad"&&!(r.subjects||[]).length){toast("اختر مادة واحدة على الأقل.");return}
-  if(F.col==="records"){if(!r.by)r.by=myId||null;r.updatedAt=Date.now()}
+  if(F.col==="records"){if(!r.by)r.by=myId||null;if(!r.byName&&myName)r.byName=myName;r.updatedAt=Date.now()}
   try{await put(F.col,r)}catch(e){return}
   if(r.type==="obs"&&r.goalStatus)for(const [gid,st] of Object.entries(r.goalStatus)){const g=S.goals.find(x=>x.id===gid);if(g&&st&&g.status!==st){try{await put("goals",{...g,status:st})}catch(e){}}}
   toast("تم الحفظ");
@@ -884,6 +914,7 @@ document.addEventListener("click",async e=>{
    case "newChild":openForm("child");break;
    case "editChild":openForm("child",{r:childById(el.dataset.id)});break;
    case "delChild":{const id=el.dataset.id;view.armed=null;
+     if(mode==="gas"){try{await api("apiDeleteChild",gasCode,id);await gasLoad()}catch(err){toast(apiErr(err));break}toast("تم حذف الملف");location.hash="children";render();break}
      for(const r of S.records.filter(x=>x.childId===id))await remove("records",r.id).catch(()=>{});
      for(const g of S.goals.filter(x=>x.childId===id))await remove("goals",g.id).catch(()=>{});
      await remove("children",id).catch(()=>{});toast("تم حذف الملف");location.hash="children";break}
@@ -898,6 +929,7 @@ document.addEventListener("click",async e=>{
    case "sugg":$("g-text").value=el.dataset.t;$("g-dom").value=el.dataset.d;break;
    case "copyMeeting":copyText(meetingText());break;
    case "copyActs":copyText(actsText());break;
+   case "logout":gasCode="";ls("afaq.code","");clearInterval(_poll);mode="login";render();break;
    /* sheet */
    case "backdrop":case "close":closeSheet();break;
    case "seg":{const cur=getP(F.r,el.dataset.k);setP(F.r,el.dataset.k,cur===el.dataset.v?"":el.dataset.v);renderSheet();break}
@@ -929,6 +961,8 @@ document.addEventListener("change",e=>{
   if(el.id==="month"&&el.value){view.month=el.value;render()}
 });
 document.addEventListener("submit",async e=>{
+  if(e.target.id==="loginForm"){e.preventDefault();myName=$("l-name").value.trim();gasCode=$("l-code").value.trim();
+    if(!myName||!gasCode)return;ls("afaq.name",myName);ls("afaq.code",gasCode);$("app").innerHTML=`<div class="loading">جار التحميل…</div>`;gasStart();return}
   if(e.target.id!=="goalForm")return;e.preventDefault();
   const id=route().id,text=$("g-text").value.trim();if(!text){toast("اكتب نص الهدف.");return}
   try{await put("goals",{id:uid(),childId:id,text,domain:$("g-dom").value,review:$("g-rev").value,who:$("g-who").value.trim(),status:"لم يبدأ",createdAt:Date.now()});toast("تمت إضافة الهدف")}catch(_){}
